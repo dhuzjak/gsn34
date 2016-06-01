@@ -1,0 +1,33 @@
+<virtual-sensor name="Z_Digital" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+		<output-structure>
+			<field name="ta" type="int"/>
+			<field name="battery" type="int"/>
+			<field name="ha" type="int"/>
+			<field name="ea" type="int"/>
+			<field name="ll" type="int"/>
+			<field name="te" type="int"/>
+		</output-structure>
+	</processing-class>
+	<description>This sensor collects all sorts of data from zDigital</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+		<predicate key="geographical">Lion - GSN</predicate>
+		<predicate key="LATITUDE">45.855452</predicate>
+		<predicate key="LONGITUDE">15.986867</predicate>
+		<predicate key="owner">RASIP - Lion</predicate>	</addressing>
+	<storage history-size="5h" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+				<address wrapper="zDigital">
+					<predicate key="sensor-id">zDigital</predicate>
+					<predicate key="sampling-rate">60000</predicate>
+				</address>
+				<query>SELECT * FROM wrapper</query>
+			</source>
+			<query>SELECT * FROM source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>

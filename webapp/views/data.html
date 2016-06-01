@@ -1,0 +1,297 @@
+<!--<div class="large-10  large-offset-1  columns">-->
+    <div id="container" >
+    </br>
+        <div class="row">
+          <div class="large-2 columns">
+            <select ng-model="numberOfValuesToFetch" 
+                  ng-options="o.name for o in numberOfValuesToFetchOptions" ng-change="numberOfValuesToFetchChanged()">
+            </select>
+          </div>
+          <div class="large-1 columns left">
+            <input ng-model="valuesToFetch" 
+                        ng-disabled="numberOfValuesToFetch.name === 'All data'" type="text" placeholder="" />
+          </div>
+
+           <div class="large-1 columns left" style="position:relative;">
+              Values
+           </div>
+        </div>
+        <div class="row">
+          <div class="large-2 columns">
+            <select ng-model="aggregation" 
+                ng-options="o.name for o in aggregationOptions" ng-change="aggregationChanged()">
+            </select>
+          </div>
+                 
+          <div class="large-1 columns left">
+            <input ng-model="aggregationPeriod" 
+                  ng-disabled="aggregation.name === 'No aggregation'" type="text" placeholder="" />
+          </div>
+                  
+          <div class="large-2 columns left">
+              <select ng-model="aggregationUnit" ng-disabled="aggregation.name === 'No aggregation'"
+                      ng-options="o.name for o in aggregationUnitOptions" ng-change="aggregationUnitChanged()">
+              </select>
+          </div>
+        </div>
+
+        <div class ="row">
+          <div class="large-2 medium-2 columns">
+            <a ng-click="addOutput()" class="alert button tiny round radius">Add output</a>
+          </div>
+        </div>
+        
+        <div class="row" ng-repeat="dataOutput in dataOutputRows">
+             <div class="large-1 columns">
+              Virtual sensor
+            </div>
+            <div class="large-2 columns left">
+              <select ng-model="selectedSensor[$index]" 
+                      ng-options="o.name for o in dataOutput" ng-change="sensorSelected($index)">
+              </select>
+            </div>
+            <div class="large-1 columns">
+              Field
+            </div>
+            <div class="large-2 medium-2 columns left">
+              <select ng-model="selectedField[$index]" 
+                  ng-options="o for o in selectedSensor[$index].structureFields">
+              </select>
+            </div>
+            <div class="large-1 columns left" >
+              <a ng-click="removeOutput($index)" 
+                    class="alert round left button tiny secondary" ng-show = "dataOutputRows.length > 1 "><strong>X</strong></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-1 columns">
+              From
+            </div>
+            <div class="large-2 columns left">
+              <input id="datetimepickerfrom" type="text" ng-model="from" ng-change="fromChanged()">
+				<script type="text/javascript">
+					jQuery('#datetimepickerfrom').datetimepicker({
+						format:'Y-m-d H:i:s',
+						maxDate:0
+						});
+				</script>
+            </div>
+
+            <div class="large-1 columns">
+              Until
+            </div>
+            <div class="large-2 columns left">
+              <input id="datetimepickeruntil" type="text" ng-model="until" ng-change="untilChanged()">
+				<script type="text/javascript">
+					jQuery('#datetimepickeruntil').datetimepicker({
+						format:'Y-m-d H:i:s',
+						maxDate:0
+						});
+				</script>
+            </div>
+        </div>
+        <br/>
+        <div class="row">      
+          <div class="large-2 columns">
+              <a ng-click="addCondition()" class="alert button tiny radius round">Add condition</a>
+          </div>
+        </div>      
+
+        <div class="row" ng-repeat="conditionRow in conditionRows">
+                  
+          <div class="large-2 columns" ng-show="$index != 0">
+            <select ng-model="selectedConditionJoin[$index]" 
+                  ng-options="o.name for o in conditionJoins" ng-change="">
+            </select>
+          </div>
+
+          <div class="large-2 columns left">
+            <select ng-model="selectedConditionSensor[$index]" 
+                ng-options="o.name for o in conditionRow" ng-change="sensorConditionSelected($index)">
+            </select>
+          </div>
+                  
+          <div class="large-2 columns left">
+            <select ng-model="selectedConditionField[$index]" 
+                  ng-options="o for o in selectedConditionSensor[$index].structureFields" ng-change="">
+            </select>
+          </div>
+
+          <div class="large-1 columns left text-center" style="position:relative;">
+            Between
+          </div>
+
+          <div class="large-1 columns left"  style="">
+              <input ng-model="selectedConditionMinValue[$index]" 
+                      type="text" placeholder="" />
+          </div>
+                  
+          <div class="large-1 columns left text-center" style="">
+              and
+          </div>
+
+          <div class="large-1 columns left" style="">
+              <input ng-model="selectedConditionMaxValue[$index]" 
+                      type="text" placeholder="" />
+          </div>
+
+          <div class="large-1 columns left" style="">
+                    <a ng-click="removeCondition($index)" 
+                        class="alert round left button tiny secondary" ng-show = "conditionRows.length > 1 "><strong>X</strong></a>
+          </div>
+        </div>
+        <br/><br/>
+        <div class = "row">
+          <div class="large-10 columns" >
+            <tabset>
+              <tab heading="Download">
+                <div class="content">
+                  <div class="row">
+                    <div class="large-2 columns" >
+                      <a ng-click="downloadReport('csv')" 
+                                class="alert round left button tiny secondary">Download CSV</a>
+                    </div>
+                    <div class="large-2 columns left" style="position:relative;">
+                          <a ng-click="downloadReport('xml')" 
+                            class="alert round left button tiny secondary">Download XML</a>
+                    </div>
+                    <div class="large-2 columns left" style="position:relative;">
+                          <a ng-click="downloadReport('pdf')" 
+                            class="alert round left button tiny secondary">Generate PDF</a>
+                    </div>
+                    <div class="large-2 large-centered columns left text-center" style="position:relative;">
+                        Time format
+                    </div>
+                    <div class="large-2 columns left" style="position:relative;">
+                      <select ng-model="timeFormat" 
+                            ng-options="o.name for o in timeFormatOptions" ng-change="timeFormatChanged()">
+                      </select>
+                    </div>
+                  </div>
+                  </div>  
+              </tab>
+              <tab heading="Plot">
+              <div class="content">
+                <!--<div ng-controller = "DataController">-->
+                  <div class="row">
+                    <!--<div class="large-2 columns left" style="position:relative;">
+                      Virtual sensor:
+                      <select ng-model="selectedChart" 
+                              ng-options="o.name for o in results" ng-change="showResulChart()">
+                      </select>
+                    </div>-->
+                    <div class="large-2 columns left" style="position:relative;left:0px;">
+                      Chart type:
+                      <select ng-model="selectedChartType" ng-options="selectedChartType for selectedChartType in chartTypes" ng-change="seriesTypeChange(selectedChartType)"></select>
+                    </div>                
+                    <div class="large-2 columns left" style="position:relative;">
+                    </br>
+                      <a ng-click="fetchData();"
+                         class="alert round left button tiny secondary">Draw by filter</a>      
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="large-3 columns left">
+                      <highchart id="chartdiv" config="chartConfig" style="height: 500px;" class="chartstyle"></highchart>
+                    </div>
+                </div>
+                </div>
+               <!-- </div>-->
+              </tab>
+              <tab heading="Table" ng-click="fetchData();">
+                <div class="content">
+                <div ng-controller = "DataController">
+                <div class="row">
+                    <div class="large-2 columns left" style="position:relative;left:0px;">
+						Virtual sensor:
+                      <select ng-model="selectedTable" 
+                                ng-options="o.name for o in results" ng-change="showResulTable()">
+                      </select>
+                    </div>
+                </div>
+                <div class="row"> 
+                  <div class="large-12 columns">
+                    <div class="gridStyle" ng-grid="gridOptions"></div>
+                  </div>
+                </div>
+              </div>
+               </div>
+              </tab>
+            </tabset>
+
+       <!-- <dl class="tabs" ng-init="selectedTab = 1" ng-model="selectedTab" data-tab>
+          <dd ng-class = "{'active' : selectedTab == 1 }" ><a ng-click="selectedTab = 1" >Download</a></dd>
+          <dd ng-class = "{'active' : selectedTab == 2 }"><a ng-click="selectedTab = 2;fetchData();" >Plot</a></dd>
+          <dd ng-class = "{'active' : selectedTab == 3 }"><a ng-click="selectedTab = 3;fetchData();" >Table</a></dd>
+        </dl>
+        
+        <div class="tabs-content">
+          <div class="content" ng-class = "{'active' : selectedTab == 1 }">
+              <div class="row">
+                <div class="large-2 columns" >
+                  <a ng-click="downloadReport('csv')" 
+                            class="alert round left button tiny secondary">Download CSV</a>
+                </div>
+                <div class="large-2 columns left" style="position:relative;">
+                      <a ng-click="downloadReport('xml')" 
+                        class="alert round left button tiny secondary">Download XML</a>
+                </div>
+                <div class="large-2 columns left" style="position:relative;">
+                      <a ng-click="downloadReport('pdf')" 
+                        class="alert round left button tiny secondary">Generate PDF</a>
+                </div>
+                <div class="large-2 large-centered columns left text-center" style="position:relative;">
+                    Time format
+                </div>
+                <div class="large-2 columns left" style="position:relative;">
+                  <select ng-model="timeFormat" 
+                        ng-options="o.name for o in timeFormatOptions" ng-change="timeFormatChanged()">
+                  </select>
+                </div>
+              </div>
+          </div>
+          <div class="content" ng-class = "{'active' : selectedTab == 2 }">
+            <div ng-controller = "DataController">
+              <div class="row">
+                <div class="large-2 columns left" style="position:relative;">
+                  Virtual sensor:
+                  <select ng-model="selectedChart" 
+                          ng-options="o.name for o in results" ng-change="showResulChart()">
+                  </select>
+                </div>
+                <div class="large-2 columns left" style="position:relative;left:0px;">
+                  Chart type:
+                  <select ng-model="selectedChartType" ng-options="selectedChartType for selectedChartType in chartTypes" ng-change="seriesTypeChange(selectedChartType)"></select>
+                </div>                
+                <div class="large-2 columns left" style="position:relative;">
+                </br>
+                  <a ng-click="drawByFilter();"
+                     class="alert round left button tiny secondary">Draw by filter</a>      
+                </div>
+              </div>
+              <div class="row">
+                <div class="large-3 columns left">
+                  <highchart id="chartdiv" config="chartConfig" style="height: 500px;" class="chartstyle"></highchart>
+                </div>
+            </div>
+            </div>
+          </div>
+          <div class="content" ng-class = "{'active' : selectedTab == 3 }">
+              <div class="row">
+                  <div class="large-2 columns left">
+                    <select ng-model="selectedTable" 
+                              ng-options="o.name for o in results" ng-change="showResulTable()">
+                    </select>
+                  </div>
+              </div> 
+              <div class="row"> 
+                <div class="large-12 columns">
+                  <div class="gridStyle" ng-grid="gridOptions"></div>
+                </div>
+              </div>
+          </div>
+        </div>-->
+      </div>
+    </div>
+<!--</div>-->      

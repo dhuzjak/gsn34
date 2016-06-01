@@ -1,0 +1,42 @@
+<virtual-sensor name="ElectricityMeter" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+		<output-structure>
+			<!--Zakomentirati podatke koje ne želite u prikazu GSN-a-->
+			<!--<field name="CURRENT_POWER_T1" type="double" />
+			<field name="CURRENT_POWER_T2" type="double" />-->
+			<field name="MAX_CUMM_POWER_T1" type="double" />
+			<field name="MAX_CUMM_POWER_T2" type="double" />
+			<field name="POWER" type="double" />
+			<field name="POWER_T1" type="double" />
+			<field name="POWER_T2" type="double" />
+			<field name="CURRENT_PHASE_1" type="double" />
+			<field name="CURRENT_PHASE_2" type="double" />
+			<field name="CURRENT_PHASE_3" type="double" />
+		</output-structure>
+	</processing-class>
+	
+	<description>This sensor measures power consumption over USB.</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+		<predicate key="geographical">ZARI</predicate>
+		<predicate key="LATITUDE">45.80000</predicate>
+		<predicate key="LONGITUDE">16.000000</predicate>
+	</addressing>
+	
+	<storage history-size="48" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+				<address wrapper="remote">
+					<!--<predicate key="serial-port">/dev/ttyUSB0</predicate>-->
+					<predicate key="name">ElectricityMeter</predicate>
+					<predicate key="host">161.53.67.90</predicate>
+					<predicate key="port">22001</predicate>
+				</address>
+				<query>select * from wrapper</query>
+			</source>
+			<query>select * from source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>

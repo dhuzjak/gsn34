@@ -1,0 +1,45 @@
+<virtual-sensor name="WaspGraph" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.ChartVirtualSensor</class-name>
+		<init-params>
+			<param name="input-stream">WaspmoteData, RandomData</param><!--MULTIPLE, SEPARATED BY COMMAS--><!--Must bu the same as stream names-->
+			<param name="title">GSN Waspmote Data, Some random data plot test</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="type">SVG, ANY</param><!--MULTIPLE, SEPARATED BY COMMAS, SVG or ANY-->
+			<param name="height">400</param>
+			<param name="width">500</param>
+			<param name="vertical-axis">Data, Data</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="history-size">100</param>
+		</init-params>
+		<output-structure>
+			<field name="WaspmoteData" type="binary:image/svg+xml" /><!--Must bu the same as stream names, binary:image/png or binary:image/svg+xml-->
+			<field name="RandomData" type="binary:image/jpeg" /><!--Must bu the same as stream names-->
+		</output-structure>
+	</processing-class>
+	<description>This sensor plots data from Waspmotes.</description>
+	<addressing>
+		<predicate key="geographical">FER - ZARI</predicate>
+		<predicate key="LATITUDE">45.801502</predicate>
+		<predicate key="LONGITUDE">15.971127</predicate>
+	</addressing>
+	<storage history-size="1" />
+	<streams>
+		<stream name="WaspmoteData"><!--Must bu the same as param-->
+			<source alias="wifiwasp" sampling-rate="1" storage-size="1">
+				<address wrapper="local">
+					<predicate key="NAME">Wasp</predicate>
+				</address>
+				<query>SELECT TEMPERATURE, TIMED FROM WRAPPER WHERE ID=1</query>
+			</source>
+			<query>SELECT * FROM wifiwasp</query>
+		</stream>
+		<stream name="RandomData"><!--Must bu the same as param-->
+			<source alias="rndvs" sampling-rate="1" storage-size="1">
+				<address wrapper="local">
+					<predicate key="NAME">MemoryMonitorVS</predicate><!--The name of the local virtual sensor to get data from-->
+				</address>
+				<query>SELECT HEAP, NON_HEAP, TIMED FROM WRAPPER</query>
+			</source>
+			<query>SELECT * FROM rndvs</query>
+		</stream>
+	</streams>
+</virtual-sensor>

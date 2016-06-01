@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE configuration SYSTEM "endymion_configuration/gsn_config.dtd">
+<configuration>
+    <gsn>
+        <ipAddress>192.168.5.52</ipAddress>
+        <port>22001</port>
+        <username>admin</username>
+        <password>admin</password>
+        <connectionType>http</connectionType>
+        
+        <vsensors sampling-time="1m" sampling-rate="1" only-last-value="false" read-sensors="all">
+            <vsensor vsname="mqttsubscribetestvs" sampling-time="1m" read-data-fields="all" only-last-value="true">
+                <!--
+                <alarms>
+                    <alarm name="alarm_mqtt_subscribetest" after="1m" only-once="false" alarm-type="mqtt" alarm-id="2">
+                        <send-to>RASIP/Endymion/alarms</send-to>
+                        
+                    </alarm>
+                </alarms>
+                -->
+            </vsensor>
+        </vsensors>
+        
+        <alarms>
+            <alarm name="alarm_GSN_90" after="1m" only-once="true" alarm-type="mqtt" alarm-id="30">
+                <send-to>RASIP/Endymion/alarms</send-to>
+                
+            </alarm>
+        </alarms>
+        
+    </gsn>
+    <gsn>
+        <ipAddress>192.168.5.84</ipAddress>
+        <port>22001</port>
+        <username>admin</username>
+        <password>admin</password>
+        <connectionType>http</connectionType>
+        
+        <vsensors sampling-time="1m" sampling-rate="1" only-last-value="false" read-sensors="all">
+            <vsensor vsname="pirsensor" sampling-time="1m" read-data-fields="all" only-last-value="true">
+                <!--
+                <alarms>
+                    <alarm name="alarm_mqtt_subscribetest" after="1m" only-once="false" alarm-type="mqtt" alarm-id="2">
+                        <send-to>RASIP/Endymion/alarms</send-to>
+                        
+                    </alarm>
+                </alarms>
+                -->
+            </vsensor>
+        </vsensors>
+        
+        <alarms>
+            <alarm name="pirsensor" after="1m" only-once="true" alarm-type="mqtt" alarm-id="62">
+                <send-to>RASIP/Endymion/alarms</send-to>
+                
+            </alarm>
+        </alarms>
+        
+    </gsn>
+	<!--
+    <gsn>
+        <ipAddress>161.53.67.210</ipAddress>
+        <port>1443</port>
+        <username>admin</username>
+        <password>admin</password>
+        <connectionType>https</connectionType>
+
+        <vsensors sampling-time="5m" sampling-rate="1" only-last-value="true" read-sensors="all">
+        </vsensors>
+		
+		<alarms>
+            <alarm name="alarm_GSN_210" after="12h" only-once="true">
+                <send-to>nikola.kurdija@gmail.com</send-to>
+                <send-to>nikola.kurdija@fer.hr</send-to>
+            </alarm>
+        </alarms>
+
+    </gsn>
+    <gsn>
+        <ipAddress>data.permasense.ch</ipAddress>
+        <port>80</port>
+        <username></username>
+        <password></password>
+        <connectionType>http</connectionType>
+
+        <vsensors sampling-time="30m" sampling-rate="1" only-last-value="false" read-sensors="part">
+            <vsensor vsname="dirruhorn_camera_pos5__scaled" read-data-fields="part">
+                <fields>
+                    <data-field name="device_id" />
+                    <data-field name="jpeg_scaled" />
+                </fields>
+            </vsensor>
+        </vsensors>
+
+    </gsn>-->
+</configuration>

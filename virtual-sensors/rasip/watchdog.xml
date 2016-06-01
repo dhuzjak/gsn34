@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="watchdog" priority="10">
+  <processing-class>
+    <class-name>gsn.processor.ScriptletProcessor</class-name>
+    <init-params>
+      <param name="persistant">false</param>
+      <param name="notification-state">1</param>
+      <param name="critical-period">120000</param>
+      <param name="scriptlet"><![CDATA[//this is a start of a scriptlet
+		                        //data definition
+		                        lastProcessedTime = System.currentTimeMillis();
+		       				    def filePath ="virtual-sensors/watchdog.xml";
+		                        def recipients = ["leonard.beus@gmail.com"]; // Define one or more recipients
+		   
+		                        def emailTitle ="Watchdog information!!!";
+		                        def emailContent="";
+		       
+		                        //end of data definition
+		        				if (notificationState == 0){
+		        			     	updateNotificationVSXMLState(filePath, 1);
+		                            emailContent='\\nWatchdog is activated!';
+		                            sendEmail(recipients, emailTitle, emailContent);
+		                       }else if (notificationState == 2){
+		        	                updateNotificationVSXMLState(filePath, 1); 
+		                            emailContent='\\nSensor started receiving readings!!!';
+		                            sendEmail(recipients, emailTitle, emailContent);
+		             }]]></param>
+      <param name="sensor-name">TempRabbit</param>
+      <param name="last-error-message-time">1405268206376</param>
+      <param name="delay">120000</param>
+      <param name="period">10000</param>
+      <param name="scriplet-periodic"><![CDATA[def filePath ="virtual-sensors/watchdog.xml";
+							  def recipients = ["leonard.beus@gmail.com"]; // Define one or more recipients
+							  def emailTitle ='';
+		                      def emailContent='';
+
+		       				  def currentTime = System.currentTimeMillis();
+		        			  if ( ! isdef('lastProcessedTime')) {
+		                               lastProcessedTime = currentTime;
+		                      }
+		                      else {
+		                         def timeDifference = currentTime - lastProcessedTime;
+		                         def criticalPeriodMinutes = (int)(criticalPeriod/60000);
+		                         def criticalPeriodSeconds = (int)(criticalPeriod-criticalPeriodMinutes*60000)/1000;
+		                                  if (timeDifference >= criticalPeriod) {
+		                	                      switch(notificationState){
+		                			                  case 0: break;     			
+		       	        			                  case 1:	emailTitle = 'Watchdog warning!!!';
+		                    				                    emailContent = 'Sensor RabbitTemp stopped receiving readings!!!\\nThis warning messages system sends if sensor has not received reading at least \' +criticalPeriodMinutes + \' min  \' + criticalPeriodSeconds + \' s !';                                                  
+																sendEmail(recipients, emailTitle, emailContent);
+			     												updateNotificationVSXMLErrorMessageTimeAndNotificationState(filePath, currentTime,2);
+																break;	
+		                    		                  case 2: emailTitle = 'Watchdog warning!!!';
+				                				              emailContent = 'Sensor RabbitTemp stopped receiving readings!!!\\nThis warning messages system sends if sensor has not received reading at least \' +criticalPeriodMinutes + \' min  \' + criticalPeriodSeconds + \' s !\\n\\nTo disable this warning messages go to '; 
+		                    				                  if((currentTime-lastErrorMessageTime) > delay ){
+		                                                        sendEmail(recipients, emailTitle, emailContent);
+		                                                        updateNotificationVSXMLErrorMessageTime(filePath, currentTime);
+		                    				                  }
+		                    				                  break;                  	
+		                	                       }
+		                                  }  
+		                       }]]></param>
+    </init-params>
+    <output-structure />
+  </processing-class>
+  <description>Watchdog for sensor RabbitTemp</description>
+  <addressing />
+  <storage history-size="1" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+        <address wrapper="local">
+          <predicate key="name">TempRabbit</predicate>
+        </address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>
+</virtual-sensor>
+

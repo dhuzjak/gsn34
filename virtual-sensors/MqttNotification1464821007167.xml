@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="MqttNotification1464821007167" priority="10">
+<processing-class>
+<class-name>gsn.processor.MqttNotificationProcessor</class-name>
+    <init-params>
+      <param name="period">2000</param>
+      <param name="delay">2000</param>
+      <param name="critical-value">1</param>
+      <param name="sensor-name">e_pirsensorrpi</param>
+      <param name="critical-type">above</param>
+      <param name="monitored-field">MOTION</param>
+    </init-params>
+    <output-structure />
+  </processing-class>
+  <description>VS for MQTT notifications</description>
+  <addressing />
+  <storage history-size="1" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+        <address wrapper="local">
+          <predicate key="query">select * from e_pirsensorrpi</predicate>
+        </address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>*/
+</virtual-sensor>

@@ -1,0 +1,10 @@
+[
+	{"attribute": "Version",
+	 "value": "2.0"},
+	 {"attribute" : "GSN name",
+	  "value": "Rasip GSN"},
+	  {"attribute" : "GSN project initiator",
+		"value": "EPFL"},
+	  {"attribute":"GSN contributor",
+		"value": "RASIP FER"}
+]

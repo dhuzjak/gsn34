@@ -1,0 +1,33 @@
+<virtual-sensor name="G_WaspmoteGateway_Remote" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+		<output-structure>
+			<field name="moteID" type="varchar(20)" />
+			<field name="data" type="varchar(100)" />
+		</output-structure>
+	</processing-class>
+	
+	<description>This sensor measures power consumption over USB.</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+		<predicate key="geographical">ZARI</predicate>
+		<predicate key="LATITUDE">45.80000</predicate>
+		<predicate key="LONGITUDE">16.000000</predicate>
+	</addressing>
+	
+	<storage history-size="48" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+				<address wrapper="remote-rest">
+					<predicate key="query">select * from g_waspmotegateway</predicate>
+					<predicate key="username">admin</predicate>
+					<predicate key="password">admin</predicate>
+                    <predicate key="remote-contact-point">http://161.53.67.90:22001/streaming</predicate>
+				</address>
+				<query>select * from wrapper</query>
+			</source>
+			<query>select * from source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>

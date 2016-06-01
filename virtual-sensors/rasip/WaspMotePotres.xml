@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="WaspMotePotres" priority="10">
+  <processing-class>
+    <class-name>hr.fer.rasip.processingclasses.WaspMotePotres</class-name>
+    <init-params>
+      <!-- <param name="persistant">false</param> -->
+    </init-params>
+    <output-structure>
+			<field name="temperature" type="int"/>
+			<field name="battery" type="int"/>
+			<field name="ax" type="int"/>
+			<field name="ay" type="int"/>
+			<field name="az" type="int"/>			
+		</output-structure>
+  </processing-class>
+  <description>Processes data sent from the Accelerometers</description>
+  <addressing />
+  <storage history-size="24h" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+        <address wrapper="local">
+        <!--  Preuzmi podatke -->
+          <predicate key="query">select data, timed from G_WaspMoteGateway where lower(moteID) = 'Potres'</predicate>
+        </address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>
+</virtual-sensor>

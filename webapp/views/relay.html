@@ -1,0 +1,119 @@
+<!--<div class="medium-10 medium-offset-1 columns">	-->
+	<div id="container" >
+		<div class="row">	
+			<div class="medium-8 columns">
+			<h1>Relay managment</h1>
+			<br/>
+			
+			<!--<dl ng-init="selectedTab = 1" ng-model="selectedTab" class="tabs" data-tab>						
+				<dd ng-class = "{'active' : selectedTab == 1 }">
+					<a ng-click=" selectedTab  = 1" >Status</a>
+				</dd>
+				<dd ng-class = "{'active' : selectedTab  == 2 }">
+					<a ng-click=" selectedTab  = 2">Config</a>
+				</dd>							
+			</dl>-->
+			<tabset>
+				<tab heading="Status">
+				<div ng-controller="RelayController">
+				<div class="content" ng-class = "{'active' : selectedTab  == 1 }">
+					<fieldset>
+	    				<legend>Relays</legend>
+				  		<div class="row" ng-repeat="relay in relays">
+				  			<div class="medium-8 columns left">
+							  	<div class="medium-4 columns">
+			          				<label class="right inline">{{relay.displayname}}</label>
+			        			</div>
+			        			<div class="medium-4 columns left">
+			        				<input type="checkbox" class="js-switch" ui-switch ng-model="relays[$index].status" 
+			        								ng-change="relayChange($index);"/>
+			        			</div>
+			        		</div>
+			        	</div>
+			        </fieldset>
+				</div>
+				</div>
+				</tab>
+				<tab heading="Config">
+				<div ng-controller="RelayController">
+				<div class="content" ng-class = "{'active' : selectedTab  == 2 }">
+					<div class="row" ng-show="showStatus === true">
+							<div class="medium-8 columns left" >
+								<alert close="showStatus=false;">{{updateStatus}}</alert>
+							</div>
+					</div>
+					<fieldset>
+	    					<legend>Connection params</legend>
+				  				<div class="row">
+				  					<div class="medium-8 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label for="ipaddress" class="right inline">IP address</label>
+			        					</div>
+			        					<div class="medium-4 columns left">
+			          				<input type="text" id="ipaddress" placeholder="" ng-model="config.connectionParams['ip-address']">
+			        					</div>
+			        				</div>
+			        				<div class="medium-8 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label class="right inline">Local port</label>
+			        					</div>
+			        					<div class="medium-3 columns left">
+			          		  				<input type="text" placeholder="" ng-model="config.connectionParams['local-port']">
+			        					</div>
+			        				</div>
+			        				<div class="medium-8 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label class="right inline">Remote port</label>
+			        					</div>
+			        					<div class="medium-3 columns left">
+			          						<input type="text" placeholder="" ng-model="config.connectionParams['remote-port']">
+			        					</div>
+			        				</div>
+			        			</div>
+			        </fieldset>
+
+        			<fieldset>
+	    				<legend>Relays</legend>
+	    				<a class="alert tiny round button" ng-click="relayAdd();">Add relay</a>
+	    				<fieldset ng-repeat="relay in config.relays">
+	    					<legend>Relay</legend>
+	    						<div class="row">
+	    							<a class="alert round right button tiny secondary" ng-click="relayRemove($index);">
+	    								<strong>X</strong>
+	    							</a>
+	    							<div class="medium-8 columns left">
+			        					<div class="medium-3 columns">
+			          						<label  class="right inline">Display name</label>
+			        					</div>
+			        					<div class="medium-5 columns left">
+			          						<input type="text" placeholder="" ng-model="config.relays[$index].displayname">
+			        					</div>
+			        				</div>
+			        				<div class="medium-8 columns left">
+			        					<div class="medium-3 columns">
+			          						<label class="right inline">Id</label>
+			        					</div>
+			        					<div class="medium-2 columns left">
+			          						<input type="text" placeholder="" ng-model="config.relays[$index].id">
+			        					</div>
+        							</div>
+        						</div>
+        				</fieldset>
+	    			</fieldset>
+	    			<div class="row">
+	    				<div class="medium-8 columns left">
+	    					<div class="medium-2 columns left">
+	    						<a class="alert tiny round button" ng-click="updateConfig();">Save</a>
+	    					</div>
+	    					<div class="medium-2 columns" style="position:relative; top:10px; left:-300px;">
+			        			<img id="spinner" ng-src="images/ajax-loader.gif" style="display:none;">
+			        		</div>
+			        	</div>
+	    			</div>
+				</div>
+				</div>
+				<tab>
+				<tabset>
+		</div>
+	</div>
+<!--</div>-->

@@ -1,0 +1,297 @@
+
+<script src="scripts/jquery.js"></script> 
+<link rel="stylesheet" href="scripts/lib/codemirror.css">
+<script src="scripts/lib/codemirror.js"></script>   
+<script src="scripts/mode/sql/sql.js"></script>   
+<script src="scripts/mode/xml/xml.js"></script>
+
+<link rel="stylesheet" href="scripts/slickGrid/slick.grid.css" type="text/css"/>
+<link rel="stylesheet" href="scripts/slickGrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+
+<script src="scripts/slickGrid/lib/firebugx.js"></script>
+<script src="scripts/slickGrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="scripts/slickGrid/lib/jquery.event.drag-2.2.js"></script>
+
+<script src="scripts/slickGrid/slick.core.js"></script>
+<script src="scripts/slickGrid/plugins/slick.cellrangedecorator.js"></script>
+<script src="scripts/slickGrid/plugins/slick.cellrangeselector.js"></script>
+<script src="scripts/slickGrid/plugins/slick.cellselectionmodel.js"></script>
+<script src="scripts/slickGrid/slick.formatters.js"></script>
+<script src="scripts/slickGrid/slick.editors.js"></script>
+<script src="scripts/slickGrid/slick.grid.js"></script>
+
+<script>
+    var SelectCellEditor = function(args) {
+        var $select;
+        var defaultValue;
+        var scope = this;
+
+        this.init = function() {
+
+            if (args.column.options) {
+                opt_values = args.column.options.split(',');
+            } else {
+                opt_values = "yes,no".split(',');
+            }
+            option_str = ""
+            for (i in opt_values) {
+                v = opt_values[i];
+                option_str += "<OPTION value='" + v + "'>" + v + "</OPTION>";
+            }
+            $select = $("<SELECT tabIndex='0' class='editor-select'>" + option_str + "</SELECT>");
+            $select.appendTo(args.container);
+            $select.focus();
+        };
+
+        this.destroy = function() {
+            $select.remove();
+        };
+
+        this.focus = function() {
+            $select.focus();
+        };
+
+        this.loadValue = function(item) {
+            defaultValue = item[args.column.field];
+            $select.val(defaultValue);
+        };
+
+        this.serializeValue = function() {
+            if (args.column.options) {
+                return $select.val();
+            } else {
+                return ($select.val() == "yes");
+            }
+        };
+
+        this.applyValue = function(item, state) {
+            item[args.column.field] = state;
+        };
+
+        this.isValueChanged = function() {
+            return ($select.val() != defaultValue);
+        };
+
+        this.validate = function() {
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+
+        this.init();
+    };
+
+
+    function requiredFieldValidator(value) {
+        if (value == null || value == undefined || !value.length) {
+            return {valid: false, msg: "This is a required field"};
+        } else {
+            return {valid: true, msg: null};
+        }
+    }
+    var grid;
+    var loadUrl = "/adminRest/archive";
+    $.getJSON("/adminRest/modify", function(data) {
+        var items = [];
+        $.each(data, function(key, val) {
+            items.push("<option value='" + val + "'>" + key + "</option>");
+        });
+        $("#active").html("<select id=\"selectActive\">" + items.join("") + "</select>");
+    });
+    $.getJSON("/adminRest/archive", function(data) {
+        var items = [];
+        $.each(data, function(key, val) {
+            items.push("<option value='" + val + "'>" + key + "</option>");
+        });
+        $("#archive").html("<select id=\"selectArchive\">" + items.join("") + "</select>");
+    });
+    $(document).ready(function()
+    {
+        $("#archiveBtn").click(function()
+        {
+
+            var jsonObj = {};
+            jsonObj["name"] = $("#selectActive").val();
+            jsonObj["mode"] = "true";
+            var jsonString = JSON.stringify(jsonObj);
+            $.ajax({
+                headers: {"Content-Type": "application/json"},
+                url: loadUrl,
+                data: jsonString,
+                type: "POST",
+                success: function(responseText) {
+                    alert("Sensor archived!");
+                    //virtualSensorCm.setValue(responseText);
+                },
+		error : function(jqxhr, status, error){
+				alert("Error\n"+status+"\n"+ error);
+			}
+            });
+        });
+        $("#activateBtn").click(function()
+        {
+            var jsonObj = {};
+            jsonObj["name"] = $("#selectArchive").val();
+            jsonObj["mode"] = "false";
+            var jsonString = JSON.stringify(jsonObj);
+            $.ajax({
+                headers: {"Content-Type": "application/json"},
+                url: loadUrl,
+                data: jsonString,
+                type: "POST",
+                success: function(responseText) {
+                    alert("Sensor activated!");
+                    //virtualSensorCm.setValue(responseText);
+                },
+		error : function(jqxhr, status, error){
+				alert("Error\n"+status+"\n"+ error);
+			}
+            });
+        });
+
+        $("#get").click(function()
+        {
+            $.getJSON("/adminRest/generic?path=" + $("#selectFileTag").val(), function(data) {
+                var jsonObj = data;
+                var columns = [
+                    {id: "parent", name: "Parent Node", field: "parent", width: 120, cssClass: "cell-title", editor: SelectCellEditor, options: "addressing,address"},
+                    {id: "name", name: "Name", field: "name", width: 120, cssClass: "cell-title", editor: Slick.Editors.Text},
+                    {id: "colValue", name: "Leel", field: "value", width: 120, cssClass: "cell-title", editor: Slick.Editors.Text}
+                ];
+                var options = {
+                    editable: true,
+                    enableAddRow: true,
+                    enableCellNavigation: true,
+                    asyncEditorLoading: false,
+                    autoEdit: false
+                };
+
+                grid = new Slick.Grid("#myGrid", jsonObj["data"], columns, options);
+
+                grid.setSelectionModel(new Slick.CellSelectionModel());
+                grid.setOptions({autoEdit: true});
+                grid.onAddNewRow.subscribe(function(e, args) {
+                    var item = args.item;
+                    grid.invalidateRow(data.length);
+                    data.push(item);
+                    grid.updateRowCount();
+                    grid.render();
+                });
+                grid.render();
+                $("#history").val(jsonObj["history"]);
+                $("#samplingRate").val(jsonObj["samplingRate"]);
+                $("#storageSize").val(jsonObj["storageSize"]);
+
+            });
+        });
+        $("#commit").click(function() {
+            var parameters = grid.getData();
+            var jsonObject = {};
+            jsonObject["path"] =  $("#selectFileTag").val();
+            jsonObject["data"] = parameters;
+            jsonObject["history"] = $("#history").val();
+            jsonObject["storageSize"] = $("#storageSize").val();
+            jsonObject["samplingRate"] = $("#samplingRate").val();
+            var jsonString = JSON.stringify(jsonObject);
+
+            $.ajax({
+                headers: {"Content-Type": "application/json"},
+                url: "/adminRest/modify",
+                data: jsonString,
+                type: "POST",
+                success: function(responseText) {
+			alert("Changes saved");
+                },
+		error : function(jqxhr, status, error){
+				alert("Error\n"+status+"\n"+ error);
+			}
+            });
+        });
+        $("#delete").click(function() {
+
+            $.ajax({
+                headers: {"Content-Type": "application/text"},
+                url: "/adminRest/delete",
+                data: $("#selectFileTag").val(),
+                type: "POST",
+                success: function(responseText) {
+			alert("Sensor deleted");
+                },
+		error : function(jqxhr, status, error){
+				alert("Error\n"+status+"\n"+ error);
+			}
+
+            });
+        });
+        $('#del').click(function() {
+            var me = $(this), id = me.attr('id');
+//assuming you have used a dataView to create your grid
+//also assuming that its variable name is called 'dataView'
+//use the following code to get the item to be deleted from it
+            var newData = grid.getData();
+            var row = grid.getSelectedRows()
+            newData.splice(row, 1);
+            grid.setData(newData);
+            grid.render();
+//This is possible because in the formatter we have assigned the row id itself as the button id;
+//now assuming your grid is called 'grid'
+//grid.invalidate();
+        });
+    });
+
+</script>
+
+
+
+<div id="container" style="" class="medium-10 medium-offset-1 columns ng-scope">
+    <h1>Modify existing sensor</h1>
+
+    <dl ng-init="selectedTab = 1" ng-model="selectedTab" class="tabs" data-tab>						
+        <dd ng-class = "{'active' : selectedTab == 1 }">
+            <a ng-click=" selectedTab = 1" >Modify</a>
+        </dd>
+        <dd ng-class = "{'active' : selectedTab == 2 }">
+            <a ng-click=" selectedTab = 2">Archive</a>
+        </dd>							
+    </dl>
+
+    <div class="tabs-content">
+        <div class="content" ng-class = "{'active' : selectedTab == 1 }">
+            <div id ="fileSelect"></div>
+            <input class ="button tiny radius" type="submit" value="Select sensor" id="get" />
+            <input class='button tiny radius alert' type='button' id='delete' value ="Delete sensor" style="margin-left:5px;"/>
+            <div id="sensorConfig" style="display:hidden">
+                <div style="width:400px">
+                    <span>History Size: </span><input id="history" type="text" >
+                    <span>Sampling Rate: </span><input id="samplingRate" type="text">
+                    <span>Storage Size: </span><input id="storageSize" type="text">
+                </div>
+                <span>Parameters:</span>
+                <div style="width:400px;">
+                    <div id="myGrid" style="width:100%;height:200px;"></div>
+                </div>
+                <input type="submit" value="Commit" id="commit" class ="button tiny radius" style="margin-right:10px"/>
+                <input class='button tiny radius alert' type='button' id='del' value ="Delete selected row"/><br/>
+            </div>
+            
+        </div>
+        <div class="content" ng-class = "{'active' : selectedTab == 2 }">
+            <div id="active"></div>
+            <input type="submit" class ="button tiny radius" id="archiveBtn" value="Archive sensor"/>
+            <div id="archive"></div>
+            <input type="submit" class ="button tiny radius" id="activateBtn" value="Activate sensor"/>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.getJSON("/adminRest/modify", function(data) {
+        var items = [];
+        $.each(data, function(key, val) {
+            items.push("<option value='" + val + "'>" + key + "</option>");
+
+        });
+        $("#fileSelect").html("<select id=\"selectFileTag\">" + items.join("") + "</select>");
+    });
+</script> 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="WaspCurrBlue" priority="10">
+  <processing-class>
+    <class-name>hr.fer.rasip.processingclasses.WaspCurrBlue</class-name>
+    <init-params>
+      <!-- <param name="persistant">false</param> -->
+    </init-params>
+    <output-structure>
+			<field name="current" type="double"/>
+			<field name="power" type="double"/>
+		</output-structure>
+  </processing-class>
+  <description>Processes data sent from the Blue current meter</description>
+  <addressing />
+  <storage history-size="72h" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+        <address wrapper="local">
+        <!--  Preuzmi podatke -->
+          <predicate key="query">select data, timed from G_WaspMoteGateway where lower(moteID) = 'CurrentMeter_Blue'</predicate>
+        </address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>
+</virtual-sensor>

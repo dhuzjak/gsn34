@@ -1,0 +1,60 @@
+<div class="medium-12 columns">
+	<div id="container" class="row" >
+		
+		
+		<div class="medium-12 columns" ng-if="inet_on == true && inet_done == true">
+			
+			<google-map 
+					center="map.center" 
+					zoom="map.zoom"  
+					draggable='true'>
+
+				 <marker ng-repeat="m in map.sensors" coords="m">
+   				 	<marker-label content="m.title" anchor="22 0" class="marker-labels" click="onMarkerClicked(m)"></marker-label>
+    					<window show="showWindow">
+    						<h4>{{m.model.name}}</h4>
+      						<div ng-repeat="field in m.model.structureFields">						
+								<div ng-show="m.model.fields[field].type === 'binary:image/jpeg'" 
+									style="position:relative;left:5px;">
+									<img ng-src="{{m.model.fields[field].value}}" 
+											style="width:200px; height:150px" />
+								</div>
+								<div ng-show="m.model.fields[field].type !== 'binary:image/jpeg'">	
+									<i>{{field}}</i> : <b>{{m.model.fields[field].value}}</b>
+								</div>
+							</div>
+    					</window>
+  				</marker>
+
+				<!--<markers models="map.sensors" 
+						 coords="'self'" 
+						 labelContent="'title'"
+						 labelAnchor="22 0"
+						 click="" 
+						 labelClass="marker-labels"
+						 templateUrl="url">
+						 <windows show="'showWindow'" options="windowOptions"s ng-cloak>
+            			</windows>
+				</markers>-->
+			</google-map>
+		</div>
+		
+		<div class="medium-12 columns" ng-if="inet_on == false && inet_done == true">
+			<p>Couldn't fetch geographical location or connect to Google Maps. Check your Internet connection and reload the page.</p>
+		</div>
+		
+		<!--<div class="panel medium-4 right">
+         	<div class="row">
+			    <div class="medium-4 columns">
+			    	<label ng-repeat="sensor in map.sensors">
+  
+					<input
+					    type="checkbox"
+					    name="selectedSensors[]"
+					    value="{{sensor.title}}"
+					    ng-model="sensor.selected"> {{sensor.title}}
+					</label>
+		  </div>
+		</div>-->
+	</div>
+<div>

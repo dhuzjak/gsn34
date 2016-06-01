@@ -1,0 +1,31 @@
+ <virtual-sensor name="MQTTSubscribeTestVS2" priority="11">
+    <processing-class>
+        <class-name>gsn.endymion.EndymionProcessingClass</class-name>
+        <output-structure>
+            <field name="temperature" type="double" />
+        </output-structure>
+    </processing-class>
+    <description>
+        Getting temperature.
+    </description>
+    <life-cycle pool-size="10" />
+    <addressing>
+        <predicate key="geographical">ZARI</predicate>
+        <predicate key="LATITUDE">45.80000</predicate>
+        <predicate key="LONGITUDE">16.000000</predicate>
+		<predicate key="owner">Endymion</predicate>
+    </addressing>
+    <storage history-size="8760h" />
+    <streams>
+        <stream name="input1">
+            <source alias="source1" sampling-rate="100" storage-size="1">
+                <address wrapper="endymion_vsensor_wrapper">
+                    <predicate key="GSNId">127.0.0.1:22001</predicate>
+                    <predicate key="vSensorName">mqttsubscribetestvs</predicate>
+                </address>
+                <query>select * from wrapper</query>
+            </source>
+            <query>select * from source1</query>
+        </stream>
+    </streams>
+</virtual-sensor>

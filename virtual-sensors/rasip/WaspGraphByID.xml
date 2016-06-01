@@ -1,0 +1,37 @@
+<virtual-sensor name="WaspGraphByID" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.ChartByIDVirtualSensor</class-name>
+		<init-params>
+			<param name="input-stream">WaspmoteData</param><!--MULTIPLE, SEPARATED BY COMMAS--><!--Must bu the same as stream names-->
+			<param name="title">GSN Waspmote Data</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="type">SVG</param><!--MULTIPLE, SEPARATED BY COMMAS, SVG or ANY-->
+			<param name="height">400</param>
+			<param name="width">500</param>
+			<param name="vertical-axis">Data</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="history-size">100</param>
+			<param name="ID">ID</param><!--The name of first field in the StreamElement received by the processing class. Represents the ID of the sensor. Default value is 'ID'-->
+			<param name="data-field-name">TEMPERATURE</param><!--The name of second field in the StreamElement received by the processing class. Represents the data measured. Defaul value is 'DATA'-->
+		</init-params>
+		<output-structure>
+			<field name="WaspmoteData" type="binary:image/svg+xml" /><!--Must bu the same as stream names, type should be set according to parameter 'type'-->
+		</output-structure>
+	</processing-class>
+	<description>This sensor plots data from Waspmotes.</description>
+	<addressing>
+		<predicate key="geographical">FER - ZARI</predicate>
+		<predicate key="LATITUDE">45.801502</predicate>
+		<predicate key="LONGITUDE">15.971127</predicate>
+	</addressing>
+	<storage history-size="1" />
+	<streams>
+		<stream name="WaspmoteData"><!--Must bu the same as param-->
+			<source alias="wifiwasp" sampling-rate="1" storage-size="1">
+				<address wrapper="local">
+					<predicate key="NAME">Wasp</predicate>
+				</address>
+				<query>SELECT * FROM WRAPPER</query>
+			</source>
+			<query>SELECT * FROM wifiwasp</query>
+		</stream>
+	</streams>
+</virtual-sensor>

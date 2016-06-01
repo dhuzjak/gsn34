@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="WaspCurrBlackAvgDay" priority="10">
+  <processing-class>
+    <class-name>hr.fer.rasip.processingclasses.WaspCurrBlackAvgDay</class-name>
+    <init-params>
+      <!-- <param name="persistant">false</param> -->
+    </init-params>
+    <output-structure>
+	     <field name="powerAvgDay" type="double"/>
+     </output-structure>
+  </processing-class>
+  <description>Make averageDay value of data sent from the Black current meter</description>
+  <addressing />
+  <storage history-size="240h" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+        <address wrapper="local">
+        <!--  Preuzmi podatke -->
+          <predicate key="time-division">1000</predicate> <!--  1000ms -->
+          <predicate key="query">select power from waspcurrblackavg</predicate>
+        </address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>
+</virtual-sensor>

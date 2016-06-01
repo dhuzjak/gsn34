@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <connection-params>
+    <local-port>27654</local-port>
+    <remote-port>26352</remote-port>
+    <ip-address>192.168.1.92</ip-address>
+  </connection-params>
+  <relays>
+    <relay>
+      <displayName>Zarulja</displayName>
+      <id>15</id>
+    </relay>
+  </relays>
+</config>
+

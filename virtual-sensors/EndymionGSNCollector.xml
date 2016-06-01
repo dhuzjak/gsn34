@@ -1,0 +1,29 @@
+<virtual-sensor name="Endymion" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+		<output-structure>
+			<field name="GSNId" type="varchar(50)"/>
+			<field name="vSensorName" type="varchar(100)"/>
+			<field name="data" type="varchar(500)"/>
+		</output-structure>
+	</processing-class>
+	<description>Collects data from other GSNs</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+		<predicate key="geographical">Endymion - GSN</predicate>
+		<predicate key="LATITUDE">45.855452</predicate>
+		<predicate key="LONGITUDE">15.986867</predicate>
+		<predicate key="owner">RASIP - Endymion</predicate>
+	</addressing>
+	<storage history-size="24h" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+				<address wrapper="endymion_wrapper">
+				</address>
+				<query>SELECT * FROM wrapper</query>
+			</source>
+			<query>SELECT * FROM source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>

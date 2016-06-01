@@ -1,0 +1,36 @@
+[
+	{
+	   "name":"/passiveHeating",
+       "templateUrl": "views/passiveHeating.html",
+       "controller": "PassiveHeatingController",
+       "pageName":"Passive heating", 
+       "url":"/passiveHeating",
+       "active":false
+    },
+	{
+	   "name": "/relay", 
+       "templateUrl": "views/relay.html",
+       "controller": "RelayController",
+       "pageName":"Relay managment",
+       "url":"/relay", 
+       "active":false
+	},
+	{
+	   "name": "/ipcamera", 
+       "templateUrl": "views/ipCamera.html",
+       "controller": "IPCamera",
+       "pageName":"Relay managment",
+       "url":"/ipcamera", 
+       "active":false
+	},	
+      {
+         "name": "/electricity", 
+       "templateUrl": "views/electricity.html",
+       "controller": "Electricity Meter",
+       "pageName":"Electricity managment",
+       "url":"/electricity", 
+       "active":false
+      }     
+]
+ 
+  

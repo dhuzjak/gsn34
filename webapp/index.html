@@ -1,0 +1,207 @@
+<!doctype html >
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" ng-app="gsnClientApp"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title ng-bind="'GSN&#58; ' + title">GSN</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+ 
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+
+    <link rel="stylesheet" href="bower_components/foundation/css/foundation.min.css" />
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="bower_components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="bower_components/ng-grid/ng-grid.css" />
+    <link rel="stylesheet" href="bower_components/switchery/dist/switchery.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-layout/ui-layout.css"/>
+    <link rel="stylesheet" href="bower_components/angular-gridster/dist/styles/gridster.min.css"/>
+    <link rel="stylesheet" href="bower_components/isteven-angular-multiselect/angular-multi-select.css"/>    
+    <link rel="stylesheet" href="bower_components/datetimepicker-master/jquery.datetimepicker.css" /> 
+    
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body>
+    <!-- <div class="columns"><br /><br /></div>-->
+
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+   
+    <div ng-controller="NavigationController">
+        <top-bar scrolltop="true">
+        <ul class="title-area">
+            <li class="name">
+                <h1></h1>
+            </li>
+            <li toggle-top-bar class="menu-icon"><a>Menu</a></li>
+        </ul>
+
+        <top-bar-section>
+            <ul class="right">
+                <li ng-class="{active: page.active == true}"
+                    ng-repeat="page in pages"><a ng-href="#{{page.url}}" ng-cloak>{{page.pageName}}</a></li>
+                <li has-dropdown>
+                    <a href="#">Sensor control</a>
+                    <ul id="directives-list" top-bar-dropdown>
+                        <li ng-class="{active: page.active == true}"
+                          ng-repeat="page in dropdown"><a ng-href="#{{page.url}}" ng-cloak>{{page.pageName}}</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </top-bar-section>
+        </top-bar>
+    </div>
+
+ <!--   <div class="contain-to-grid fixed" ng-controller="NavigationController">
+
+      <top-bar>
+        <top-bar-section>
+          <ul class="left">
+            <li toggle-top-bar class="menu-icon"><a href="#">Menu</a></li>
+            <li ng-class="{active: page.active == true}"
+                          ng-repeat="page in pages"><a ng-href="#{{page.url}}" ng-cloak>{{page.pageName}}</a></li>
+            
+          </ul>
+          <ul class="right">
+            <li has-dropdown>
+                <a href="#">Sensor control</a>
+                 <ul top-bar-dropdown>
+                    <li ng-class="{active: page.active == true}"
+                          ng-repeat="page in dropdown"><a ng-href="#{{page.url}}" ng-cloak>{{page.pageName}}</a></li>
+                </ul>
+            </li>
+          </ul>
+        </top-bar-section>
+     </top-bar>
+
+    </div>-->  
+    
+    <!-- Add your site or application content here -->
+    <div id="viewContainer" class="viewContainer" ng-view=""></div> 
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+	<script>
+		var latitude_var;
+		var longitude_var;
+		var inet_connection = true;
+		var inet_check_done = false;
+	</script>
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+
+    <script src="bower_components/angular-foundation/mm-foundation-tpls-0.3.1.js"></script>
+
+
+   
+
+
+
+
+    <script src="bower_components/modernizr/modernizr.js"></script>
+    <script src="bower_components/angular-ui-date/src/date.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/fastclick/lib/fastclick.js"></script>
+    <script src="bower_components/jquery.cookie/jquery.cookie.js"></script>
+    <script src="bower_components/jquery-placeholder/jquery.placeholder.js"></script>
+    <script src="bower_components/foundation/js/foundation/foundation.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+    <!--<script src="http://j.maxmind.com/app/geoip.js"></script>-->
+    <script src="bower_components/ngQuickDate/dist/ng-quick-date.js"></script>
+    <script src="bower_components/ng-grid/build/ng-grid.js"></script>
+    <script src="bower_components/switchery/dist/switchery.js"></script>
+    <script src="bower_components/ng-switchery/src/ng-switchery.js"></script>
+    <script src="bower_components/angular-gridster/dist/scripts/gridster.min.js"></script>
+    <script src="bower_components/isteven-angular-multiselect/angular-multi-select.js"></script>
+    <script src="bower_components/highcharts-stock/js/highstock.js"></script>
+    <script src="bower_components/highcharts-stock/js/modules/exporting.js"></script>
+    <script src="bower_components/highcharts-ng/src/highcharts-ng.js"></script>
+    <script src="bower_components/highcharts/js/highcharts-more.js"></script>
+    <script src="bower_components/datetimepicker-master/jquery.datetimepicker.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+	<script src="bower_components/angular-moment/angular-moment.js"></script>
+
+    <script src="bower_components/paho-mqtt-js/mqttws31.js"></script>
+    
+<!--    <script src="bower_components/angular-foundation/mm-foundation.js"></script>-->
+   
+    <!-- endbower -->
+    <!-- endbuild -->
+    
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/services/navigation.js"></script>
+        <script src="scripts/services/VirtualSensor.js"></script>
+        <script src="scripts/services/refresh.js"></script>
+        <script src="scripts/services/settings.js"></script>
+        <script src="scripts/services/PassiveHeatingService.js"></script>
+        <script src="scripts/services/RelayService.js"></script>
+        <script src="scripts/services/IPCameraService.js"></script>
+        <script src="scripts/services/ChartService.js"></script>
+        <script src="scripts/services/mqttConfigService.js"></script>
+
+        <script src="scripts/controllers/navigation.js" ></script>
+        <script src="scripts/controllers/home.js"></script>
+        <script src="scripts/controllers/data.js"></script>
+        <script src="scripts/controllers/map.js"></script>
+        <script src="scripts/controllers/passiveHeating.js"></script>
+        <script src="scripts/controllers/relay.js"></script>
+        <script src="scripts/controllers/admin.js"></script>
+        <script src="scripts/controllers/adminMain.js"></script>
+        <script src="scripts/controllers/config.js"></script>
+        <script src="scripts/controllers/modifyDesc.js"></script>
+      <!--  <script src="scripts/directives/map.js"></script>-->
+        <script src="scripts/controllers/IPCamera.js"></script>
+        <script src="scripts/controllers/electricity.js"></script>
+        <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/watchdog.js"></script>
+        <script src="scripts/controllers/notifications.js"></script>
+        
+        <script src="scripts/controllers/MQTT.js"></script>
+
+        <script src="scripts/directives/layout.js"></script>
+
+        <!-- endbuild -->
+		
+		<script>
+			$.ajax({
+				dataType: "jsonp",
+				url: "https://freegeoip.net/json/",
+				type: "GET",
+				timeout: 4096,
+				error: function(jqXHR, text, error) {
+					inet_connection = false;
+					inet_check_done = true;
+				},
+				success: function(response) {
+					latitude_var = response.latitude;
+					longitude_var = response.longitude;
+					inet_connection = true;
+					inet_check_done = true;
+				}
+			});					
+		</script>
+</body>
+</html>

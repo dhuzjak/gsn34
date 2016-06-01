@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="A_WaspTermometer1" priority="10">
+  <processing-class>
+    <class-name>hr.fer.rasip.processingclasses.WaspMoteTermometer</class-name>
+    <init-params>
+      <!--<param name="persistant">false</param> -->
+    </init-params>
+    <output-structure>
+			<field name="temperature" type="int" />
+			<field name="battery" type="int"/>
+		</output-structure>
+  </processing-class>
+  <description>Testing wasp termometer1 T2.1 V2.0 T1S (VB)</description>
+  <addressing />
+  <storage history-size="24h" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+        <address wrapper="local">
+          <predicate key="query">select data, timed from G_WaspMoteGateway where moteID = 'termometar-1'</predicate>
+        </address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>
+</virtual-sensor>
+

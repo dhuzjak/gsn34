@@ -1,0 +1,61 @@
+<!--<div class="medium-10 medium-offset-1  columns">-->
+  <div id="container" >
+    <div ng-controller = "ElectricityController">
+      <div class="row">
+        <div class="medium-12 columns">
+          <h1>Electricity Meter</h1>
+          <br/><br/>
+          <h3>Current sensor: {{sensorTitle}}</h3>
+          <br/>
+          <div class="row">
+            <div id="content">
+
+              <div class="medium-3 columns">
+                Sensor field:              
+                <select ng-model="selectedSensor"
+                        ng-options="o.name for o in results" ng-change="sensorChanged()">
+                </select>
+              </div>
+            </div>
+            </div>
+            <div class="medium-12 columns">
+            <div class="row">
+              
+              <div class="medium-4 columns" >
+                <div id="container_gauge1" style="height: 300px; margin: 0 auto"></div>            
+                </br>
+                <div class = "gaugeTime">
+                  Value: {{valueGauge1}}
+                  </br>
+                  Time: {{valueTime1}}
+                </div>
+              </div>
+              <div class="medium-4 columns" >
+                <div id="container_gauge2" style="height: 300px; margin: 0 auto"></div>   
+                </br>
+                <div class = "gaugeTime">
+                  Value: {{valueGauge2}}
+                  </br>
+                  Time: {{valueTime2}}
+                </div>              
+              </div>       
+              <div class="medium-4 columns">
+                <div id="container_gauge3" style="height: 300px; margin: 0 auto"></div>   
+                </br>
+                <div class = "gaugeTime" >
+                  Value: {{valueGauge3}}
+                  </br>
+                  Time: {{valueTime3}}
+                </div>             
+              </div>
+            </div>
+            </div>
+          </div>
+          </div>
+          </div>
+          <br/><br/>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--</div>-->

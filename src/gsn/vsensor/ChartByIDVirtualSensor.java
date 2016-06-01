@@ -1,0 +1,409 @@
+package gsn.vsensor;
+
+import gsn.beans.DataTypes;
+import gsn.beans.StreamElement;
+import gsn.utils.ParamParser;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.io.OutputStreamWriter;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.log4j.Logger;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.SeriesException;
+import org.jfree.data.time.FixedMillisecond;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+
+/**
+ * The plot should be introduced in the init-param part of the configuration
+ * file in which this virtual sensor is used. The paramter name is PLOT and the
+ * value should have the following syntax
+ * INPUT_STREAM_VAR_NAME:CHART_NAME[TYPE@SIZE]{WIDTH;HEIGHT} The typcal values
+ * for width and height are 640 and 480. The Size means how many values the
+ * system should use for plotting the diagram. <br>
+ * VERY IMPORTANT : THIS A GENERAL PLOT DRAWING VIRTUAL SENSOR AND NOT
+ * MEMORY/CPU FRIENDLY. ONE CAN USE THIS VIRTUAL SENSOR AS A STARTING POINT FOR
+ * WRITING MORE ADVANCED AND OPTIMIZED CHART DRAWING PACKAGES. <br>
+ * VERY IMPORTANT : IN THIS IMPLEMENTATION, THE LARGER THE SIZE OF THE HISTORY
+ * USED FOR DRAWING, THE BIGGER THE OUTPUT PLOT SIZE (IN KILOBYTES) AND THE
+ * HIGHER PROCESSING TIME.
+ * 
+ */
+ 
+ /**
+  * This VS should get StreamElements with fields ID (int) and getparam('data-field-name') (double)
+  * 'ID' <string> represents a unique sensor
+  * 'data-field-name' <string> represents data from sensor
+  * Each ID (sensor) will get its own line on the final plot
+  */
+public class ChartByIDVirtualSensor extends AbstractVirtualSensor {
+   
+   private  final transient Logger               logger                             = Logger.getLogger( this.getClass() );
+   
+   /**
+    * The <code>GENERATE_COUNT</code> represents after how many inputs, the
+    * virtual sensor should generate data. By default it set to 1 meaning that
+    * for each stream element received, the virtual sensor plots a new diagram.
+    * If you want to make the virtual sensor plot after receiving each K stream
+    * elements, set <code>GENERATE_COUNT</code> to K.
+    */
+   private final int                                   GENERATE_COUNT                     = 1;
+   
+   private long                                        counter                            = 0;
+   
+   private final HashMap < String , ChartByIDInfo > input_stream_name_to_ChartByIDInfo_map = new HashMap < String , ChartByIDInfo >( );
+   
+   private int                                         counter_pref                       = 0;
+   
+   private String ID;
+   
+   private String dataFieldName;
+   
+   public boolean initialize ( ) {
+      
+      TreeMap <String, String> params = getVirtualSensorConfiguration( ).getMainClassInitialParams( );
+
+      
+      String[] inputStreams = params.get("input-stream").split(","); //Input stream names should be separated by commas
+       
+       for(int i=0; i<inputStreams.length; i++){
+       	inputStreams[i]=inputStreams[i].trim();
+       	
+       	if(inputStreams[i].equals("")){
+       		logger.warn("input-streams parameters must be non-empty strings");
+       		return false;
+       	}
+       }
+       
+       ID = params.get("ID").trim();
+       dataFieldName = params.get("data-field-name").trim();
+       
+       if(dataFieldName.equals(""))
+       	dataFieldName = "DATA";
+
+       if(ID.equals(""))
+       	ID = "ID";
+       	
+       String[] titles = params.get("title").split(",");
+       
+       for(int i=0; i<titles.length; i++)
+       	titles[i]=titles[i].trim();
+       	
+       String[] verticals = params.get("vertical-axis").split(",");
+       
+       for(int i=0; i<verticals.length; i++)
+       	titles[i]=titles[i].trim();
+       	
+       String[] types = params.get("type").split(",");
+       
+       for(int i=0; i<types.length; i++)
+       	types[i]=types[i].trim();
+       	
+       if(verticals.length!=inputStreams.length || titles.length!=inputStreams.length || types.length!=inputStreams.length)
+       	return false;
+       	
+       for(int i=0; i<inputStreams.length; i++){
+       	ChartByIDInfo chartInfo = new ChartByIDInfo( );
+       	
+	chartInfo.setInputStreamName( inputStreams[i] );
+	chartInfo.setPlotTitle( titles[i] );
+	chartInfo.setType( types[i] );
+	chartInfo.setHeight( ParamParser.getInteger( params.get( "height" ) , 480 ) );
+	chartInfo.setWidth( ParamParser.getInteger( params.get( "width" ) , 640 ) );
+	chartInfo.setVerticalAxisTitle( verticals[i] );
+	chartInfo.setHistorySize( ParamParser.getInteger( params.get( "history-size" ) , 10 ) );
+	
+	input_stream_name_to_ChartByIDInfo_map.put( chartInfo.getInputStreamName( ) , chartInfo );
+	
+	chartInfo.initialize( );
+       }
+       
+      return true;
+   }
+   
+   public void dataAvailable ( String inputStreamName , StreamElement streamElement ) {
+      if ( logger.isDebugEnabled( ) ) logger.debug( new StringBuilder( "data received under the name *" ).append( inputStreamName ).append( "* to the ChartVS." ).toString( ) );
+      /**
+       * Finding the appropriate ChartByIDInfo object for this input stream.
+       */
+      ChartByIDInfo chartInfo = input_stream_name_to_ChartByIDInfo_map.get( inputStreamName );
+      /**
+       * If there is not chartInfo configured for this input stream, the virtual
+       * sensor doesn't produce any values. Note that if this virtual sensor is
+       * intended to produce output other than plots (e.g., if output of this
+       * virtual sensor also container integers), then one might comment the
+       * following line.
+       */
+       
+      if ( chartInfo == null ) {
+         logger.warn( "ChartVS drops the input because there is no chart specification defined for the specific input." );
+         return;
+      }
+      /**
+       * Sending the data to the chartInfo.
+       */
+      chartInfo.addData( streamElement, ID, dataFieldName );
+      /**
+       * counter checks to see if it's the time to do the plotting or not.
+       */
+      
+      if ( ++counter % GENERATE_COUNT != 0 ) return;
+      /**
+       * Creating the stream element(s) for output. For creating a stream
+       * element one need to provide the field names (in the form of string
+       * array) and their types (in the form of integer array). This virtual
+       * sensor just produces plots therefore the output is in the form of
+       * binary data thus we set the type of the output stream element to
+       * Types.Binary.
+       */
+      
+      String [ ] fieldNames = input_stream_name_to_ChartByIDInfo_map.keySet( ).toArray( new String [ ] {} );
+      Byte [ ] fieldTypes = new Byte [ fieldNames.length ];
+      Serializable [ ] charts = new Serializable [ fieldNames.length ];
+      for ( int i = 0 ; i < fieldTypes.length ; i++ ) {
+         /**
+          * We set the type of the output stream element to Types.Binary because
+          * we are producing images.
+          */
+         fieldTypes[ i ] = DataTypes.BINARY;
+      }
+      /**
+       * Creating an stream element with the specified fieldnames, fieldtypes
+       * and using the current time as the timestamp of the stream element.
+       */
+      
+      /**
+       * In here our stream element's relation contains just one row of data and
+       * it's filled using the binary data which contains the plots. Note that
+       * this virtual sensor plots one diagram for each InputStreamName. Also
+       * Note that, each InputStreamName can have one or more variables inside
+       * it's stream elements's relation thus having one plot for several
+       * variables.
+       */
+
+      for ( int i = 0 ; i < fieldNames.length ; i++ ) {
+         ChartByIDInfo chart = input_stream_name_to_ChartByIDInfo_map.get( fieldNames[ i ] );
+         charts[ i ] = chart.writePlot( ).toByteArray( );
+      }
+      StreamElement output = new StreamElement( fieldNames , fieldTypes , charts , System.currentTimeMillis( ) );
+      
+      /**
+       * Informing container about existance of a stream element.
+       */
+      dataProduced( output );
+      /**
+       * For debugging purposes.
+       */
+      if ( logger.isDebugEnabled( ) ) logger.debug( new StringBuilder( ).append( "Data received under the name: " ).append( inputStreamName ).toString( ) );
+   }
+   
+   public void dispose ( ) {
+
+   }
+   
+}
+
+/**
+ * This class represents a chart. The class is initialized using a String with a
+ * predefined syntax. The class acts as a proxy between the Virtual Sensor and
+ * the JFreeChart library which is used for plotting diagrams.
+ */
+
+class ChartByIDInfo {
+   
+   private static final String             SYNTAX          = "INPUT_STREAM_VAR_NAME:CHART_NAME:VERTICAL_AXIS_TITLE [TYPE@SIZE] {WIDTH;HEIGHT}";
+   
+   private  final transient Logger   logger          = Logger.getLogger( this.getClass() );
+   
+   private String                          plotTitle;
+   
+   private int                             width;
+   
+   private int                             height;
+   
+   private int                             historySize;
+   
+   private String                          type;
+   
+   private String                          rowData;
+   
+   private String                          inputStreamName;
+   
+   private TimeSeriesCollection            dataCollectionForTheChart;
+   
+   private HashMap < String , TimeSeries > dataForTheChart = new HashMap < String , TimeSeries >( );
+   
+   private ByteArrayOutputStream           byteArrayOutputStream;
+   
+   private JFreeChart                      chart;
+   
+   private boolean                         changed         = true;
+   
+   private boolean                         ready           = false;
+   
+   private String                          verticalAxisTitle;
+   
+   public ChartByIDInfo ( ) {
+      byteArrayOutputStream = new ByteArrayOutputStream( 64 * 1024 ); // Grows
+      // as
+      // needed
+      byteArrayOutputStream.reset( );
+      dataCollectionForTheChart = new TimeSeriesCollection( );
+      rowData = "";
+   }
+   
+   public void setWidth ( int width ) {
+      if ( !ready ) this.width = width;
+   }
+   
+   public void setHeight ( int height ) {
+      if ( !ready ) this.height = height;
+   }
+   
+   public void setHistorySize ( int history ) {
+      if ( !ready ) historySize = history;
+   }
+   
+   public void setVerticalAxisTitle ( String title ) {
+      if ( !ready ) verticalAxisTitle = title;
+   }
+   
+   public void setType ( String type ) {
+      if ( !ready ) this.type = type;
+   }
+   
+   public void setPlotTitle ( String plotTitle ) {
+      if ( !ready ) this.plotTitle = plotTitle;
+   }
+   
+   public void setInputStreamName ( String inputStreamName ) {
+      if ( !ready ) this.inputStreamName = inputStreamName;
+   }
+   
+   public void initialize ( ) {
+      if ( !ready ) {
+         chart = ChartFactory.createTimeSeriesChart( plotTitle , "Time" , verticalAxisTitle , dataCollectionForTheChart , true , true , false );
+         chart.setBorderVisible( true );
+         ready = true;
+         if ( logger.isDebugEnabled( ) ) logger.debug( "The Chart Virtual Sensor is ready." );
+      }
+   }
+   
+   /**
+    * This method adds the specified stream elements to the timeSeries of the
+    * appropriate plot.
+    * 
+    * @param streamElement
+    */
+   public synchronized void addData ( StreamElement streamElement, String ID, String dataField ) {
+   	Integer receivedID;
+	Double receivedData;
+   
+   	try {
+		receivedID = Integer.parseInt( streamElement.getData(ID).toString() );
+		receivedData = Double.parseDouble( streamElement.getData(dataField).toString() );
+	} catch ( Exception e ) {
+		logger.warn(e.getMessage(), e);
+		return;
+	}
+
+	TimeSeries timeSeries = dataForTheChart.get( receivedID.toString() );
+
+	if ( timeSeries == null ) {
+	    dataForTheChart.put( receivedID.toString() , timeSeries = new TimeSeries( receivedID.toString() , org.jfree.data.time.FixedMillisecond.class ) );
+	    timeSeries.setMaximumItemCount( historySize );
+	    dataCollectionForTheChart.addSeries( timeSeries );
+	}
+	 
+	try {
+	    timeSeries.addOrUpdate( new FixedMillisecond( new Date( streamElement.getTimeStamp( ) ) ) , Double.parseDouble( receivedData.toString( ) ) );
+	} catch ( SeriesException e ) {
+	    logger.warn( e.getMessage( ) , e );
+	}
+
+	changed = true;
+   }
+   
+   /**
+    * Plots the chart and sends it in the form of ByteArrayOutputStream to
+    * outside.
+    * 
+    * @return Returns the byteArrayOutputStream.
+    */
+   public synchronized ByteArrayOutputStream writePlot ( ) {
+      if ( !changed ) return byteArrayOutputStream;
+      byteArrayOutputStream.reset( );
+      try {
+         if(this.type.equalsIgnoreCase("SVG")) {
+		DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+		Document sensorDoc = domImpl.createDocument(null, "svg", null);
+		SVGGraphics2D svg2d = new SVGGraphics2D(sensorDoc);
+		
+		chart.draw(svg2d, new Rectangle(0, 0, width, height));
+		svg2d.setSVGCanvasSize(new Dimension(width, height));
+		
+		Writer out = new OutputStreamWriter(byteArrayOutputStream, "UTF-8");
+		svg2d.stream(out, false);
+		out.flush();
+		out.close();
+         } else
+         	ChartUtilities.writeChartAsPNG( byteArrayOutputStream , chart , width , height , false , 8 );
+         
+      } catch ( IOException e ) {
+         logger.warn( e.getMessage( ) , e );
+      }
+      return byteArrayOutputStream;
+   }
+   
+   public boolean equals ( Object obj ) {
+      if ( obj == null && !( obj instanceof ChartByIDInfo ) ) return false;
+      return ( obj.hashCode( ) == hashCode( ) );
+   }
+   
+   int cachedHashCode = -1;
+   
+   public int hashCode ( ) {
+      if ( rowData != null && cachedHashCode == -1 ) cachedHashCode = rowData.hashCode( );
+      return cachedHashCode;
+   }
+   
+   /**
+    * @return Returns the inputStreamName.
+    */
+   public String getInputStreamName ( ) {
+      return inputStreamName;
+   }
+   
+   public String toString ( ) {
+      StringBuffer buffer = new StringBuffer( );
+      try {
+         if ( plotTitle != null ) buffer.append( "Plot-Title : " ).append( plotTitle ).append( "\n" );
+         if ( inputStreamName != null ) {
+            buffer.append( "Input-Stream Name : " ).append( inputStreamName ).append( "\n" );
+         }
+         buffer.append( "Width : " ).append( width ).append( "\n" );
+         buffer.append( "Height : " ).append( height ).append( "\n" );
+         if ( type != null ) buffer.append( "Type : " ).append( type ).append( "\n" );
+         buffer.append( "History-size : " ).append( historySize ).append( "\n" );
+      } catch ( Exception e ) {
+         buffer.insert( 0 , "ERROR : Till now the ChartByIDVirtualSensor instance could understand the followings : \n" );
+      }
+      return buffer.toString( );
+   }
+}

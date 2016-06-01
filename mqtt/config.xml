@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <connection-params>
+    <gsn-name>GSN_MQTT_develop</gsn-name>
+    <gsn-id>1</gsn-id>
+    <broker-url>tcp://test.mosquitto.org</broker-url>
+    <broker-port>1883</broker-port>
+    <websockets-url>test.mosquitto.org</websockets-url>
+    <websockets-port>8080</websockets-port>
+    <mqtt-username>admin</mqtt-username>
+    <mqtt-password>admin</mqtt-password>
+    <mqtt-gateway>RASIP/#</mqtt-gateway>
+    <mqtt-topic-endymion-alarm>RASIP/Endymion/alarms</mqtt-topic-endymion-alarm>
+    <mqtt-topic-notifications>RASIP/GSN/notifications</mqtt-topic-notifications>
+    <mqtt-topic-watchdog>RASIP/GSN/watchdog</mqtt-topic-watchdog>
+    <mqtt-topic-relay>RASIP/GSN/relays</mqtt-topic-relay>
+    <mqtt-topic-waspmotegateway>RASIP/GSN/GatewayOutput</mqtt-topic-waspmotegateway>
+  </connection-params>
+</config>

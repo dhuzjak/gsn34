@@ -1,0 +1,27 @@
+<virtual-sensor name="usbCamVS_2" priority="11">
+	<processing-class>
+		<class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+		<output-structure>
+			<field name="picture" type="binary:image/jpeg" />
+		</output-structure>
+	</processing-class>
+	<description>Capture image from USB camera!</description>
+	<life-cycle pool-size="2" />
+	<addressing>
+		<predicate key="geographical">Not Specified!</predicate>
+	</addressing>
+	<storage history-size="20000"/>
+	<streams>
+		<stream name="DATA">
+			<source alias="sourceCam" storage-size="1" sampling-rate="10">
+				<address wrapper="usbcam">
+					<predicate key="image-width">400</predicate>
+					<predicate key="image-height">400</predicate>
+					<predicate key="device-id">0</predicate>
+				</address>
+				<query>select picture from wrapper</query>
+			</source>
+			<query>select * from sourceCam</query>
+		</stream>
+	</streams>
+</virtual-sensor>

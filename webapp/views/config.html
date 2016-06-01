@@ -1,0 +1,86 @@
+
+		
+        <script src="scripts/jquery.js"></script> 
+		<!--<div class="medium-10 medium-offset-1 columns ng-scope">-->
+		<div id="container" class="ng-scope">
+		<h1>Configure your GSN</h1>
+        <fieldset style="width:400px; margin-right:5px;">
+            <legend>GSN Information</legend>
+            <span>GSN Name:</span><input id="name" type="text" name="name" value=""><br>
+            <span>Author:</span> <input  id ="author" type="text" name="author" value=""><br>
+            <span>Email:</span> <input  id ="email" type="text" name="email" value=""><br>
+            <span>Description:</span> <input  id ="description" type="text" name="description" value=""><br>
+            <div style="display:none"><span>Port:</span> <input  id ="port" type="text" name="port" value=""><br></div>
+        </fieldset> 
+
+        <fieldset style="width:400px; margin-right:5px; display:none">
+            <legend>Database Configuration</legend>
+            <span>User:</span><input id="user" type="text" name="user" value=""><br>
+            <span>Password:</span> <input  id ="password" type="text" name="password" value=""><br>
+            <span>Url to database: </span> <input  id ="url" type="text" name="url" value=""><br>
+            <div>
+                <span>Driver:</span>  <select id="driver">
+                    <option value="0">H2</option>
+                    <option value="1">MySql</option>
+                    <option value="2">Postgre</option>
+                    <option value="3">Oracle</option>
+                </select>
+            </div>
+        </fieldset> 
+		<input type="submit" class="button" value="Send" id="get" style="margin-right:5px;" />
+		</div>
+		<!--</div>-->
+        <script>
+            var loadUrl = "/adminRest/config"
+            $(document).ready(function()
+            {
+                $.ajax({
+                    headers: {"Accept": "application/json"},
+                    url: loadUrl,
+                    type: "GET",
+                    success: function(wrapperObject) {
+                        $("#name").val(wrapperObject["name"]);                          
+                        $("#author").val(wrapperObject["author"]);
+                        $("#email").val(wrapperObject["email"]);
+                        $("#description").val(wrapperObject["description"]);
+                        $("#port").val(wrapperObject["port"]);
+                        $("#user").val(wrapperObject["user"]);
+                        $("#password").val(wrapperObject["password"] );
+                        $("#url").val(wrapperObject["url"]);
+                        $("#driver").val(wrapperObject["driver"]);
+                    }
+                });
+            });
+            var wrapperObject = {};
+            $("#get").click(function() {               
+                
+
+                wrapperObject["name"] = $("#name").val();
+                wrapperObject["author"] = $("#author").val();
+                wrapperObject["email"] = $("#email").val();
+                wrapperObject["description"] = $("#description").val();
+                wrapperObject["port"] = $("#port").val();
+                wrapperObject["user"] = $("#user").val();
+                wrapperObject["password"] = $("#password").val();
+                wrapperObject["url"] = $("#url").val();
+                wrapperObject["driver"] = $("#driver").val();
+
+
+                var jsonString = JSON.stringify(wrapperObject);
+                $.ajax({
+                    headers: {"Accept": "application/text",
+                        "Content-Type": "application/json"},
+                    url: loadUrl,
+                    data: jsonString,
+                    type: "POST",
+                    success: function(responseText) {
+                        alert("Changes are saved!");
+                        //virtualSensorCm.setValue(responseText);
+                    },
+		    error : function(jqxhr, status, error){
+				alert("Error while saving changes\n"+status+"\n"+ error);
+			}
+                });
+            });
+        </script>
+

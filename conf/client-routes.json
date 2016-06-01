@@ -1,0 +1,52 @@
+[
+	{
+	   "name":"/passiveHeating",
+       "templateUrl": "views/passiveHeating.html",
+       "controller": "PassiveHeatingController",
+       "pageName":"Passive heating", 
+       "url":"/passiveHeating",
+       "active":false
+    },
+	{
+	   "name": "/relay", 
+       "templateUrl": "views/relay.html",
+       "controller": "RelayController",
+       "pageName":"Relay managment",
+       "url":"/relay", 
+       "active":false
+	},
+	{
+	   "name": "/ipcamera", 
+       "templateUrl": "views/ipCamera.html",
+       "controller": "IPCamera",
+       "pageName":"IP camera",
+       "url":"/ipcamera", 
+       "active":false
+	},
+	{
+	   "name": "/watchdog", 
+       "templateUrl": "views/watchdog.html",
+       "controller": "WatchdogController",
+       "pageName":"Watchdog",
+       "url":"/watchdog", 
+       "active":false
+	},
+	{
+	   "name": "/notifications", 
+       "templateUrl": "views/notifications.html",
+       "controller": "NotificationsController",
+       "pageName":"Notifications",
+       "url":"/notifications", 
+       "active":false
+	},
+	{
+	   "name": "/adminMain", 
+       "templateUrl": "views/adminMain.html",
+       "controller": "AdminMainCtrl",
+       "pageName":"Admin pages",
+       "url":"/adminMain", 
+       "active":false
+	}
+]
+ 
+  

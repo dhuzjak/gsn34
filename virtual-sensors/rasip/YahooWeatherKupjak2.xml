@@ -1,0 +1,35 @@
+<virtual-sensor name="YahooWeatherKupjak2" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+		<output-structure>
+			<field name="temperature" type="int"/>
+			<field name="humidity" type="int"/>
+		</output-structure>
+	</processing-class>
+	<description>This sensor collects temperature and humidity from Yahoo Weather for Kupjak</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+    <predicate key="geographical">Yahoo Weather sensor in Kupjak</predicate>
+		<predicate key="LATITUDE">45.81</predicate>
+		<predicate key="LONGITUDE">15.97</predicate>
+		<predicate key="owner">MZ</predicate>
+	</addressing>
+	<storage history-size="240h" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+				<address wrapper="yahooweather2">
+					<predicate key="sampling-rate">3600000</predicate>
+					<!--predicate key="woeid">851128</predicate--> 	  <!-- woeid for Zagreb-->
+					<predicate key="woeid">848702</predicate> 	  <!-- woeid for Kupjak -->
+					<!--predicate key="woeid">847275</predicate--> 	  <!-- woeid for Delnice -->
+					<!--predicate key="woeid">15022274</predicate--> <!-- woeid for Ravna Gora -->
+					<!--predicate key="woeid">15022156</predicate--> <!-- woeid for Skrad -->
+					<!--predicate key="woeid">55855366</predicate--> <!-- woeid for Jadranovo -->
+				</address>
+				<query>select temperature, humidity, TIMED from WRAPPER</query>
+			</source>
+			<query>select temperature, humidity, TIMED from source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>

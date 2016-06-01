@@ -1,0 +1,19 @@
+{
+  "name": "angular-ui-layout",
+  "version": "0.0.0",
+  "main": "ui-layout.js",
+  "dependencies": {
+    "angular": "~1.2.1"
+  },
+  "homepage": "https://github.com/angular-ui/ui-layout",
+  "_release": "0.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.0",
+    "commit": "f0deccf82962c1136757310bb84dbd792cbd1bc6"
+  },
+  "_source": "git://github.com/angular-ui/ui-layout.git",
+  "_target": "~0.0.0",
+  "_originalSource": "angular-ui-layout",
+  "_direct": true
+}

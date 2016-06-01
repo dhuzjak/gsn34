@@ -1,0 +1,43 @@
+<!ELEMENT configuration (gsn+, storage?)>
+
+<!ELEMENT gsn (ipAddress, port, username, password, connectionType, vsensors, alarms?)>
+<!ELEMENT ipAddress (#PCDATA)>
+<!ELEMENT port (#PCDATA)>
+<!ELEMENT username (#PCDATA)>
+<!ELEMENT password (#PCDATA)>
+<!ELEMENT connectionType (#PCDATA)>
+
+<!ELEMENT alarms (alarm+)>
+
+<!ELEMENT alarm (send-to+)>
+<!ATTLIST alarm name CDATA #REQUIRED>
+<!ATTLIST alarm after CDATA "24h">
+<!ATTLIST alarm only-once (false|true) "false">
+<!ATTLIST alarm alarm-type (email|stdout|mqtt) "stdout">
+<!ATTLIST alarm alarm-id CDATA "1">
+
+<!ELEMENT send-to (#PCDATA)>
+
+<!ELEMENT vsensors (vsensor*)>
+<!ATTLIST vsensors sampling-time CDATA "1h">
+<!ATTLIST vsensors sampling-rate CDATA "1">
+<!ATTLIST vsensors only-last-value (false|true) "false">
+<!ATTLIST vsensors read-sensors (all|part) "all">
+
+<!ELEMENT vsensor (fields?, alarms?)>
+<!ATTLIST vsensor vsname CDATA #REQUIRED>
+<!ATTLIST vsensor sampling-time CDATA #IMPLIED>
+<!ATTLIST vsensor sampling-rate CDATA #IMPLIED>
+<!ATTLIST vsensor only-last-value (false|true) #IMPLIED>
+<!ATTLIST vsensor read-data-fields (all|part) "all">
+
+<!ELEMENT fields (data-field*)>
+<!ELEMENT data-field EMPTY>
+
+<!ATTLIST data-field name CDATA #REQUIRED>
+<!--<!ATTLIST data-field unit (int|double|string) #REQUIRED>-->
+
+<!ELEMENT storage EMPTY>
+<!ATTLIST storage url CDATA #REQUIRED>
+<!ATTLIST storage username CDATA #REQUIRED>
+<!ATTLIST storage password CDATA #REQUIRED>

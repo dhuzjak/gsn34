@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="A_WaspDigitalAgricultural_Remote" priority="10">
+  <processing-class>
+    <class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+    <init-params>
+      <!-- <param name="persistant">false</param> -->
+    </init-params>
+    <output-structure>
+			<field name="air_temperature" type="int" />
+			<field name="battery" type="int"/>
+			<field name="humidity" type="int"/>
+			<field name="vwc_mineral" type="double"/>
+			<field name="vwc_potting" type="double"/>
+			<field name="vwc_rockwool" type="double"/>
+			<field name="vwc_perlite" type="double"/>
+			<field name="light_level" type="int"/>
+			<field name="earth_temperature" type="double"/>
+		</output-structure>
+  </processing-class>
+  <description>Processes data sent from the agricultural mote.</description>
+  <addressing />
+  <storage history-size="24h" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+       <address wrapper="remote-rest">
+					<predicate key="query">select * from A_WaspDigitalAgricultural</predicate>
+					<predicate key="username">admin</predicate>
+					<predicate key="password">admin</predicate>
+                    <predicate key="remote-contact-point">http://161.53.67.205:22001/streaming</predicate>
+				</address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>
+</virtual-sensor>
+
+
+

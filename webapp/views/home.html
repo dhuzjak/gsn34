@@ -1,0 +1,183 @@
+<div id="container">
+
+			<div>
+				<!--<h1>GSN::{{info.name}}</h1>-->
+	        
+	            <!--<div id="msg">
+	                <p>Welcome to Global Sensor Networks. The first ten sensors are displayed by default, but you can easily close them with the
+	                <em>close all</em> button. By clicking on a virtual sensors on the left sidebar, it will bring it to the top of the list.</p>
+	            </div>-->
+	            <br/><br/>
+	           <!-- <div class="medium-2 columns left" style="position:relative;top:7px;">-->
+	           		<div>
+	           		
+	           		<div style="position:relative;left:5px;top:5px; width:130px;">
+	            	Auto-refresh every :
+	            	</div>
+	        	<!--</div>-->
+
+	           <!-- <div class="medium-2 columns left" style="position:relative;top:7px">-->
+			            <!--<select ng-model="interval"
+			            			ng-options="o.name for o in intervalOptions" ng-change="setRefreshInterval()">
+			            </select>-->
+			            
+			            <div style="position:relative;left:140px;top:-20px;width:100px;">
+			            <div     
+  							multi-select
+  							helper-elements=""
+    						input-model="intervalOptions"
+    						output-model="interval"
+    						selection-mode="single"
+    						button-label="Refresh interval"
+    						max-labels="1"
+    						item-label="name"
+    						tick-property="visible"
+    						callback="setRefreshInterval()"
+    						button-label-fn="getRefreshLabel()">
+						</div>
+						</div>
+			   <!-- </div>-->        
+
+			    <!--<div class="small-1 medium-5 columns left" style="position:relative;">-->
+			    		<div  style="position:relative;left:230px;top:-50px;width:50px;">
+			            <input ng-click="refreshClicked()" type="button" value="refresh" class="alert button tiny radius" />
+		              <!--  <input type="button" value="close all" class="button tiny radius alert" /> -->
+		                <span class="refreshing" ng-show="updating">
+		                    <img src="images/ajax-loader.gif" alt="loading" title="" />
+		                </span>
+		            	</div>
+		       <!-- </div>-->
+
+		       	<div style="position:relative;left:320px;top:-97px;width:170px;">
+			        <div     
+	  						multi-select
+	  						helper-elements=""
+	    					input-model="sensors"
+	    					output-model="visibleSensors"
+	    					button-label="Active sensors"
+	    					max-labels="1"
+	    					item-label="name"
+	    					tick-property="visible"
+	    					button-label-fn="getActiveSensorLabel()">
+					</div>
+				</div>
+				</div>
+
+
+		        <br/>
+			     <!--<div class="row">-->
+			     	<!--<div class="medium-9 columns">-->
+			     	<div style="position:relative;top:-60px;">
+	            	 	<div class="wall" gridster="gridsterOpts">
+		                    
+		                    <!--
+		                    <div ng-show="updating">
+		                        <div class="loading">Virtual sensors are currently loading...</div>
+		                        <br />
+		                    </div>
+							-->
+		                 <!--   <div class="row">  -->
+		                     
+		             <!-- <div masonry="{ gutter: 20, transitionDuration: '0.5s' }">-->
+		             	<!--	<div class="wall" gridster="gridsterOpts"> -->
+								<ul>
+		                         	<li gridster-item class="box" style="" size-x="sensor.size.x" size-y="sensor.size.y"
+		                         								ng-repeat="sensor in sensors | filter:{visible:true}">
+					                    <div style="" class="panel radius vs-box" >
+					                     		<a ng-click="removeSensor($index);" class="round-button"
+					                     				style="position:relative; top:0px;right:0px;">X</a><!--With this positioning, the button is always in the upper left corner. Otherwise the positioning would fluctuate depending on the width of the widget.-->
+										        <h4>
+													<strong>
+											            <span class="vsname">{{sensor.name}}</span>
+													</strong>
+										            <small><span class="timed" ng-show="updating">Loading...</span></small>
+										        </h4>
+
+										        <div ng-repeat="field in sensor.structureFields">
+														<!--
+														<div ng-show="sensor.fields[field].type === 'binary:image/jpeg' || sensor.fields[field].type === 'binary:image/png' || sensor.fields[field].type === 'binary:image/svg+xml'" style="position:relative;left:0px;">{{field}}<br />
+																<img ng-src="{{sensor.fields[field].value}}" 
+																		style="width:340px; height:270px" />
+														</div>
+														<div ng-show="sensor.fields[field].type !== 'binary:image/jpeg' && sensor.fields[field].type !== 'binary:image/png' && sensor.fields[field].type !== 'binary:image/svg+xml'" style="">	
+															<i>{{field}}</i> : <b>{{sensor.fields[field].value}}</b>
+														</div>
+														-->
+														<div ng-if="sensor.fields[field].type === 'binary:image/jpeg' || sensor.fields[field].type === 'binary:image/png' || sensor.fields[field].type === 'binary:image/svg+xml'" style="position:relative;left:0px;">{{field}}<br />
+																<img ng-src="{{sensor.fields[field].value}}" 
+																		style="width:340px; height:270px" />
+														</div>
+														<div ng-if="sensor.fields[field].type !== 'binary:image/jpeg' && sensor.fields[field].type !== 'binary:image/png' && sensor.fields[field].type !== 'binary:image/svg+xml'" style="">	
+															<i>{{field}}</i> : <b>{{sensor.fields[field].value}}</b>
+														</div>
+														
+												</div>
+										</div>
+									</li>
+								</ul>
+								   		
+								   	   <!--                 	  
+					                   <dl ng-init="selectedTab[$index-1] = 1" ng-model="selectedTab[$index-1]" class="tabs" data-tab>
+										
+											<dd ng-class = "{'active' : selectedTab[$index-1] == 1 }">
+												<a ng-click=" selectedTab[$index-1]  = 1" >Real time</a>
+											</dd>
+											<dd ng-class = "{'active' : selectedTab[$index-1]  == 2 }">
+												<a ng-click=" selectedTab[$index-1]  = 2">Description</a>
+											</dd>
+											<dd ng-class = "{'active' : selectedTab[$index-1]  == 3 }">
+												<a ng-click=" selectedTab[$index-1]  = 3">Structure</a>
+											</dd>
+											<dd ng-class = "{'active' : selectedTab[$index-1]  == 4 }">
+												<a ng-click=" selectedTab[$index-1]  = 4">frok</a>
+											</dd>
+									   </dl>
+									   <div class="tabs-content">
+											  <div class="content" ng-class = "{'active' : selectedTab[$index-1]  == 1 }">
+											    <div ng-repeat="field in sensor.structureFields">
+											    	<div ng-show="sensor.fields[field].type === 'binary:image/jpeg'">
+											    			<img ng-src="{{sensor.fields[field].value}}" width="400" height="400" />
+											    	</div>
+													<div ng-show="sensor.fields[field].type !== 'binary:image/jpeg'">	
+														<i>{{field}}</i> : <b>{{sensor.fields[field].value}}</b>
+													</div>
+													<br/>
+											    </div>
+											  </div>
+											  <div class="content" ng-class = "{'active' : selectedTab[$index-1]  == 2 }">
+											    <p>{{sensor.description}}</p>
+											  </div>
+											  <div class="content" ng-class = "{'active' : selectedTab[$index-1]  == 3 }">
+											    <p ng-repeat = "field in sensor.structureFields">
+											    	<i>{{field}}</i> : <b>{{sensor.fields[field].type}}</b> 
+											    </p>
+											  </div>
+											  <div class="content" ng-class = "{'active' : selectedTab[$index-1]  == 4 }">
+											    <p>Fourth panel content goes here...</p>
+											  </div>
+										</div>-->
+								<!--</div>-->
+							<!-- </div> -->
+		              <!-- </div> -->
+		            </div>
+	           <!-- </div> -->
+            <!--</div>-->
+
+            <!--
+			<div id="sidebar" class="medium-3 columns right">
+                <h3>Description</h3>
+                <p id="gsn-desc">{{info.description}}</p>
+                <h3>Author</h3>
+                <p id="gsn-author">{{info.author}}</p>
+                <h3>Virtual sensors</h3>
+                    <ul id="vsmenu">
+                        <li><a href="#">not loaded</a>
+                        </li>
+                    </ul>
+                    <p>
+                        <input class="hidden" id="toggleallmarkers" type="button" value="Show/hide all markers" />
+                    </p>
+            </div>-->
+        </div>
+</div>
+</div>

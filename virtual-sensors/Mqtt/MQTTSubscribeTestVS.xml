@@ -1,0 +1,32 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <virtual-sensor name="MQTTSubscribeTestVS" priority="11">
+    <processing-class>
+        <class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+        <output-structure>
+            <field name="temperature" type="double" />
+ 		
+        </output-structure>
+    </processing-class>
+    <description>
+        Getting temperature.
+    </description>
+    <life-cycle pool-size="10" />
+    <addressing>
+        <predicate key="geographical">ZARI</predicate>
+    </addressing>
+    <storage history-size="24h" />
+    <streams>
+        <stream name="input1">
+            <source alias="source1" sampling-rate="1" storage-size="1">
+                <address wrapper="MQTTSubTempTest">
+                    <predicate key="sampling-rate">5000</predicate>
+                    <predicate key="MQTT-broker-address">tcp://test.mosquitto.org:1883</predicate>
+                    <predicate key="MQTT-topic">RASIP/GSN/test</predicate>
+
+                </address>
+                <query>select * from wrapper</query>
+            </source>
+            <query>select * from source1</query>
+        </stream>   
+    </streams>
+</virtual-sensor>

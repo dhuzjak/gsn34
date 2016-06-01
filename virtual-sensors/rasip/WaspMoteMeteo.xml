@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="WaspMoteMeteo" priority="10">
+  <processing-class>
+    <class-name>hr.fer.rasip.processingclasses.WaspMoteMeteo</class-name>
+    <init-params>
+      <!-- <param name="persistant">false</param> -->
+    </init-params>
+    <output-structure>
+			<field name="temperature" type="double"/>
+			<field name="preasure" type="double"/>
+			<field name="humidity" type="double"/>
+			<field name="battery" type="int"/>		
+   </output-structure>
+  </processing-class>
+  <description>Processes data sent from the EfergyBlue Meteo</description>
+  <addressing />
+  <storage history-size="240h" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+        <address wrapper="local">
+        <!--  Preuzmi podatke -->
+          <predicate key="query">select data, timed from G_WaspMoteGateway where lower(moteID) = 'Meteo_Blue'</predicate>
+        </address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>
+</virtual-sensor>

@@ -1,0 +1,43 @@
+<virtual-sensor name="ipCamVS" priority="11">
+	<processing-class>
+		<class-name>gsn.vsensor.CommandVirtualSensor</class-name>
+		<web-input>
+			<command name="MOVE">
+				<field name="X" type="int"/>
+				<field name="Y" type="int"/>
+			</command>
+			<command name="ABS_MOVE">
+				<field name="X" type="int"/>
+				<field name="Y" type="int"/>
+			</command>
+			<command name="RST">
+				<field name="UnosNepotreban" type="bool"/>
+			 </command>
+		</web-input>
+		<output-structure>
+			<field name="picture" type="binary:image/jpeg" />
+		</output-structure>
+	</processing-class>
+	<description>Capture image from IP camera!</description>
+	<life-cycle pool-size="2" />
+	<addressing>
+        <predicate key="geographical">ZARI</predicate>
+        <predicate key="LATITUDE">45.67893</predicate>
+        <predicate key="LONGITUDE">16.0000023</predicate>
+    </addressing>
+	<streams>
+		<stream name="DATA">
+			<source alias="sourceCam" storage-size="1" sampling-rate="1">
+				<address wrapper="ipcam">
+					<predicate key="image-width">400</predicate>
+					<predicate key="image-height">400</predicate>
+					<predicate key="device-id">0</predicate>
+					<predicate key="user">leonard</predicate>
+					<predicate key="pass">leonardgsn</predicate>
+				</address>
+				<query>select picture from wrapper</query>
+			</source>
+			<query>select * from sourceCam</query>
+		</stream>
+	</streams>
+</virtual-sensor>

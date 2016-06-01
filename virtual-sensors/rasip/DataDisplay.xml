@@ -1,0 +1,36 @@
+<virtual-sensor name="DataDisplay" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.DataDisplayVirtualSensor</class-name>
+		<init-params>
+			<param name="field-names">Temperature, Humidity, Pressure, Switch, Battery</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="units">C, %, Pa, , %</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="display">THERMO, METER, METER, BOOLEAN, BAR</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="max-sensor-number">5</param>
+			<param name="width">640</param>
+			<param name="type">ANY</param>
+			<param name="timeout">60</param>
+			<param name="separator">!</param>
+		</init-params>
+		<output-structure>
+			<field name="Data" type="binary:image/png" />
+		</output-structure>
+	</processing-class>
+	<description>This sensor plots data received from sensors through the network.</description>
+	<addressing>
+		<predicate key="geographical">FER - ZARI</predicate>
+		<predicate key="LATITUDE">45.801502</predicate>
+		<predicate key="LONGITUDE">15.971127</predicate>
+	</addressing>
+	<storage history-size="5m" />
+	<streams>
+		<stream name="Data">
+			<source alias="networksrc" sampling-rate="1" storage-size="1">
+				<address wrapper="SerialNetworkWrapper">
+					<predicate key="type">Data</predicate>
+				</address>
+				<query>SELECT * FROM WRAPPER</query>
+			</source>
+			<query>SELECT * FROM networksrc</query>
+		</stream>
+	</streams>
+</virtual-sensor>

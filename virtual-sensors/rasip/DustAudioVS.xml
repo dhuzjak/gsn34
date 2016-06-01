@@ -1,0 +1,46 @@
+<virtual-sensor name="DustAudio" priority="10">
+	<processing-class>
+		<class-name>hr.fer.rasip.vsensor.DustAudio</class-name>
+		<init-params>
+			<param name="field-names">Battery, Audio, Dust</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="units">%, dB, ug/m^3</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="display">BAR, METER, BAR</param><!--MULTIPLE, SEPARATED BY COMMAS-->
+			<param name="max-sensor-number">5</param>
+			<param name="width">640</param>
+			<param name="icon-dimension">300</param>
+			<param name="type">ANY</param>
+			<param name="timeout">60</param>
+			<param name="separator">!</param>
+			<param name="include-geo-data">true</param>
+			<param name="path">Test/file.txt</param>
+		</init-params>
+		<output-structure>
+			<field name="Data" type="binary:image/svg+xml" />
+			<field name="Dust" type="double" />
+			<field name="Audio" type="double" />
+			<field name="Battery" type="double" />
+			<field name="Geo" type="binary:image/png" />
+		</output-structure>
+	</processing-class>
+	<description>This sensor plots data received from WaspMote which measures dust and audio</description>
+	<addressing>
+		<predicate key="geographical">FER - ZARI</predicate>
+		<predicate key="LATITUDE">45.801502</predicate>
+		<predicate key="LONGITUDE">15.971127</predicate>
+	</addressing>
+	<storage history-size="60m" />
+	<streams>
+		<stream name="Data">
+			<source alias="DustAudio" sampling-rate="1" storage-size="1">
+				<address wrapper="wasp">
+					<predicate key="serial-port">/dev/ttyUSB0</predicate>
+					<predicate key="baudrate">38400</predicate>
+					<predicate key="data-string-length">100</predicate>
+					<predicate key="mote-id-length">20</predicate>
+				</address>
+				<query>SELECT * FROM WRAPPER</query>
+			</source>
+			<query>SELECT * FROM DustAudio</query>
+		</stream>
+	</streams>
+</virtual-sensor>

@@ -1,0 +1,75 @@
+<!--<div class="medium-10 medium-offset-1 columns">	-->
+	<div id="container" >
+		<div class="row">	
+			<div class="medium-8 columns">
+			<h1>MQTT Control</h1>
+			<br/>
+			
+			<!--<dl ng-init="selectedTab = 1" ng-model="selectedTab" class="tabs" data-tab>						
+				<dd ng-class = "{'active' : selectedTab == 1 }">
+					<a ng-click=" selectedTab  = 1" >Status</a>
+				</dd>
+				<dd ng-class = "{'active' : selectedTab  == 2 }">
+					<a ng-click=" selectedTab  = 2">Config</a>
+				</dd>							
+			</dl>-->
+			<tabset>
+				<tab heading="MQTT Relays">
+				<div ng-controller="MQTTController">
+				<div class="content" ng-class = "{'active' : selectedTab  == 1 }">
+					<fieldset>
+	    				<legend>Relays</legend>
+				  		<div class="row" >
+				  		<div class="row" ng-repeat="relay in relays">
+				  			<div class="medium-8 columns left">
+							  	<div class="medium-4 columns">
+			          				<label class="right inline">{{ relay.name }}</label>
+			        			</div>
+			        			<div class="medium-4 columns left">
+			        				<input type="checkbox" class="js-switch" ui-switch ng-model="relay.status" 
+			        								ng-change="publish(relay)"/>
+			        			</div>
+			        		</div>
+			        	</div>
+			        		
+			        </fieldset>
+
+				</div>
+				</div>
+				</tab>
+				<tab heading="Waspmote Gateway">
+				<div ng-controller="MQTTController">
+				<div class="content" ng-class = "{'active' : selectedTab  == 2 }">
+					
+					<fieldset>
+	    					<legend>Waspmote Gateway message</legend>
+				  			<div class="row">
+				  					<div class="medium-8 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label for="GatewayTopic" class="right inline">MQTT topic</label>
+			        					</div>
+			        					<div class="medium-6 columns left">
+			          				<input type="text" id="GatewayTopic" placeholder="" ng-model="GatewayTopic">
+			        					</div>
+			        				</div>
+			        				<div class="medium-8 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label class="right inline">Message</label>
+			        					</div>
+			        					<div class="medium-6 columns left">
+			          		  				<input type="text" placeholder="" ng-model="message">
+			        					</div>
+			        				</div>
+			        				
+			        			</div>
+			        			<a class="alert tiny round button" ng-click="gatewayPublish(message);">Publish</a>
+			        </fieldset>
+				</div>
+				</div>
+				<tab>
+
+				
+				<tabset>
+		</div>
+	</div>
+<!--</div>-->

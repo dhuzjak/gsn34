@@ -1,0 +1,37 @@
+<virtual-sensor name="ElectricityMeter_0" priority="10">
+	<processing-class>
+		<class-name>gsn.endymion.EndymionProcessingClass</class-name>
+		<output-structure>
+			<field name="MAX_CUMM_POWER_T1" type="double" />
+			<field name="MAX_CUMM_POWER_T2" type="double" />
+			<field name="POWER" type="double" />
+			<field name="POWER_T1" type="double" />
+			<field name="POWER_T2" type="double" />
+			<field name="CURRENT_PHASE_1" type="double" />
+			<field name="CURRENT_PHASE_2" type="double" />
+			<field name="CURRENT_PHASE_3" type="double" />
+		</output-structure>
+	</processing-class>
+	
+	<description>This sensor measures power consumption over USB.</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+		<predicate key="geographical">ZARI</predicate>
+		<predicate key="LATITUDE">45.80000</predicate>
+		<predicate key="LONGITUDE">16.000000</predicate>
+	</addressing>
+	
+	<storage history-size="8760h" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+                <address wrapper="endymion_vsensor_wrapper">
+                    <predicate key="GSNId">161.53.67.210:1443</predicate>
+                    <predicate key="vSensorName">electricitymeterusb0</predicate>
+                </address>
+				<query>select * from wrapper</query>
+			</source>
+			<query>select * from source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>

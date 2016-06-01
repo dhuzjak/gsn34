@@ -1,0 +1,13 @@
+<div class="well" style="margin-top: 30px; width: 200px; overflow: hidden;">
+    <form class="form-search" > 
+        <div class="input-append">
+          <input type="text" ng-model="search" class="search-query" style="width: 80px">
+          <button type="submit" class="btn">Search</button>
+        </div>
+        <ul class="nav nav-pills nav-stacked" ng-init="names=['Igor Minar', 'Brad Green', 'Dave Geddes', 'Naomi Black', 'Greg Weber', 'Dean Sofer', 'Wes Alvaro', 'John Scott', 'Daniel Nadasi'];">
+          <li class="container"  ng-repeat="name in names | filter:search">
+            <a href="#"> {{name}} </a>
+          </li> 
+      </ul>
+    </form>
+  </div>

@@ -1,0 +1,245 @@
+
+	   <!-- <script src="scripts/jquery.js"></script> -->
+        <link rel="stylesheet" href="scripts/lib/codemirror.css">
+        <script src="scripts/lib/codemirror.js"></script>   
+        <script src="scripts/mode/sql/sql.js"></script>   
+        <script src="scripts/mode/xml/xml.js"></script>
+
+        <link rel="stylesheet" href="scripts/slickGrid/slick.grid.css" type="text/css"/>
+        <link rel="stylesheet" href="scripts/slickGrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+
+        <script src="scripts/slickGrid/lib/firebugx.js"></script>
+        <script src="scripts/slickGrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
+        <script src="scripts/slickGrid/lib/jquery.event.drag-2.2.js"></script>
+
+        <script src="scripts/slickGrid/slick.core.js"></script>
+        <script src="scripts/slickGrid/plugins/slick.cellrangedecorator.js"></script>
+        <script src="scripts/slickGrid/plugins/slick.cellrangeselector.js"></script>
+        <script src="scripts/slickGrid/plugins/slick.cellselectionmodel.js"></script>
+        <script src="scripts/slickGrid/slick.formatters.js"></script>
+        <script src="scripts/slickGrid/slick.editors.js"></script>
+        <script src="scripts/slickGrid/slick.grid.js"></script>
+		
+		<script>
+            
+        var SelectCellEditor = function(args) {
+                var $select;
+                var defaultValue;
+                var scope = this;
+
+                this.init = function() {
+
+                    if (args.column.options) {
+                        opt_values = args.column.options.split(',');
+                    } else {
+                        opt_values = "yes,no".split(',');
+                    }
+                    option_str = ""
+                    for (i in opt_values) {
+                        v = opt_values[i];
+                        option_str += "<OPTION value='" + v + "'>" + v + "</OPTION>";
+                    }
+                    $select = $("<SELECT tabIndex='0' class='editor-select'>" + option_str + "</SELECT>");
+                    $select.appendTo(args.container);
+                    $select.focus();
+                };
+
+                this.destroy = function() {
+                    $select.remove();
+                };
+
+                this.focus = function() {
+                    $select.focus();
+                };
+
+                this.loadValue = function(item) {
+                    defaultValue = item[args.column.field];
+                    $select.val(defaultValue);
+                };
+
+                this.serializeValue = function() {
+                    if (args.column.options) {
+                        return $select.val();
+                    } else {
+                        return ($select.val() == "yes");
+                    }
+                };
+
+                this.applyValue = function(item, state) {
+                    item[args.column.field] = state;
+                };
+
+                this.isValueChanged = function() {
+                    return ($select.val() != defaultValue);
+                };
+
+                this.validate = function() {
+                    return {
+                        valid: true,
+                        msg: null
+                    };
+                };
+
+                this.init();
+            };
+
+
+            var loadUrl = "/adminRest/generic";
+            var virtualSensorCm = null;
+            var sqlWrapperQueryCm = null;
+            var sqlWrapperQuery = null;
+            var sqlSourceQueryCm = null;
+            var sqlSourceQuery = null;
+            var selectedFile = null;
+            var dataView = null;
+            var grid;
+            var data = [];
+
+            var wrapperObject = {};
+
+            $(document).ready(function()
+            {
+                //virtualSensorCm = CodeMirror.fromTextArea($("#textArea")[0], {"lineNumbers": true, "mode": CodeMirror.mimeModes["text/xml"]});		
+		$("#loader").hide();
+                sqlWrapperQueryCm = CodeMirror.fromTextArea($("#sqlWrapperArea")[0], {"lineNumbers": true, "mode": CodeMirror.mimeModes["text/x-mysql"]});
+                sqlSourceQueryCm = CodeMirror.fromTextArea($("#sqlSourceArea")[0], {"lineNumbers": true, "mode": CodeMirror.mimeModes["text/x-mysql"]});
+
+                var wrapper = null;
+                $("#get").click(function() {
+                    ;
+                    wrapperObject["sqlWrapperQuery"] = sqlWrapperQueryCm.getValue();
+                    wrapperObject["sqlSourceQuery"] = sqlSourceQueryCm.getValue();
+                    wrapperObject["parameters"] = grid.getData();
+
+		    $("#loader").show();
+                    var jsonString = JSON.stringify(wrapperObject);
+                    $.ajax({
+                        headers: {"Accept": "application/text",
+                            "Content-Type": "application/json"},
+                        url: loadUrl,
+                        data: jsonString,
+                        type: "POST",
+                        success: function(responseText) {
+                            alert("Sensor added successfully. Restart you GSN to see changes");
+			    $("#loader").hide();
+                            //virtualSensorCm.setValue(responseText);
+                        },
+			error : function(jqxhr, status, error){
+				alert("Error while adding sensor\n"+status+"\n"+ error);
+				$("#loader").hide();
+			}
+                    });
+                });
+				$("#choose").click(function(e){
+					e.preventDefault();
+					$("#files").trigger('click');
+				});
+
+                $('#del').click(function() {
+                    var me = $(this), id = me.attr('id');
+                    //assuming you have used a dataView to create your grid
+                    //also assuming that its variable name is called 'dataView'
+                    //use the following code to get the item to be deleted from it
+                    var newData = grid.getData();
+                    var row = grid.getSelectedRows()
+                    newData.splice(row, 1);
+                    grid.setData(newData);
+                    grid.render();
+                    //This is possible because in the formatter we have assigned the row id itself as the button id;
+                    //now assuming your grid is called 'grid'
+                    //grid.invalidate();
+                });
+				$('legend').click(function(){
+					$(this).parent().find('.fieldsetContent').slideToggle("slow");
+				});
+                document.getElementById('files').addEventListener('change', handleFileSelect, false);
+                function buttonFormatter(row, cell, value, columnDef, dataContext) {
+                    var button = "<input class='del' type='button' id='" + row + "' />";
+                    //the id is so that you can identify the row when the particular button is clicked
+                    return button;
+                    //Now the row will display your button
+                }
+                
+                var columns = [
+                    {id: "parent", name: "Parent Node", field: "parent", width: 120, cssClass: "cell-title", editor: SelectCellEditor, options: "addressing,address"},
+                    {id: "name", name: "Name", field: "name", width: 120, cssClass: "cell-title", editor: Slick.Editors.Text},
+                    {id: "value", name: "Value", field: "value", width: 120, cssClass: "cell-title", editor: Slick.Editors.Text}
+
+                ];
+                var options = {
+                    editable: true,
+                    enableAddRow: true,
+                    enableCellNavigation: true,
+                    asyncEditorLoading: false,
+                    autoEdit: false
+                };
+
+                grid = new Slick.Grid("#myGrid", data, columns, options);
+
+                grid.setSelectionModel(new Slick.CellSelectionModel());
+                grid.setOptions({autoEdit: true});
+                grid.onAddNewRow.subscribe(function(e, args) {
+                    var item = args.item;
+                    grid.invalidateRow(data.length);
+                    data.push(item);
+                    grid.updateRowCount();
+                    grid.render();
+                });
+            });
+
+            function handleFileSelect(evt) {
+                var files = evt.target.files; // FileList object
+
+                selectedFile = files[0];
+
+                var reader = new FileReader();
+                reader.onload = (function(theFile) {
+                    wrapperObject["fileName"] = selectedFile.name;
+                    wrapperObject["content"] = reader.result;
+		    $("#choosenFile").val(selectedFile.name);
+                });
+                reader.readAsText(selectedFile);
+            }
+
+
+        </script>
+        <div id="container" class="medium-10 medium-offset-1 columns ng-scope">
+			<h1>Add new sensor</h1>
+            <div id="inputSection">
+			<div style="display : inline-block">
+				<input style="display:none" type="file" id="files" name="files[]" multiple />
+				<input type="submit" id="choose" value="Choose file" class="button"/>
+				<input type="text" id="choosenFile">
+                    <output id="list"></output></div>
+                <div id="get-div"">
+                    <span>Inject Description File</span>
+                    <input class="button [radius round]" type="submit" value="Inject" id="get" />
+		    <img src="/images/ajax-loader.gif"" id="loader" style="display:inline"/>	
+                </div>   
+				<fieldset>
+				<legend id="sqlLegend">Specify SQL</legend>
+					<div id="sqlEditors" class="fieldsetContent" style="overflow: hidden; display:none;">
+						<div style="float :left; width : 600px">
+							<strong>Input your SQL query for wrapper</strong>
+							<textarea id="sqlWrapperArea"></textarea>
+						</div>
+						<div style="float :left; width : 600px">
+							<strong>Input your SQL query for source</strong>
+							<textarea id="sqlSourceArea"></textarea>
+						</div>
+					</div>
+				</fieldset>
+            </div>
+			<fieldset>
+				<legend id="parametersLegend">Specify parameters</legend>
+				<div class="fieldsetContent" style="display:none;">
+					<div id ="myGridTag" style="width:361px;">
+					<input class='button tiny radius alert' type='button'  id='del' value ="Delete selected row"/>
+						<div id="myGrid" style="width:100%;height:200px;"></div>
+					</div>
+				</div>
+			</fieldset>
+        </div>
+        <script>         
+        </script> 
+	

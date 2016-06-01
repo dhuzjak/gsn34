@@ -1,0 +1,57 @@
+<virtual-sensor name="relayVSensor" priority="1">
+	<processing-class>
+		<class-name>gsn.vsensor.CommandVirtualSensor</class-name>
+		<web-input>
+			<command name="ON">
+				<field name="Relay" type="int"/>
+			</command>
+			<command name="OFF">
+				<field name="Relay" type="int"/>
+			</command>
+	    </web-input>
+		<!--Broj releya, i output structure su povezani, 
+		    naziv polja mora biti Relay_i, gdje je i broj određen:
+			0 .. Relays -1
+		-->
+		<output-structure>
+			<field name="Relay_0" type="int" />
+			<field name="Relay_1" type="int" />
+			<field name="Relay_2" type="int" />
+			<field name="Relay_3" type="int" />
+			<field name="Relay_4" type="int" />
+			<field name="Relay_5" type="int" />
+			<field name="Relay_6" type="int" />
+			<field name="Relay_7" type="int" />
+			<field name="Relay_8" type="int" />
+			<field name="Relay_9" type="int" />
+			<field name="Relay_10" type="int" />
+			<field name="Relay_11" type="int" />
+			<field name="Relay_12" type="int" />
+			<field name="Relay_13" type="int" />
+			<field name="Relay_14" type="int" />
+			<field name="Relay_15" type="int" />
+		</output-structure>
+	</processing-class>
+	<description>Mreža releya, kojom se može upravljati i provjeravati status svakog releya.</description>
+	<life-cycle pool-size="2" />
+	<addressing>
+		<predicate key="geographical">Fakultet elektrotehnike i računarstva, Unska 3, Zagreb, Zavod za automatiku računalno inženjerstvo
+        </predicate>
+		<predicate key="LATITUDE">45.768</predicate>
+		<predicate key="LONGITUDE">15.854</predicate>
+	</addressing>
+	<streams>
+		<stream name="PowerBoardStream">
+			<source alias="sourceboard" storage-size="1" sampling-rate="100">
+				<address wrapper="relaycontrol">
+					<predicate key="IPAddress">192.168.1.92</predicate>
+					<predicate key="Relays">16</predicate>
+					<predicate key="sampling-rate">60000</predicate>
+			    </address>
+				<query>select * from wrapper</query>
+			</source>
+			<!--query>select PowerBoardOn as LinijskiNapon from sourceboard</query-->
+			<query>select * from sourceboard</query>
+		</stream>
+	</streams>
+</virtual-sensor>

@@ -1,0 +1,30 @@
+<virtual-sensor name="A_yahooWeatherZagreb2" priority="10">
+	<processing-class>
+		<class-name>gsn.endymion.EndymionProcessingClass</class-name>
+		<output-structure>
+			<field name="temperature" type="int"/>
+			<field name="humidity" type="int"/>
+		</output-structure>
+	</processing-class>
+	<description>This sensor collects temperature and humidity from Yahoo Weather for Zagreb</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+    <predicate key="geographical">Yahoo Weather sensor in Zagreb</predicate>
+		<predicate key="LATITUDE">45.81</predicate>
+		<predicate key="LONGITUDE">15.97</predicate>
+		<predicate key="owner">Endymion</predicate>
+	</addressing>
+	<storage history-size="8760h" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+				<address wrapper="endymion_vsensor_wrapper">
+                    <predicate key="GSNId">161.53.67.90:22222</predicate>
+                    <predicate key="vSensorName">yahooweatherzagreb2</predicate>
+				</address>
+				<query>select * from WRAPPER</query>
+			</source>
+			<query>select * from source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>

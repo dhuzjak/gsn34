@@ -1,0 +1,15 @@
+<div>
+	<p>polje</p>
+    <div ng-repeat="field in sensor.structureFields">
+		<p>polje {{ field }}</p>
+								
+								<div ng-show="sensor.fields[field].type === 'binary:image/jpeg'" 
+									style="position:relative;left:5px;">
+									<img ng-src="{{sensor.fields[field].value}}" 
+											style="width:220px; height:152px" />
+								</div>
+								<div ng-show="sensor.fields[field].type !== 'binary:image/jpeg'">	
+									<i>{{field}}</i> : <b>{{sensor.fields[field].value}}</b>
+								</div>
+	</div>
+</div>

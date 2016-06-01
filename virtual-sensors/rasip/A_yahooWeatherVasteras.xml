@@ -1,0 +1,30 @@
+<virtual-sensor name="A_yahooWeatherVasteras" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+		<output-structure>
+			<field name="temperature" type="int"/>
+			<field name="humidity" type="int"/>
+		</output-structure>
+	</processing-class>
+	<description>This sensor collects temperature and humidity from Yahoo Weather for Vasteras</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+    <predicate key="geographical">Yahoo Weather sensor in Vasteras</predicate>
+		<predicate key="LATITUDE">59.61</predicate>
+		<predicate key="LONGITUDE">16.55</predicate>
+		<predicate key="owner">ColdWatch team</predicate>
+	</addressing>
+	<storage history-size="24h" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+				<address wrapper="yahooweatherstate">
+					<predicate key="sampling-rate">10000</predicate> <!--reads every 30 minutes-->
+					<predicate key="woeid">909319</predicate> <!-- woeid for Vasteras-->
+				</address>
+				<query>select temperature, humidity, TIMED from WRAPPER</query>
+			</source>
+			<query>select temperature, humidity, TIMED from source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>

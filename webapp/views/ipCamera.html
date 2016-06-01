@@ -1,0 +1,179 @@
+<!--<div class="medium-10 medium-offset-1 columns">-->	
+	<div id="container" >	
+			
+			<div class="large-8 columns">
+				<div class="row">
+				<h1>IP Camera Control</h1>
+				<br/>
+				<!--
+				<dl ng-init="selectedTab = 1" ng-model="selectedTab" class="tabs" data-tab>						
+					<dd ng-class = "{'active' : selectedTab == 1 }">
+						<a ng-click=" selectedTab  = 1;" >Status</a>
+					</dd>
+					<dd ng-class = "{'active' : selectedTab  == 2 }">
+						<a ng-click="selectedTab  = 2;">Config</a>
+					</dd>							
+				</dl>-->
+				<tabset>
+					<tab heading="Status">
+					<div ng-controller="IPCamera">
+					<div class="content" ng-class = "{'active' : selectedTab  == 1 }" style="">
+						<div class="row">
+							<div class="large-5 centered columns left">
+								<img id="cameraStream" width="43px00" height="300" src="/ipcamera/status" />
+							</div>
+						</div>
+						<br /><br />
+						
+						<div class="row">
+							<div class="large-2 centered columns left">
+								<img src="/images/arrow-up.png" width="50" 
+										height="50" ng-click="move(0,1);">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="large-4 centered columns left" style="position:relative;left:43px;">
+								<div class="large-2 columns left">
+									<img src="/images/arrow-left.png" width="50" 
+										height="50" ng-click="move(-1,0);">
+								</div>
+								<div class="large-2 columns left">
+									<img src="/images/arrow-right.png" width="50" 
+										height="50" ng-click="move(1,0);">
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="large-2 centered columns left">
+								<img src="/images/arrow-down.png" width="50" 
+									height="50" style="position:relative;left:0px;" ng-click="move(0,-1);">
+							</div>
+						</div>
+
+						<div class="row">
+						<div class="large-8 centered columns left">
+							<fieldset>
+	    						<legend>Absolute position</legend>
+					  			<div class="row">
+					  				<div class="large-8 columns left">
+								  	 	<div class="large-3 columns">
+				          					<label for="x" class="right inline">X</label>
+				        				</div>
+				        				<div class="large-2 columns left">
+				          					<input type="text" id="x" placeholder="" ng-model="x">
+				        				</div>
+				        			</div>
+				        		</div>
+				        		<div class="row">
+					  				<div class="large-8 columns left">
+								  	 	<div class="large-3 columns">
+				          					<label for="x" class="right inline">Y</label>
+				        				</div>
+				        				<div class="large-2 columns left">
+				          					<input type="text" id="x" placeholder="" ng-model="y">
+				        				</div>
+				        			</div>
+				        		</div>
+			        			<div class="row">
+		        					<div class="large-8 columns left">
+		        						<div class="large-2 columns">
+		        							<a class="alert tiny round button" ng-click="setPosition();" style="position:relative;left:123px;">Set</a>
+					        			</div>
+					        			<div class="large-2 columns" style="position:relative; top:10px; left:-300px;">
+					        				<img id="spinner-position" ng-src="images/ajax-loader.gif" style="display:none;">
+					        			</div>
+		        					</div>
+        						</div>
+			        		</fieldset>
+						</div>
+						</div>
+					</div>
+					</div>
+					</tab>
+					<tab heading="Config">
+					<div ng-controller="IPCamera">
+					<div class="content" ng-class = "{'active' : selectedTab  == 2 }">
+						<div class="row" ng-show="showStatus === true">
+							<div class="medium-8 columns left" >
+								<alert close="showStatus=false;">{{updateStatus}}</alert>
+							</div>
+						</div>
+						<div class="row" ng-show="showError === true">
+							<div class="medium-8 columns left" >
+								<alert close="showError=false;">{{errorMessage}}</alert>
+							</div>
+						</div>
+
+						<fieldset>
+	    					<legend>Connection params</legend>
+				  			<div class="row">
+				  				<div class="medium-8 columns left">
+							  	 	<div class="medium-3 columns">
+			          					<label for="ipaddress" class="right inline">IP Address</label>
+			        				</div>
+			        				<div class="medium-5 columns left">
+			          					<input type="text" id="ipaddress" placeholder="" ng-model="config['ip-address']">
+			        				</div>
+			        			</div>
+			        		</div>
+			        		<div class="row">
+				  				<div class="medium-8 columns left">
+							  	 	<div class="medium-3 columns">
+			          					<label for="port" class="right inline">Port</label>
+			        				</div>
+			        				<div class="medium-4 columns left">
+			          					<input type="text" id="port" placeholder="" ng-model="config.port">
+			        				</div>
+			        			</div>
+			        		</div>
+			        		<div class="row">
+				  				<div class="medium-8 columns left">
+							  	 	<div class="medium-3 columns">
+			          					<label for="profile" class="right inline">Profile</label>
+			        				</div>
+			        				<div class="medium-2 columns left">
+			          					<input type="text" id="profile" placeholder="" ng-model="config.profile">
+			        				</div>
+			        			</div>
+			        		</div>
+			        		<div class="row">
+				  				<div class="medium-8 columns left">
+							  	 	<div class="medium-3 columns">
+			          					<label for="username" class="right inline">Username</label>
+			        				</div>
+			        				<div class="medium-5 columns left">
+			          					<input type="text" id="username" placeholder="" ng-model="config.username">
+			        				</div>
+			        			</div>
+			        		</div>
+			        		<div class="row">
+				  				<div class="medium-8 columns left">
+							  	 	<div class="medium-3 columns">
+			          					<label for="password" class="right inline">Password</label>
+			        				</div>
+			        				<div class="medium-5 columns left">
+			          					<input type="password" id="password" placeholder="" ng-model="config.password">
+			        				</div>
+			        			</div>
+			        		</div>
+			        	</fieldset>
+			        	<div class="row">
+        					<div class="medium-8 columns left">
+        						<div class="medium-2 columns">
+        							<a class="alert tiny round button" ng-click="updateConfig();">Save</a>
+			        			</div>
+			        			<div class="medium-2 columns" style="position:relative; top:10px; left:-300px;">
+			        				<img id="spinner" ng-src="images/ajax-loader.gif" style="display:none;">
+			        			</div>
+        					</div>
+        				</div>
+					</div>
+					</div>
+					</tab>
+				</tabset>
+			</div>
+		</div>
+	</div>
+<!--</div>-->

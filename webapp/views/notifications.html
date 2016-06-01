@@ -1,0 +1,108 @@
+<!--<div class="medium-10 medium-offset-1 columns">-->	
+	<div ng-controller="NotificationsController">
+	<div id="container" >
+		<div class="row">	
+			<div class="medium-8 columns">
+			<h1>Notification</h1>
+			<br/>
+			<fieldset>
+	    					<legend>Notification params</legend>
+				  				<div class="row">
+
+				  					<div class="medium-9 columns left" ng-show="showError === true">
+									<alert close="showError=false;">{{errorMessage}}</alert>
+									</div>
+
+									<div class="medium-9 columns left" ng-show="showInfo === true">
+									<alert close="showInfo=false;">{{infoMessage}}</alert>
+									</div>
+
+									<div class="medium-9 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label class="right inline">Notification type</label>
+			        					</div>
+			        					<div class="medium-4 columns left" text-center>
+			          		  			<input type="radio" name="notification" ng-model="notificationType" value="email" id="email">
+			          		  			<label for="email">Email</label>
+      									<input type="radio" name="notification" ng-model="notificationType" value="mqtt" id="mqtt">
+      									<label for="mqtt">MQTT</label>
+			        					</div>
+			        				</div>
+
+				  					<div class="medium-9 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label for="ipaddress" class="right inline">Monitored sensor</label>
+			        					</div>
+			        					<div class="medium-4 columns left">
+			        						<select ng-model="selectedSensor" 
+                								ng-options="o.name for o in sensors" ng-change="">
+            								</select>
+			        					</div>
+			        				</div>
+
+			        				<div class="medium-9 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label for="selectedField" class="right inline">Monitored field</label>
+			        					</div>
+			        					<div class="medium-4 columns left">
+			        						<select ng-model="selectedField" 
+                								ng-options="o for o in selectedSensor.structureFields" ng-change="">
+            								</select>
+			        					</div>
+			        				</div>
+
+				  					<div class="medium-9 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label for="ipaddress" class="right inline">Delay (in seconds) between notifications</label>
+			        					</div>
+			        					<div class="medium-4 columns left">
+			          				<input type="text" id="ipaddress" placeholder="" ng-model="delay">
+			        					</div>
+			        				</div>
+			        				<div class="medium-9 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label class="right inline">Critical value</label>
+			        					</div>
+			        					<div class="medium-3 columns left">
+			          		  				<input type="text" placeholder="" ng-model="criticalValue">
+			        					</div>
+			        				</div>
+
+			        				<div class="medium-9 columns left">
+							  	 		<div class="medium-4 columns">
+			          						<label class="right inline">Critical type</label>
+			        					</div>
+			        					<div class="medium-4 columns left" text-center>
+			          		  			<input type="radio" name="critical" ng-model="criticalType" value="above" id="above">
+			          		  			<label for="above">Above</label>
+      									<input type="radio" name="critical" ng-model="criticalType" value="below" id="below">
+      									<label for="below">Below</label>
+			        					</div>
+			        				</div>
+
+
+			        				<div class="medium-9 columns left" ng-show="notificationType === 'email'">
+							  	 		<div class="medium-4 columns">
+			          						<label class="right inline">Email</label>
+			        					</div>
+			        					<div class="medium-5 columns left">
+			          						<input type="text" placeholder="" ng-model="email">
+			        					</div>
+			        				</div>
+			        			</div>
+			</fieldset>
+			<div class="row">
+        						<div class="medium-9 columns left">
+        							<div class="medium-2 columns">
+        								<a class="alert tiny round button" ng-click="generateNotification();">Generate</a>
+			        				</div>
+			        				<div class="medium-2 columns" style="position:relative; top:10px; left:-300px;">
+			        					<img id="spinner" ng-src="images/ajax-loader.gif" style="display:none;">
+			        				</div>
+        						</div>
+        	</div>
+		</div>
+	</div>
+</div>
+</div>
+<!--</div>-->

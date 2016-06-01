@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtual-sensor name="WaspCurrBlueAvg" priority="10">
+  <processing-class>
+    <class-name>hr.fer.rasip.processingclasses.WaspCurrBlueAvg</class-name>
+    <init-params>
+      <!-- <param name="persistant">false</param> -->
+    </init-params>
+    <output-structure>
+	     <field name="current" type="double"/>
+      	<field name="power" type="double"/>
+      	<field name="powerAvg" type="double"/>
+     </output-structure>
+  </processing-class>
+  <description>Make average value of data sent from the Blue current meter</description>
+  <addressing />
+  <storage history-size="24h" />
+  <streams>
+    <stream name="stream1">
+      <source alias="source1" storage-size="1" sampling-rate="1">
+        <address wrapper="local">
+        <!--  Preuzmi podatke -->
+          <predicate key="time-division">1000</predicate> <!--  1000ms -->
+          <predicate key="query">select * from g_waspmotegateway where lower(moteID) = 'CurrentMeter_Blue'</predicate>
+        </address>
+        <query>select * from wrapper</query>
+      </source>
+      <query>select * from source1</query>
+    </stream>
+  </streams>
+</virtual-sensor>

@@ -1,0 +1,35 @@
+<virtual-sensor name="Temperatures" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.TemperaturesVirtualSensor</class-name>
+		<init-params>
+			<param name="max-icon-number">5</param>
+			<param name="type">SVG</param><!--ANY or SVG-->
+			<param name="height">260</param>
+			<param name="width">130</param>
+			<param name="timeout">1</param>
+			<param name="lower-limit">20</param>
+			<param name="upper-limit">70</param>
+		</init-params>
+		<output-structure>
+			<field name="Temperatures" type="binary:image/svg+xml" /><!--If type == SVG then image/svg+xml, otherwise image/png-->
+		</output-structure>
+	</processing-class>
+	<description>This sensor displays latest temperature data.</description>
+	<addressing>
+		<predicate key="geographical">FER - ZARI</predicate>
+		<predicate key="LATITUDE">45.801502</predicate>
+		<predicate key="LONGITUDE">15.971127</predicate>
+	</addressing>
+	<storage history-size="1" />
+	<streams>
+		<stream name="Temperatures">
+			<source alias="wifiwasp" sampling-rate="1" storage-size="1">
+				<address wrapper="local">
+					<predicate key="NAME">Wasp</predicate>
+				</address>
+				<query>SELECT * FROM WRAPPER</query>
+			</source>
+			<query>SELECT * FROM wifiwasp</query>
+		</stream>
+	</streams>
+</virtual-sensor>

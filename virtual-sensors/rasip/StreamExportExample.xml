@@ -1,0 +1,41 @@
+<virtual-sensor name="StreamExportExample" priority="10">
+	<processing-class>
+		<class-name>gsn.vsensor.StreamExporterVirtualSensor</class-name>
+		<init-params>
+			<param name="user">korisnickoime</param>
+			<param name="password">lozinka1</param>
+			<param name="url">db4free.net:3306</param>
+			<param name="driver">com.mysql.jdbc.Driver</param>
+		</init-params>
+		<output-structure>
+			<field name="Counter" type="integer" />
+		</output-structure>
+	</processing-class>
+	<description>This sensor forwards data to external DB.</description>
+	<addressing>
+		<predicate key="geographical">FER - ZARI</predicate>
+		<predicate key="LATITUDE">45.801502</predicate>
+		<predicate key="LONGITUDE">15.971127</predicate>
+	</addressing>
+	<storage history-size="1" />
+	<streams>
+		<stream name="Stream1">
+			<source alias="wifiwasp" sampling-rate="1" storage-size="1">
+				<address wrapper="local">
+					<predicate key="NAME">Wasp</predicate>
+				</address>
+				<query>SELECT * FROM WRAPPER</query>
+			</source>
+			<query>SELECT * FROM wifiwasp</query>
+		</stream>
+		<stream name="Stream2">
+			<source alias="rnddata" sampling-rate="1" storage-size="1">
+				<address wrapper="local">
+					<predicate key="NAME">MemoryMonitorVS</predicate>
+				</address>
+				<query>SELECT * FROM WRAPPER</query>
+			</source>
+			<query>SELECT * FROM rnddata</query>
+		</stream>
+	</streams>
+</virtual-sensor>

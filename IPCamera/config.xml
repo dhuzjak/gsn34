@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <connection-params>
+    <port>8080</port>
+    <ip-address>161.53.67.95</ip-address>
+    <profile>1</profile>
+    <username>leonard</username>
+    <password>leonardgsn</password>
+  </connection-params>
+</config>
+

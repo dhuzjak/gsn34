@@ -1,0 +1,33 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <virtual-sensor name="MqttDs18b20Publisher" priority="11">
+    <processing-class>
+        <class-name>hr.fer.rasip.mqtt.processingclasses.MqttDs18b20Publisher</class-name>
+        <init-params>
+
+            <param name="publish-topic">RASIP/GSN/temperature</param>
+        </init-params>
+        <output-structure>
+            <field name="temperature" type="double" />
+ 		
+        </output-structure>
+    </processing-class>
+    <description>
+        Publish temperature.
+    </description>
+    <life-cycle pool-size="10" />
+    <addressing>
+        <predicate key="geographical">ZARI</predicate>
+    </addressing>
+    <storage history-size="24h" />
+    <streams>
+        <stream name="input1">
+            <source alias="source1" sampling-rate="1" storage-size="1">
+                <address wrapper="ds18b20">
+			<predicate key="sampling-rate">5000</predicate>
+                </address>
+                <query>select * from wrapper</query>
+            </source>
+            <query>select * from source1</query>
+        </stream>
+    </streams>
+</virtual-sensor>

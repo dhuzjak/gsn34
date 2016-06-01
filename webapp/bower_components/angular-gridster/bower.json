@@ -1,0 +1,27 @@
+{
+	"name": "angular-gridster",
+	"version": "0.9.7",
+	"main": "app/scripts/gridster.js",
+	"dependencies": {
+		"angular": "~1.2.0",
+		"es5-shim": "~2.1.0",
+		"jquery-ui": "~1.10.4"
+	},
+	"devDependencies": {
+		"angular-mocks": "~1.2.0",
+		"angular-scenario": "~1.2.0"
+	},
+	"ignore": [
+		"test",
+		".bowerrc",
+		".editorconfig",
+		".gitattributes",
+		".gitignore",
+		".jshintrc",
+		".travis.yml",
+		"Gruntfile.js",
+		"karma.conf.js",
+		"karma-e2e.conf.js",
+		"package.json"
+	]
+}

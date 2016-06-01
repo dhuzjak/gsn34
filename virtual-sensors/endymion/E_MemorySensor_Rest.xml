@@ -1,0 +1,33 @@
+<virtual-sensor name="memorymonitorvs_remoterest" priority="10">
+    <processing-class>
+        <class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+        <output-structure>
+            <field name="heap" type="double"/>
+            <field name="non_heap" type="double"/>
+            <field name="pending_finalization_count" type="double"/>
+        </output-structure>
+    </processing-class>
+    <description>Collects data from Endymion</description>
+    <life-cycle pool-size="10" />
+    <addressing>
+        <predicate key="geographical">Endymion - GSN</predicate>
+        <predicate key="LATITUDE">45.855452</predicate>
+        <predicate key="LONGITUDE">15.986867</predicate>
+        <predicate key="owner">RASIP - Endymion</predicate>
+    </addressing>
+    <storage history-size="8760h" />
+    <streams>
+        <stream name="input1">
+            <source alias="source1" sampling-rate="1" storage-size="1">
+                <address wrapper="remote-rest">
+                    <predicate key="query">select * from memorymonitorvs</predicate>
+                    <predicate key="username">admin</predicate>
+                    <predicate key="password">admin</predicate>
+                    <predicate key="remote-contact-point">http://161.53.67.90:22001/streaming</predicate>
+                </address>
+                <query>SELECT * FROM wrapper</query>
+            </source>
+            <query>SELECT * FROM source1</query>
+        </stream>
+    </streams>
+</virtual-sensor>

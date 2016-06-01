@@ -1,0 +1,2304 @@
+Endymion started: [01/06/2016+22:31:46]
+
+[01/06/2016+22:31:46]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+Endymion started: [01/06/2016+22:36:33]
+
+[01/06/2016+22:36:33]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[01/06/2016+22:37:33]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1
+
+[01/06/2016+22:37:33]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[01/06/2016+22:37:33]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[01/06/2016+22:38:33]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+22:38:33]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+22:38:33]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[01/06/2016+22:39:33]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+22:39:33]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+22:39:33]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+Endymion started: [01/06/2016+22:58:19]
+
+[01/06/2016+22:58:19]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[01/06/2016+22:58:19]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+22:58:19]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+Endymion started: [01/06/2016+22:59:15]
+
+[01/06/2016+22:59:15]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[01/06/2016+22:59:15]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+22:59:15]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:00:15]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+23:00:15]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:00:15]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1
+
+[01/06/2016+23:00:15]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[01/06/2016+23:01:15]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+23:01:15]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:01:15]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:59:49
+
+[01/06/2016+23:01:15]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:02:15]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+23:02:15]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:02:16]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:59:49
+
+[01/06/2016+23:02:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:03:16]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+23:03:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:03:16]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:59:49
+
+[01/06/2016+23:03:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:04:16]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+23:04:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:04:16]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:59:49
+
+[01/06/2016+23:04:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[01/06/2016+23:05:16]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+23:05:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:05:16]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:03:35
+
+[01/06/2016+23:05:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:06:16]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+23:06:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:06:16]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:03:35
+
+[01/06/2016+23:06:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:07:16]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+22:36:50
+
+[01/06/2016+23:07:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[01/06/2016+23:07:16]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:03:35
+
+[01/06/2016+23:07:16]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[01/06/2016+23:08:17]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:06:25
+
+[01/06/2016+23:08:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:08:17]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:06:52
+
+[01/06/2016+23:08:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:09:17]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:06:25
+
+[01/06/2016+23:09:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:09:17]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:06:52
+
+[01/06/2016+23:09:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[01/06/2016+23:10:17]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:06:25
+
+[01/06/2016+23:10:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[01/06/2016+23:10:17]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:08:38
+
+[01/06/2016+23:10:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:11:17]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:09:25
+
+[01/06/2016+23:11:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:11:17]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:08:38
+
+[01/06/2016+23:11:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:12:17]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:09:25
+
+[01/06/2016+23:12:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[01/06/2016+23:12:17]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:08:38
+
+[01/06/2016+23:12:17]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:13:18]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:11:38
+
+[01/06/2016+23:13:18]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:13:18]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:08:38
+
+[01/06/2016+23:13:18]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[01/06/2016+23:14:18]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:11:38
+
+[01/06/2016+23:14:18]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[01/06/2016+23:14:18]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:08:38
+
+[01/06/2016+23:14:18]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+Endymion started: [01/06/2016+23:17:38]
+
+[01/06/2016+23:17:38]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[01/06/2016+23:17:38]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:14:00
+
+[01/06/2016+23:17:38]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[01/06/2016+23:17:38]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:08:38
+
+[01/06/2016+23:17:38]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+Endymion started: [02/06/2016+00:01:47]
+
+[02/06/2016+00:01:47]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[02/06/2016+00:01:47]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:14:00
+
+[02/06/2016+00:01:47]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:01:47]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+Endymion started: [02/06/2016+00:11:42]
+
+[02/06/2016+00:11:42]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[02/06/2016+00:11:42]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:14:00
+
+[02/06/2016+00:11:42]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:11:43]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:08:38
+
+[02/06/2016+00:11:43]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:12:44]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=01/06/2016+23:14:00
+
+[02/06/2016+00:12:44]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[02/06/2016+00:12:44]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:11:41
+
+[02/06/2016+00:12:44]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+Endymion started: [02/06/2016+00:13:45]
+
+[02/06/2016+00:13:45]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[02/06/2016+00:13:45]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:12:08
+
+[02/06/2016+00:13:46]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:13:46]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:11:41
+
+[02/06/2016+00:13:46]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+Endymion started: [02/06/2016+00:14:21]
+
+[02/06/2016+00:14:21]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[02/06/2016+00:14:21]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:12:08
+
+[02/06/2016+00:14:21]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:15:21]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:12:08
+
+[02/06/2016+00:15:21]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[02/06/2016+00:15:21]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:13:32
+
+[02/06/2016+00:15:21]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:16:21]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:16:21]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:16:21]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:13:32
+
+[02/06/2016+00:16:21]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:17:21]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:17:21]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:17:21]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:13:32
+
+[02/06/2016+00:17:21]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:18:21]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:18:21]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:18:22]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:13:32
+
+[02/06/2016+00:18:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:19:22]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:19:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:19:22]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:13:32
+
+[02/06/2016+00:19:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:20:22]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:20:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:20:22]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:13:32
+
+[02/06/2016+00:20:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:21:22]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:21:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:21:22]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:20:18
+
+[02/06/2016+00:21:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:22:22]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:22:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:22:22]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:20:44
+
+[02/06/2016+00:22:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:23:22]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:23:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:23:22]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:20:44
+
+[02/06/2016+00:23:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:24:22]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:24:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:24:22]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:20:44
+
+[02/06/2016+00:24:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:25:22]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:25:22]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:25:22]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:23:57
+
+[02/06/2016+00:25:23]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:26:23]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:26:23]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:26:23]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:23:57
+
+[02/06/2016+00:26:23]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:27:34]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:27:34]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+Endymion started: [02/06/2016+00:27:42]
+
+[02/06/2016+00:27:42]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[02/06/2016+00:27:42]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:27:42]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:27:43]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:23:57
+
+[02/06/2016+00:27:43]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+Endymion started: [02/06/2016+00:28:10]
+
+[02/06/2016+00:28:10]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[02/06/2016+00:28:10]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:28:10]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:28:10]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:23:57
+
+[02/06/2016+00:28:10]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:29:10]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:29:10]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:29:10]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:27:53
+
+[02/06/2016+00:29:10]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:30:10]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:30:10]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:30:10]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:27:53
+
+[02/06/2016+00:30:10]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:31:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:31:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:31:11]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:30:05
+
+[02/06/2016+00:31:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:32:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:32:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:32:11]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:30:15
+
+[02/06/2016+00:32:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:33:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:33:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:33:11]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:34:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:34:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:34:11]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:35:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:35:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:35:11]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:36:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:36:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:36:11]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:37:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:37:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:37:11]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:38:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:38:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:38:11]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:39:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:39:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:39:11]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:40:11]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:40:11]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:40:11]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+Endymion started: [02/06/2016+00:40:53]
+
+[02/06/2016+00:40:53]
+[INFO]: 
+----------GSN------------
+ID: 192.168.5.52:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: alarm_GSN_90
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: mqttsubscribetestvs
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+----------GSN------------
+ID: 192.168.5.84:22001
+Username: admin
+Password: admin
+Connection type: http
+Sampling-rate:1
+Sampling-time: 1m
+Only-last-value:false
+Read-sensors:all
+
+----------ALARM------------
+Alarm name: pirsensor
+Type: mqtt
+After: 1m
+Only-once: true
+Send-to: RASIP/Endymion/alarms
+
+----------VSENSOR------------
+VSname: pirsensor
+Sampling-rate:null
+Sampling-time: 1m
+Only-last-value:true
+Read-data-fields:all
+
+
+[02/06/2016+00:40:53]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:40:53]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:40:53]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:41:54]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:14:48
+
+[02/06/2016+00:41:54]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[02/06/2016+00:42:55]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:42:55]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:42:55]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:31:51
+
+[02/06/2016+00:42:55]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:43:55]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:43:55]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:43:56]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:42:26
+
+[02/06/2016+00:43:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:44:56]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:44:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:44:56]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:45:56]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:45:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:45:56]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:46:56]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:46:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:46:56]
+[ERROR]: Connection refusedhttp://192.168.5.84:22001/gsn
+endymion.exception.EndymionException: Connection refusedhttp://192.168.5.84:22001/gsn
+	at endymion.collector.connection.GSNConnectionHTTP.readFromConnection(GSNConnectionHTTP.java:223)
+	at endymion.collector.connection.GSNConnectionHTTP.GSNOperation(GSNConnectionHTTP.java:61)
+	at endymion.collector.GSNDataCollector.initialize(GSNDataCollector.java:144)
+	at endymion.GSNDataCollectorMain.collectData(GSNDataCollectorMain.java:205)
+	at endymion.GSNDataCollectorMain.run(GSNDataCollectorMain.java:107)
+	at gsn.endymion.EndymionWrapper.run(EndymionWrapper.java:76)
+
+[02/06/2016+00:47:56]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:47:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:48:56]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:48:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:48:56]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:43:47
+
+[02/06/2016+00:48:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:49:56]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:49:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:49:56]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:48:24
+
+[02/06/2016+00:49:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:50:56]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:50:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:50:56]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:48:24
+
+[02/06/2016+00:50:56]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 1
+
+[02/06/2016+00:51:57]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:51:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:51:57]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:50:39
+
+[02/06/2016+00:51:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:52:57]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:41:46
+
+[02/06/2016+00:52:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 1
+
+[02/06/2016+00:52:57]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:50:39
+
+[02/06/2016+00:52:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:53:57]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:52:27
+
+[02/06/2016+00:53:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:53:57]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:50:39
+
+[02/06/2016+00:53:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:54:57]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:52:27
+
+[02/06/2016+00:54:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:54:57]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:50:39
+
+[02/06/2016+00:54:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+
+[02/06/2016+00:55:57]
+[INFO]: URL: http://192.168.5.52:22001/multidata?vs[0]=mqttsubscribetestvs&field[0]=temperature&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:52:27
+
+[02/06/2016+00:55:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: mqttsubscribetestvs
+
+-----------------FIELD-----------------
+Field name: temperature
+Unit: double
+Number of data entries: 0
+
+[02/06/2016+00:55:57]
+[INFO]: URL: http://192.168.5.84:22001/multidata?vs[0]=pirsensor&field[0]=motion&time_format=iso&download_format=xml&nb=SPECIFIED&nb_value=1&from=02/06/2016+00:50:39
+
+[02/06/2016+00:55:57]
+[INFO]: 
+-----------------VS-----------------
+VSName: pirsensor
+
+-----------------FIELD-----------------
+Field name: motion
+Unit: int
+Number of data entries: 0
+

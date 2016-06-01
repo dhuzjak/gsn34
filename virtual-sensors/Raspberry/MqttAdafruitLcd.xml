@@ -1,0 +1,36 @@
+<virtual-sensor name="MqttAdafruitLcd" priority="10">
+	<processing-class>
+		<class-name>hr.fer.rasip.mqtt.processingclasses.MqttAdafruitLcd</class-name>
+		<init-params>
+	      
+	      
+	    </init-params>
+		<output-structure>
+			<field name="topic" type="varchar(16)" />
+            		<field name="message" type="varchar(16)" />
+
+			
+
+		</output-structure>
+	</processing-class>
+	<description>This sensor gets data from MqttGateway all topics</description>
+	<life-cycle pool-size="10" />
+	<addressing>
+		<predicate key="geographical">Lion - GSN</predicate>
+		<predicate key="LATITUDE">45.855452</predicate>
+		<predicate key="LONGITUDE">15.986867</predicate>
+		<predicate key="owner">Mqtt Gateway</predicate>	</addressing>
+	<storage history-size="24h" />
+	<streams>
+		<stream name="input1">
+			<source alias="source1" sampling-rate="1" storage-size="1">
+				<address wrapper="local">
+					<predicate key="query">SELECT * FROM MqttGateway</predicate>
+				</address>
+
+			<query>select * from wrapper</query>
+			</source>
+			<query>SELECT * FROM source1</query>
+		</stream>
+	</streams>
+</virtual-sensor>
