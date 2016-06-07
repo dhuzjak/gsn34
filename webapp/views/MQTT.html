@@ -27,8 +27,10 @@
 			          				<label class="right inline">{{ relay.name }}</label>
 			        			</div>
 			        			<div class="medium-4 columns left">
-			        				<input type="checkbox" class="js-switch" ui-switch ng-model="relay.status" 
-			        								ng-change="publish(relay)"/>
+			        				<!--<input type="checkbox" class="js-switch" ui-switch ng-model="relay.status" ng-click="publish(relay)" />-->
+
+			        				<switch id="relay.id" disabled="false" name="relay.name" ng-model="relay.status" ng-click="publish(relay)" ></switch>
+
 			        			</div>
 			        		</div>
 			        	</div>

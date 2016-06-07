@@ -122,7 +122,7 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
         if(!isConnected()){
 	      try {
 
-		client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
+		client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
 		client.connect();
 		System.out.println( getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
 		client.setCallback(this);
@@ -141,7 +141,7 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
     }
 
     public String getWrapperName() {
-        return "MQTT relay";
+        return "MQTTrelay";
     }
 
     public void dispose() {
@@ -160,13 +160,15 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
     }
 
     public void connectionLost(Throwable cause) {
+        System.out.println(getWrapperName() + " disconnected");
+
     }
 
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         String newMessage = message.toString();
         JSONParser parser = new JSONParser();
         
-	   try {
+        try {
             Object obj = parser.parse(newMessage);
             JSONArray array = (JSONArray)obj;
             for (int i = 0; i < array.size(); ++i) {
@@ -181,8 +183,13 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
             e.printStackTrace();
             return;
         }
+
         // send same message as acknowledgement that this message was received by relay wrapper
-        client.publish(mqttRelayTopicAck, message);
+        MqttMessage status = new MqttMessage();
+        status.setPayload(newMessage.getBytes());
+        status.setRetained(true);
+        client.publish(mqttRelayTopicAck, status);
+
         // update status of relays
         postStreamElement(new Serializable[]{   String.valueOf(in_1.isLow()),
                                                 String.valueOf(in_2.isLow()),

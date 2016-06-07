@@ -3,13 +3,13 @@
 angular.module('gsnClientApp')
   .controller('MQTTController', function ($http, $scope, mqttConfigService ) {
 
-    $scope.relays=[{name:'Relay 1', id: 1, status: false},
-                        {name:'Relay 2',id: 2, status: false},
-                        {name:'Relay 3', id: 3, status: false},
-                        {name:'Relay 4', id: 4, status: false}];
+    $scope.relays=[{"name":"Relay 1", "id": 1, "status": false},
+                        {"name":"Relay 2","id": 2, "status": false},
+                        {"name":"Relay 3", "id": 3, "status": false},
+                        {"name":"Relay 4", "id": 4, "status": false}];
     
     $scope.config = [];
-
+    $scope.isDisabled = false;
     var client;
 
     // load data first
@@ -34,16 +34,22 @@ angular.module('gsnClientApp')
         // set handler for recv message
         client.onMessageArrived = function (message) {
           
+          //console.log($scope.isDisabled);
           var payload = message.payloadString;
           //console.log("recv");
           //console.log(payload);
+
+          $scope.isDisabled = false;
           var relayStatus = angular.fromJson(payload);
 
           for(var i=0; i < relayStatus.length; i++){
 
-            if(!angular.equals(relayStatus[i],$scope.relays[i])){
-                $scope.relays[i].status = relayStatus[i].status;
-                console.log($scope.relays[i]);
+            if(angular.equals(relayStatus[i].id,$scope.relays[i].id)){
+                //if($scope.relays[i].status != relayStatus[i].status){
+                    $scope.relays[i].status = relayStatus[i].status
+                  //  console.log($scope.relays[i].status);
+                //}
+                
             }
           }
         
@@ -72,25 +78,46 @@ angular.module('gsnClientApp')
       
     }
 
+    
+
     $scope.publish = function (relay) {
-      //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)
+        //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)
+        
+        //$scope.isDisabled = true;
+        console.log("Publish Relay message");
+        //console.log(relay);
 
-      console.log("Publish Relay message");
 
-      var json = angular.toJson($scope.relays);
+        var relaysCopy = angular.copy($scope.relays);
+        for(var i=0; i < relaysCopy.length; i++){
+            if(angular.equals(relaysCopy[i].id,relay.id)){
+                relaysCopy[i].status = !relay.status;
 
-      //console.log(json);
-      var message = new Paho.MQTT.Message(json);
-      message.destinationName = $scope.RelayTopic;
-      message.qos = 0;
-      message.retained = true;      // retain message on server
-      client.send(message);
+            }
+        }
+        //relay.status = !relay.status;
 
-      // reset status
-      $scope.relays=[{name:'Relay 1', id: 1, status: false},
-                        {name:'Relay 2',id: 2, status: false},
-                        {name:'Relay 3', id: 3, status: false},
-                        {name:'Relay 4', id: 4, status: false}];
+        var json = angular.toJson(relaysCopy);
+        
+        //console.log(json);
+        var message = new Paho.MQTT.Message(json);
+        message.destinationName = $scope.RelayTopic;
+        message.qos = 0;
+        message.retained = true;      // retain message on server
+        client.send(message);
+        
+        //console.log($scope.isDisabled);
+        // reset status (to recieve actual one from Ack topic)
+        /*
+        for(var i=0; i < $scope.relays.length; i++){
+            if(angular.equals($scope.relays[i].id,relay.id)){
+                $scope.relays[i].status = false;
+            }
+        }
+        */
+        
+        
+
 
       
     }

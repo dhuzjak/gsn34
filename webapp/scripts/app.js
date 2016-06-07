@@ -16,7 +16,8 @@ var app = angular.module('gsnClientApp', [
   'multi-select',
   'highcharts-ng',
   'mm.foundation',
-  'angularMoment'
+  'angularMoment',
+  'uiSwitch'
 ]);
 
 

@@ -85,7 +85,7 @@ public class MQTTService {
 
 
       try {
-              client = new MqttClient(brokerAddress + ":" + port, client.generateClientId(), new MemoryPersistence());
+              client = new MqttClient("tcp://" + brokerAddress + ":" + port, "MqttService" + client.generateClientId(), new MemoryPersistence());
               client.connect();
 
               return true;

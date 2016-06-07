@@ -83,7 +83,7 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
     if(!isConnected()){
       try {
 
-        client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
+        client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
         client.connect();
         System.out.println(getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
         client.setCallback(this);
@@ -104,7 +104,7 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
   }
 
   public String getWrapperName() {
-    return "MQTT Gateway";
+    return "MQTTGateway";
   }  
 
 
