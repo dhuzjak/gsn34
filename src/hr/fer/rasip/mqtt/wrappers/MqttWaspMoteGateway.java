@@ -39,6 +39,7 @@ import org.jdom.output.Format;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -104,15 +105,19 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 	private static final int 		MAXBUFFERSIZE = 1024;
 
 	private static final String MQTT_CONFIG_FILE = "mqtt/config.xml";
-	
-	MqttClient client;
 
 	private String brokerAddress;
   	private int brokerPort;
 
   	private String mqttWaspmoteGatewayTopic;
 
-  	private boolean isConnected = false;
+  	private String username;
+    private String password;
+
+    private boolean isConnected = false;
+    
+    MqttClient client;
+    MqttConnectOptions connOpt;
 	/**
 	 * Uzima parametre iz XML datoteke. One koji nisu navedeni postavlja na 
 	 * predpostavljene vrijednosti. Inicijalizira vezu za serijskim portom.  
@@ -229,6 +234,9 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
           brokerPort = Integer.valueOf(connectionParameters.getChild("broker-port").getValue());
           mqttWaspmoteGatewayTopic = connectionParameters.getChild("mqtt-topic-waspmotegateway").getValue(); 
 
+          username = connectionParameters.getChild("mqtt-username").getValue(); 
+          password = connectionParameters.getChild("mqtt-password").getValue(); 
+
          }
 		catch(Exception e){
           logger.error(e.getMessage(), e);
@@ -245,7 +253,13 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 			try {
 
 				client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
-				client.connect();
+				connOpt = new MqttConnectOptions();
+    
+		        connOpt.setCleanSession(true);
+		        connOpt.setKeepAliveInterval(300);
+		        connOpt.setUserName(username);
+		        connOpt.setPassword(password.toCharArray());
+		        client.connect(connOpt);
 				System.out.println(getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
 				client.setCallback(this);
 				client.subscribe(mqttWaspmoteGatewayTopic);

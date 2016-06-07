@@ -3,6 +3,7 @@
   <connection-params>
     <gsn-name>GSN_MQTT_develop</gsn-name>
     <gsn-id>1</gsn-id>
+    <mqtt-anonymous>false</mqtt-anonymous>
     <broker-url>192.168.5.81</broker-url>
     <broker-port>1883</broker-port>
     <websockets-port>9001</websockets-port>

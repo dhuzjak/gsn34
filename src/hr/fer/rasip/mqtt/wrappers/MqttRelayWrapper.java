@@ -30,6 +30,7 @@ import org.jdom.output.Format;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -55,13 +56,16 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
     private String brokerAddress;
     private int brokerPort;
 
-	private String mqttRelayTopic;
+    private String mqttRelayTopic;
     private String mqttRelayTopicAck;
 
+    private String username;
+    private String password;
+
     private boolean isConnected = false;
-
-
+    
     MqttClient client;
+    MqttConnectOptions connOpt;
 
     private GpioController gpio;
     private GpioPinDigitalOutput in_1;
@@ -89,7 +93,10 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
             brokerAddress = connectionParameters.getChild("broker-url").getValue();  
             brokerPort = Integer.valueOf(connectionParameters.getChild("broker-port").getValue());
             mqttRelayTopic = connectionParameters.getChild("mqtt-topic-relay").getValue(); 
-            mqttRelayTopicAck = connectionParameters.getChild("mqtt-topic-relay-ack").getValue(); 
+            mqttRelayTopicAck = connectionParameters.getChild("mqtt-topic-relay-ack").getValue();
+
+            username = connectionParameters.getChild("mqtt-username").getValue(); 
+            password = connectionParameters.getChild("mqtt-password").getValue(); 
 
         }
         catch(Exception e){
@@ -120,18 +127,24 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
         
 	
         if(!isConnected()){
-	      try {
+            try {
 
-		client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-		client.connect();
-		System.out.println( getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
-		client.setCallback(this);
-		client.subscribe(mqttRelayTopic);
-		
-	      } catch (MqttException e) {
-		  logger.error(e.getMessage(), e);
-		  e.printStackTrace();
-	      }
+                client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+                connOpt = new MqttConnectOptions();
+
+                connOpt.setCleanSession(true);
+                connOpt.setKeepAliveInterval(300);
+                connOpt.setUserName(username);
+                connOpt.setPassword(password.toCharArray());
+                client.connect(connOpt);
+                System.out.println( getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
+                client.setCallback(this);
+                client.subscribe(mqttRelayTopic);
+    		
+            } catch (MqttException e) {
+                logger.error(e.getMessage(), e);
+                e.printStackTrace();
+            }
 
 	    }
     }

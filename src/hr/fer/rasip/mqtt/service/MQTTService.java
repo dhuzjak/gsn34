@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -38,14 +39,14 @@ public class MQTTService {
     private String topicName;
 
     private static String brokerAddress;
-    private static Integer port;
+    private static Integer port = 0;
     private static String username;
     private static String password;
 
     private static boolean isConnected = false;
     
-
     private static MqttClient client;
+    private static MqttConnectOptions connOpt;
 
     public static boolean init(){
 
@@ -61,12 +62,28 @@ public class MQTTService {
           //gsnName = connectionParameters.getChild("gsn-name").getValue();  
           //gsnId = Integer.valueOf(connectionParameters.getChild("gsn-id").getValue());
 
-          brokerAddress = connectionParameters.getChild("broker-url").getValue();  
+          brokerAddress = connectionParameters.getChild("broker-url").getValue();
+          if(brokerAddress == null){
+            logger.error("MQTTService: no broker-url parameter");
+            return false;
+          }
           port = Integer.valueOf(connectionParameters.getChild("broker-port").getValue());
+          if(port == 0){
+            logger.error("MQTTService: no broker-port parameter");
+            return false;
+          }
           
+          username = connectionParameters.getChild("mqtt-username").getValue(); 
+          if(username == null){
+            logger.error("MQTTService: no username parameter");
+            return false;
+          }
+          password = connectionParameters.getChild("mqtt-password").getValue(); 
+          if(password == null){
+            logger.error("MQTTService: no password parameter");
+            return false;
+          }
           
-          //username = connectionParameters.getChild("username").getValue();
-          //password = connectionParameters.getChild("password").getValue();
           return true;
          }
        catch(Exception e){
@@ -86,7 +103,13 @@ public class MQTTService {
 
       try {
               client = new MqttClient("tcp://" + brokerAddress + ":" + port, "MqttService" + client.generateClientId(), new MemoryPersistence());
-              client.connect();
+              connOpt = new MqttConnectOptions();
+
+              connOpt.setCleanSession(true);
+              connOpt.setKeepAliveInterval(300);
+              connOpt.setUserName(username);
+              connOpt.setPassword(password.toCharArray());
+              client.connect(connOpt);
 
               return true;
         } catch (MqttException e) {

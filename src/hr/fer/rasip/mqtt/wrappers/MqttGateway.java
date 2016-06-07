@@ -19,6 +19,7 @@ import org.jdom.output.Format;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -43,10 +44,13 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
   private int brokerPort;
 
   private String mqttGatewayTopic;
+  private String username;
+  private String password;
 
   private boolean isConnected = false;
   
   MqttClient client;
+  MqttConnectOptions connOpt;
   
   public boolean initialize() {
     setName("MqttGateway" + counter++);
@@ -65,7 +69,10 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
 
         brokerAddress = connectionParameters.getChild("broker-url").getValue();  
         brokerPort = Integer.valueOf(connectionParameters.getChild("broker-port").getValue());
-        mqttGatewayTopic = connectionParameters.getChild("mqtt-gateway").getValue(); 
+        mqttGatewayTopic = connectionParameters.getChild("mqtt-gateway").getValue();
+
+        username = connectionParameters.getChild("mqtt-username").getValue(); 
+        password = connectionParameters.getChild("mqtt-password").getValue(); 
 
     }
     catch(Exception e){
@@ -84,7 +91,13 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
       try {
 
         client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-        client.connect();
+        connOpt = new MqttConnectOptions();
+    
+        connOpt.setCleanSession(true);
+        connOpt.setKeepAliveInterval(300);
+        connOpt.setUserName(username);
+        connOpt.setPassword(password.toCharArray());
+        client.connect(connOpt);
         System.out.println(getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
         client.setCallback(this);
         client.subscribe(mqttGatewayTopic);
