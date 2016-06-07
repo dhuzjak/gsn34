@@ -1,4 +1,4 @@
-package hr.fer.rasip.wrappers;
+package hr.fer.rasip.mqtt.wrappers;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
@@ -209,7 +209,8 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 		inputBuffer = new byte [MAXBUFFERSIZE];
 		//dataField - struktura podataka koji izlaze i omotaca
 		dataField = new DataField[] {new DataField("moteID","varchar(" + moteIDLength + ")" , "Identifier of WaspMote node" ), 
-									 new DataField("data", "varchar(" + dataStringLength+ ")", "Data part of package")};	
+									 new DataField("data", "varchar(" + dataStringLength+ ")", "Data part of package"),
+									 new DataField("outData", "varchar(500)", "Output data to sensor network")};	
 		
 		
 
@@ -243,7 +244,7 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 		if(!isConnected()){
 			try {
 
-				client = new MqttClient(brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
+				client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
 				client.connect();
 				System.out.println(getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
 				client.setCallback(this);
@@ -256,6 +257,7 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 
     	}
 		
+		// send test string to putput
 		/*
 		while(isActive()){
 			
@@ -346,7 +348,7 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 			} catch (UnsupportedEncodingException encodingEx){
 				logger.warn("Unsupported encoding exception UTF-8");
 			}
-			System.out.println("primljeno: " + message);
+			//System.out.println("primljeno: " + message);
 			//pobrisi inputBuffer
 			inputBuffer = new byte [MAXBUFFERSIZE];
 			
@@ -400,7 +402,7 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 			logger.error("Data part of package is too big. Increase data-string-length parameter.");
 		}
         //WaspMoteGatewayDataHolder.getWaspMoteGatewayDataHolderInstance().addGatewayData(moteID, data);
-		postStreamElement(new Serializable[]{moteID,data});		
+		postStreamElement(new Serializable[]{moteID,data, null});		
 	}
 	
 	
@@ -419,7 +421,7 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 	    
 	    String newMessage = message.toString();
 	    waspMoteConnection.sendString(newMessage);
-	    System.out.println(newMessage);
+	    //System.out.println(newMessage);
 	      
 	}
 	 
@@ -580,6 +582,7 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 			 try {
 				 os.write(s.getBytes());
 				 os.flush();
+				 postStreamElement(new Serializable[]{null, null, s});		
 			 } catch (IOException e){
 				 System.err.println("OutputStream write error: " + e);
 			 }

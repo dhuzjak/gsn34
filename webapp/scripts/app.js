@@ -124,7 +124,7 @@ app.run(function($rootScope, $location, $http, NavigationService) {
     });
     
     $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
-		$rootScope.title = current.$$route.title;
+		  $rootScope.title = current.$$route.title;
     });
 });
 

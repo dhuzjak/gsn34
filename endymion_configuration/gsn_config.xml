@@ -2,7 +2,7 @@
 <!DOCTYPE configuration SYSTEM "endymion_configuration/gsn_config.dtd">
 <configuration>
     <gsn>
-        <ipAddress>192.168.5.52</ipAddress>
+        <ipAddress>127.0.0.1</ipAddress>
         <port>22001</port>
         <username>admin</username>
         <password>admin</password>
@@ -27,8 +27,9 @@
                 
             </alarm>
         </alarms>
-        
+    
     </gsn>
+    <!--
     <gsn>
         <ipAddress>192.168.5.84</ipAddress>
         <port>22001</port>
@@ -38,14 +39,7 @@
         
         <vsensors sampling-time="1m" sampling-rate="1" only-last-value="false" read-sensors="all">
             <vsensor vsname="pirsensor" sampling-time="1m" read-data-fields="all" only-last-value="true">
-                <!--
-                <alarms>
-                    <alarm name="alarm_mqtt_subscribetest" after="1m" only-once="false" alarm-type="mqtt" alarm-id="2">
-                        <send-to>RASIP/Endymion/alarms</send-to>
-                        
-                    </alarm>
-                </alarms>
-                -->
+                
             </vsensor>
         </vsensors>
         
@@ -56,7 +50,8 @@
             </alarm>
         </alarms>
         
-    </gsn>
+    </gsn>-->
+
 	<!--
     <gsn>
         <ipAddress>161.53.67.210</ipAddress>

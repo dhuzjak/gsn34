@@ -1,4 +1,4 @@
-package gsn.processor;
+package hr.fer.rasip.mqtt.processor;
 
 import gsn.beans.DataField;
 import gsn.beans.DataTypes;
@@ -17,7 +17,6 @@ import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.DateTime;
 
-import gsn.utils.services.MQTTService;
 import java.util.Arrays;
 
 import java.io.File;
@@ -34,6 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONObject;
+import hr.fer.rasip.mqtt.service.MQTTService;
 
 
 public class MqttNotificationProcessor extends AbstractVirtualSensor {

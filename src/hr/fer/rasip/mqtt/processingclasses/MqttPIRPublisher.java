@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import java.io.Serializable;
 import java.util.TreeMap;
 
-import gsn.utils.services.MQTTService;
+import hr.fer.rasip.mqtt.service.MQTTService;
 
 public class MqttPIRPublisher extends AbstractVirtualSensor{
 	

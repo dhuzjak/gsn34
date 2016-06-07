@@ -1,5 +1,6 @@
 <!--<div class="medium-10 medium-offset-1 columns">	-->
 	<div id="container" >
+	<!--<div ng-controller="MQTTController"> -->
 		<div class="row">	
 			<div class="medium-8 columns">
 			<h1>MQTT Control</h1>
@@ -15,7 +16,7 @@
 			</dl>-->
 			<tabset>
 				<tab heading="MQTT Relays">
-				<div ng-controller="MQTTController">
+				
 				<div class="content" ng-class = "{'active' : selectedTab  == 1 }">
 					<fieldset>
 	    				<legend>Relays</legend>
@@ -35,10 +36,10 @@
 			        </fieldset>
 
 				</div>
-				</div>
+				
 				</tab>
 				<tab heading="Waspmote Gateway">
-				<div ng-controller="MQTTController">
+				
 				<div class="content" ng-class = "{'active' : selectedTab  == 2 }">
 					
 					<fieldset>
@@ -65,11 +66,13 @@
 			        			<a class="alert tiny round button" ng-click="gatewayPublish(message);">Publish</a>
 			        </fieldset>
 				</div>
-				</div>
-				<tab>
-
 				
-				<tabset>
+				</tab>
+
+			
+			</tabset>
+			</div>
 		</div>
+	<!--</div>-->
 	</div>
 <!--</div>-->

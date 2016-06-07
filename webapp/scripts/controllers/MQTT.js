@@ -19,8 +19,9 @@ angular.module('gsnClientApp')
         
         $scope.GatewayTopic = $scope.config['mqtt-topic-waspmotegateway'];
         $scope.RelayTopic = $scope.config['mqtt-topic-relay'];
+        $scope.RelayTopicAck = $scope.config['mqtt-topic-relay-ack'];
 
-        $scope.brokerUrl = $scope.config['websockets-url'];
+        $scope.brokerUrl = $scope.config['broker-url'];
         $scope.brokerPort = $scope.config['websockets-port'];
 
         // Create a client instance: Broker, Port, Websocket Path, Client ID
@@ -42,7 +43,7 @@ angular.module('gsnClientApp')
 
             if(!angular.equals(relayStatus[i],$scope.relays[i])){
                 $scope.relays[i].status = relayStatus[i].status;
-                //console.log($scope.relays[i]);
+                console.log($scope.relays[i]);
             }
           }
         
@@ -63,12 +64,12 @@ angular.module('gsnClientApp')
     
     function onConnect() {
       console.log("Connected");
-      client.subscribe($scope.RelayTopic,{qos: 0});
+      client.subscribe($scope.RelayTopicAck,{qos: 0});
     }
 
     function onFail() {
       console.log("Failure");
-      $scope.status = false;
+      
     }
 
     $scope.publish = function (relay) {
@@ -84,6 +85,13 @@ angular.module('gsnClientApp')
       message.qos = 0;
       message.retained = true;      // retain message on server
       client.send(message);
+
+      // reset status
+      $scope.relays=[{name:'Relay 1', id: 1, status: false},
+                        {name:'Relay 2',id: 2, status: false},
+                        {name:'Relay 3', id: 3, status: false},
+                        {name:'Relay 4', id: 4, status: false}];
+
       
     }
     $scope.gatewayPublish = function (GatewayMessage) {

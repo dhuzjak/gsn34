@@ -1,4 +1,4 @@
-package gsn.utils.services;
+package hr.fer.rasip.mqtt.service;
 
 import gsn.utils.Utils;
 import org.apache.log4j.Logger;

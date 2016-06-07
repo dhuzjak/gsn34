@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import gsn.utils.services.MQTTService;
+import hr.fer.rasip.mqtt.service.MQTTService;
 
 /**
  * Helper class - used for debugging only

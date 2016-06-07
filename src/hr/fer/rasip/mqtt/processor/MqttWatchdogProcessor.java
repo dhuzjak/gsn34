@@ -1,4 +1,4 @@
-package gsn.processor;
+package hr.fer.rasip.mqtt.processor;
 
 import gsn.beans.DataField;
 import gsn.beans.DataTypes;
@@ -19,8 +19,6 @@ import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.format.ISODateTimeFormat;
 import java.util.Arrays;
 
-import gsn.utils.services.MQTTService;
-
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -30,6 +28,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 
 import org.json.simple.JSONObject;
+import hr.fer.rasip.mqtt.service.MQTTService;
 
 
 public class MqttWatchdogProcessor extends AbstractVirtualSensor {

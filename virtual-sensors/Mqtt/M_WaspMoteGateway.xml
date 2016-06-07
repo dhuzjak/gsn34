@@ -5,6 +5,7 @@
 		<output-structure>
 			<field name="moteID" type="varchar(20)" />
 			<field name="data" type="varchar(100)" />
+			<field name="outData" type="varchar(500)" />
 		</output-structure>
 	</processing-class>
 	<description>VS that collects data from WaspMoteGateway and process recived message,

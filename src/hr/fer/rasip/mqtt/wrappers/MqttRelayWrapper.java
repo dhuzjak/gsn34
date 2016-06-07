@@ -56,12 +56,12 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
     private int brokerPort;
 
 	private String mqttRelayTopic;
+    private String mqttRelayTopicAck;
 
-  private boolean isConnected = false;
+    private boolean isConnected = false;
 
 
     MqttClient client;
-
 
     private GpioController gpio;
     private GpioPinDigitalOutput in_1;
@@ -73,41 +73,42 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
     public boolean initialize() {
 
         setName("MQTT relay" + counter++);
-        
+
         params = getActiveAddressBean();
 
-       //fetch info from mqtt config
+        //fetch info from mqtt config
         try {
-          SAXBuilder builder = new SAXBuilder();
-          File xmlFile = new File(MQTT_CONFIG_FILE);
-          Document doc = (Document) builder.build(xmlFile);
-          Element root = doc.getRootElement();
-          
-          //get parameters from config file
-          Element connectionParameters = root.getChild("connection-params");
-          
-          brokerAddress = connectionParameters.getChild("broker-url").getValue();  
-          brokerPort = Integer.valueOf(connectionParameters.getChild("broker-port").getValue());
-          mqttRelayTopic = connectionParameters.getChild("mqtt-topic-relay").getValue(); 
+            SAXBuilder builder = new SAXBuilder();
+            File xmlFile = new File(MQTT_CONFIG_FILE);
+            Document doc = (Document) builder.build(xmlFile);
+            Element root = doc.getRootElement();
 
-         }
-       catch(Exception e){
-          logger.error(e.getMessage(), e);
-          return false; 
-       }
+            //get parameters from config file
+            Element connectionParameters = root.getChild("connection-params");
 
-	gpio = GpioFactory.getInstance();
+            brokerAddress = connectionParameters.getChild("broker-url").getValue();  
+            brokerPort = Integer.valueOf(connectionParameters.getChild("broker-port").getValue());
+            mqttRelayTopic = connectionParameters.getChild("mqtt-topic-relay").getValue(); 
+            mqttRelayTopicAck = connectionParameters.getChild("mqtt-topic-relay-ack").getValue(); 
+
+        }
+        catch(Exception e){
+            logger.error(e.getMessage(), e);
+            return false; 
+        }
+
+        gpio = GpioFactory.getInstance();
         in_1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_06, "Input_1", PinState.HIGH);
         in_2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_10, "Input_2", PinState.HIGH);
         in_3 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_11, "Input_3", PinState.HIGH);
         in_4 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_13, "Input_4", PinState.HIGH);
         
-	in_1.setShutdownOptions(Boolean.FALSE, PinState.HIGH);
+        in_1.setShutdownOptions(Boolean.FALSE, PinState.HIGH);
         in_2.setShutdownOptions(Boolean.FALSE, PinState.HIGH);
         in_3.setShutdownOptions(Boolean.FALSE, PinState.HIGH);
         in_4.setShutdownOptions(Boolean.FALSE, PinState.HIGH);
         
-	relays.add(in_1);
+        relays.add(in_1);
         relays.add(in_2);
         relays.add(in_3);
         relays.add(in_4);
@@ -121,7 +122,7 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
         if(!isConnected()){
 	      try {
 
-		client = new MqttClient(brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
+		client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
 		client.connect();
 		System.out.println( getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
 		client.setCallback(this);
@@ -165,7 +166,7 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
         String newMessage = message.toString();
         JSONParser parser = new JSONParser();
         
-	try {
+	   try {
             Object obj = parser.parse(newMessage);
             JSONArray array = (JSONArray)obj;
             for (int i = 0; i < array.size(); ++i) {
@@ -173,18 +174,20 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
 
                 if (relays.get(i).getState() != relayState.get((Object)"status")){
                 	relays.get(i).setState((Boolean)relayState.get((Object)"status") == false);
-		}
+                }
             }
         }
         catch (Exception e) {
             e.printStackTrace();
-		return;
+            return;
         }
-
-	postStreamElement(new Serializable[]{   String.valueOf(in_1.isLow()),
-                                                        String.valueOf(in_2.isLow()),
-                                                        String.valueOf(in_3.isLow()),
-                                                        String.valueOf(in_4.isLow())
+        // send same message as acknowledgement that this message was received by relay wrapper
+        client.publish(mqttRelayTopicAck, message);
+        // update status of relays
+        postStreamElement(new Serializable[]{   String.valueOf(in_1.isLow()),
+                                                String.valueOf(in_2.isLow()),
+                                                String.valueOf(in_3.isLow()),
+                                                String.valueOf(in_4.isLow())
                                                     });
     }
 
