@@ -24,6 +24,11 @@ angular.module('gsnClientApp')
         $scope.brokerUrl = $scope.config['broker-url'];
         $scope.brokerPort = $scope.config['websockets-port'];
 
+        $scope.username = $scope.config['mqtt-username'];
+        $scope.password = $scope.config['mqtt-password'];
+
+        $scope.anonymous = $scope.config['mqtt-anonymous'];
+
         // Create a client instance: Broker, Port, Websocket Path, Client ID
         client = new Paho.MQTT.Client($scope.brokerUrl, Number($scope.brokerPort),  "pahoJS_" + parseInt(Math.floor((Math.random() * 100) + 1)));
      
@@ -58,11 +63,26 @@ angular.module('gsnClientApp')
         }
          
         // Connect the client, providing an onConnect callback
-        client.connect({
+        if (angular.equals($scope.anonymous,"false"))
+        {
+          client.connect({
             timeout: 5,
             onSuccess: onConnect,  
-            onFailure: onFail
+            onFailure: onFail,
+            userName : $scope.username,
+            password : $scope.password
+          });
+        }
+        else
+        {
+          client.connect({
+            timeout: 5,
+            onSuccess: onConnect,  
+            onFailure: onFail,
+
         });
+        }
+        
 
       });
 

@@ -4,8 +4,8 @@
         <class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
         <output-structure>
             <field name="topic" type="varchar(120)" />
-            
- 		
+            <field name="message" type="varchar(1000)" />
+
         </output-structure>
     </processing-class>
     <description>

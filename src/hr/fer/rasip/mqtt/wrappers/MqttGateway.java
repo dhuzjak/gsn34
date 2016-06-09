@@ -48,6 +48,7 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
   private String password;
 
   private boolean isConnected = false;
+  private boolean anonymous = false;
   
   MqttClient client;
   MqttConnectOptions connOpt;
@@ -73,6 +74,7 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
 
         username = connectionParameters.getChild("mqtt-username").getValue(); 
         password = connectionParameters.getChild("mqtt-password").getValue(); 
+        anonymous = Boolean.parseBoolean(connectionParameters.getChild("mqtt-anonymous").getValue()); 
 
     }
     catch(Exception e){
@@ -91,13 +93,24 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
       try {
 
         client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-        connOpt = new MqttConnectOptions();
+        
+        if(!anonymous)
+        {
+          connOpt = new MqttConnectOptions();
     
-        connOpt.setCleanSession(true);
-        connOpt.setKeepAliveInterval(300);
-        connOpt.setUserName(username);
-        connOpt.setPassword(password.toCharArray());
-        client.connect(connOpt);
+          connOpt.setCleanSession(true);
+          connOpt.setKeepAliveInterval(300);
+          connOpt.setUserName(username);
+          connOpt.setPassword(password.toCharArray());
+          client.connect(connOpt);
+
+        }
+        else
+        {
+          client.connect();
+        }
+
+        
         System.out.println(getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
         client.setCallback(this);
         client.subscribe(mqttGatewayTopic);

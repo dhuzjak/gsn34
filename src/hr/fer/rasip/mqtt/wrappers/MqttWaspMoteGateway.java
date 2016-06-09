@@ -115,6 +115,7 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
     private String password;
 
     private boolean isConnected = false;
+    private boolean anonymous = false;
     
     MqttClient client;
     MqttConnectOptions connOpt;
@@ -237,6 +238,8 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
           username = connectionParameters.getChild("mqtt-username").getValue(); 
           password = connectionParameters.getChild("mqtt-password").getValue(); 
 
+          anonymous = Boolean.parseBoolean(connectionParameters.getChild("mqtt-anonymous").getValue()); 
+
          }
 		catch(Exception e){
           logger.error(e.getMessage(), e);
@@ -255,11 +258,21 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 				client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
 				connOpt = new MqttConnectOptions();
     
-		        connOpt.setCleanSession(true);
-		        connOpt.setKeepAliveInterval(300);
-		        connOpt.setUserName(username);
-		        connOpt.setPassword(password.toCharArray());
-		        client.connect(connOpt);
+		        if(!anonymous)
+		        {
+		          connOpt = new MqttConnectOptions();
+		    
+		          connOpt.setCleanSession(true);
+		          connOpt.setKeepAliveInterval(300);
+		          connOpt.setUserName(username);
+		          connOpt.setPassword(password.toCharArray());
+		          client.connect(connOpt);
+
+		        }
+		        else
+		        {
+		          client.connect();
+		        }
 				System.out.println(getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
 				client.setCallback(this);
 				client.subscribe(mqttWaspmoteGatewayTopic);

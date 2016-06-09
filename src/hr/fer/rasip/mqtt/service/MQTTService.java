@@ -44,6 +44,7 @@ public class MQTTService {
     private static String password;
 
     private static boolean isConnected = false;
+    private static boolean anonymous = false;
     
     private static MqttClient client;
     private static MqttConnectOptions connOpt;
@@ -83,6 +84,12 @@ public class MQTTService {
             logger.error("MQTTService: no password parameter");
             return false;
           }
+          String anonym = connectionParameters.getChild("mqtt-anonymous").getValue();
+          if(anonym == null){
+            logger.error("MQTTService: no mqtt-anonymous parameter");
+            return false;
+          }
+          anonymous = Boolean.parseBoolean(anonym); 
           
           return true;
          }
@@ -103,13 +110,21 @@ public class MQTTService {
 
       try {
               client = new MqttClient("tcp://" + brokerAddress + ":" + port, "MqttService" + client.generateClientId(), new MemoryPersistence());
-              connOpt = new MqttConnectOptions();
+              if(!anonymous)
+              {
+                connOpt = new MqttConnectOptions();
+          
+                connOpt.setCleanSession(true);
+                connOpt.setKeepAliveInterval(300);
+                connOpt.setUserName(username);
+                connOpt.setPassword(password.toCharArray());
+                client.connect(connOpt);
 
-              connOpt.setCleanSession(true);
-              connOpt.setKeepAliveInterval(300);
-              connOpt.setUserName(username);
-              connOpt.setPassword(password.toCharArray());
-              client.connect(connOpt);
+              }
+              else
+              {
+                client.connect();
+              }
 
               return true;
         } catch (MqttException e) {
