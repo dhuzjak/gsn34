@@ -149,77 +149,93 @@ public class MQTTService {
      */
     public static boolean connectToBroker(){
 
+        // initial values
+        String connectProtocol = "tcp://";
+        int connectPort = brokerPort;
+
         // if initialization parameters are not correct return false
         if(!init()){
         return false;
         }
 
+
+
         try {
-              // connect with username and without security
+
+            connOpt = new MqttConnectOptions();
+            connOpt.setCleanSession(true);
+            connOpt.setKeepAliveInterval(keepAliveInterval);
+
+            // connect with username and without security
             if(!anonymous && !mqttSecurity)
             {
-                client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, "MQTTService" + client.generateClientId(), new MemoryPersistence());
-                connOpt = new MqttConnectOptions();
 
-                connOpt.setCleanSession(true);
-                connOpt.setKeepAliveInterval(keepAliveInterval);
+                connectProtocol = "tcp://";
+                connectPort = brokerPort;
+
                 connOpt.setUserName(username);
                 connOpt.setPassword(password.toCharArray());
-                client.connect(connOpt);
+
                 infoMessage = "MQTTService: Connected to: tcp://" + brokerAddress + ":" + brokerPort;
 
             }
-                  // connect with security, username optional
+
+            // connect with security, username optional
             if(mqttSecurity)
             {
-                client = new MqttClient("ssl://" + brokerAddress + ":" + securePort, "MQTTService" + client.generateClientId(), new MemoryPersistence());
+
+                connectProtocol = "ssl://";
+                connectPort = securePort;
+
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
                 InputStream certFile = new FileInputStream(brokerCertificatePath);
                 Certificate ca = cf.generateCertificate(certFile);
-               
+             
                 KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
                 keyStore.load(null, null);
                 keyStore.setCertificateEntry("ca", ca);
 
                 TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
                 trustManagerFactory.init(keyStore);
-                    
+                
                 SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
                 sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
-                connOpt = new MqttConnectOptions();
 
                 // if anonymous in configuration is set to false, connect with username and pass
                 if(!anonymous){
-                  connOpt.setUserName(username);
-                  connOpt.setPassword(password.toCharArray());
+
+                    connOpt.setUserName(username);
+                    connOpt.setPassword(password.toCharArray());
+
                 }
-                connOpt.setCleanSession(true);
-                connOpt.setKeepAliveInterval(keepAliveInterval);
+                
                 connOpt.setSocketFactory(sslContext.getSocketFactory());
-                client.connect(connOpt);
+
                 infoMessage = "MQTTService: Connected to: ssl://" + brokerAddress + ":" + securePort;
 
             }
-                  // connection without user authentification and no encryption
-            if(anonymous && !mqttSecurity)
-            {
+            
+            // connection without user authentification and no encryption
+            if(anonymous && !mqttSecurity){
 
-                client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, "MQTTService" + client.generateClientId(), new MemoryPersistence());
-                connOpt = new MqttConnectOptions();
+                connectProtocol = "tcp://";
+                connectPort = brokerPort;
 
-                connOpt.setCleanSession(true);
-                connOpt.setKeepAliveInterval(keepAliveInterval);
-                client.connect(connOpt);
                 infoMessage = "MQTTService: Connected to: tcp://" + brokerAddress + ":" + brokerPort;
             }
 
+                client = new MqttClient(connectProtocol + brokerAddress + ":" + connectPort, "MQTTService:" + client.generateClientId(), new MemoryPersistence());
+                client.connect(connOpt);
+                logger.warn(infoMessage);
+                
+        
         } catch (MqttException | GeneralSecurityException | IOException e) {
             logger.warn("MQTTService: Could not connect to broker: " + brokerAddress);
             logger.error(e.getMessage(), e);
             return false;
         }
 
-        logger.warn(infoMessage);
+        
         return true;
 
     }

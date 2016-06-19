@@ -90,6 +90,11 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
     private MqttClient client;
     private MqttConnectOptions connOpt;
 
+    private final String lastWillPayload = "[{\"name\":\"Relay 1\",\"id\":1,\"status\":false}," + 
+                                            "{\"name\":\"Relay 2\",\"id\":2,\"status\":false}," +
+                                            "{\"name\":\"Relay 3\",\"id\":3,\"status\":false}," +
+                                            "{\"name\":\"Relay 4\",\"id\":4,\"status\":false}]";
+
     private GpioController gpio;
     private GpioPinDigitalOutput in_1;
     private GpioPinDigitalOutput in_2;
@@ -155,6 +160,10 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
     }
 
     public void run() {
+
+        // initial values
+        String connectProtocol = "tcp://";
+        int connectPort = brokerPort;
         
         // try to reconnect while wrapper is active
         while(isActive()){
@@ -162,25 +171,34 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
             if(!isConnected()){
               try {
 
+                connOpt = new MqttConnectOptions();
+                connOpt.setCleanSession(true);
+                connOpt.setKeepAliveInterval(keepAliveInterval);
+
+                // last will (qos = 1, retain = true)
+                connOpt.setWill(mqttRelayTopicAck, lastWillPayload.getBytes(), 1, true);
+
                 // connect with username and without security
                 if(!anonymous && !mqttSecurity)
                 {
-                    client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-                    connOpt = new MqttConnectOptions();
 
-                    connOpt.setCleanSession(true);
-                    connOpt.setKeepAliveInterval(keepAliveInterval);
+                    connectProtocol = "tcp://";
+                    connectPort = brokerPort;
+
                     connOpt.setUserName(username);
                     connOpt.setPassword(password.toCharArray());
-                    client.connect(connOpt);
+
                     infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
 
                 }
+
                 // connect with security, username optional
                 if(mqttSecurity)
                 {
 
-                    client = new MqttClient("ssl://" + brokerAddress + ":" + securePort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+                    connectProtocol = "ssl://";
+                    connectPort = securePort;
+
                     CertificateFactory cf = CertificateFactory.getInstance("X.509");
                     InputStream certFile = new FileInputStream(brokerCertificatePath);
                     Certificate ca = cf.generateCertificate(certFile);
@@ -194,32 +212,33 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
                     
                     SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
                     sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
-                    connOpt = new MqttConnectOptions();
 
                     // if anonymous in configuration is set to false, connect with username and pass
                     if(!anonymous){
+
                         connOpt.setUserName(username);
                         connOpt.setPassword(password.toCharArray());
+
                     }
-                    connOpt.setCleanSession(true);
-                    connOpt.setKeepAliveInterval(keepAliveInterval);
+                    
                     connOpt.setSocketFactory(sslContext.getSocketFactory());
-                    client.connect(connOpt);
+
                     infoMessage = getWrapperName() + ": Connected to: ssl://" + brokerAddress + ":" + securePort;
 
                 }
+                
                 // connection without user authentification and no encryption
                 if(anonymous && !mqttSecurity){
-                    client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-                    connOpt = new MqttConnectOptions();
 
-                    connOpt.setCleanSession(true);
-                    connOpt.setKeepAliveInterval(keepAliveInterval);
-                    client.connect(connOpt);
+                    connectProtocol = "tcp://";
+                    connectPort = brokerPort;
+
                     infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
                 }
 
-                
+                    client = new MqttClient(connectProtocol + brokerAddress + ":" + connectPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+                    client.connect(connOpt); 
+
                     logger.warn(infoMessage);
                     client.setCallback(this);
                     client.subscribe(mqttRelayTopic);

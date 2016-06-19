@@ -23,7 +23,7 @@
         
         <alarms>
             <alarm name="alarm_GSN_90" after="1m" only-once="true" alarm-type="mqtt" alarm-id="30">
-                <send-to>RASIP/Endymion/alarms</send-to>
+                <send-to>RASIP2/Endymion/alarms</send-to>
                 
             </alarm>
         </alarms>

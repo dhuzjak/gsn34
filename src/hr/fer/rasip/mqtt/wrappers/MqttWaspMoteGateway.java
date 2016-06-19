@@ -272,70 +272,81 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 	
 	public void run (){
 
+		// initial values
+    	String connectProtocol = "tcp://";
+    	int connectPort = brokerPort;
+
 		// try to reconnect while wrapper is active
 		while(isActive()){
 
 		    if(!isConnected()){
-		      try {
+              try {
 
-		      	// connect with username and without security
-		        if(!anonymous && !mqttSecurity)
-		        {
-					client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-					connOpt = new MqttConnectOptions();
+                connOpt = new MqttConnectOptions();
+                connOpt.setCleanSession(true);
+                connOpt.setKeepAliveInterval(keepAliveInterval);
 
-					connOpt.setCleanSession(true);
-					connOpt.setKeepAliveInterval(keepAliveInterval);
-					connOpt.setUserName(username);
-					connOpt.setPassword(password.toCharArray());
-					client.connect(connOpt);
-					infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
+                // connect with username and without security
+                if(!anonymous && !mqttSecurity)
+                {
 
-		        }
-		        // connect with security, username optional
-		        if(mqttSecurity)
-		        {
+                    connectProtocol = "tcp://";
+                    connectPort = brokerPort;
 
-		        	client = new MqttClient("ssl://" + brokerAddress + ":" + securePort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-		        	CertificateFactory cf = CertificateFactory.getInstance("X.509");
-				 	InputStream certFile = new FileInputStream(brokerCertificatePath);
-				 	Certificate ca = cf.generateCertificate(certFile);
-				 
-				 	KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-				 	keyStore.load(null, null);
-				 	keyStore.setCertificateEntry("ca", ca);
+                    connOpt.setUserName(username);
+                    connOpt.setPassword(password.toCharArray());
 
-				 	TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-				 	trustManagerFactory.init(keyStore);
-		        	
-		        	SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-					sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
-					connOpt = new MqttConnectOptions();
+                    infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
 
-					// if anonymous in configuration is set to false, connect with username and pass
-					if(!anonymous){
-						connOpt.setUserName(username);
-						connOpt.setPassword(password.toCharArray());
-					}
-					connOpt.setCleanSession(true);
-					connOpt.setKeepAliveInterval(keepAliveInterval);
-					connOpt.setSocketFactory(sslContext.getSocketFactory());
-					client.connect(connOpt);
-					infoMessage = getWrapperName() + ": Connected to: ssl://" + brokerAddress + ":" + securePort;
+                }
 
-		        }
-		        // connection without user authentification and no encryption
-		        if(anonymous && !mqttSecurity){
-		        	client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-		        	connOpt = new MqttConnectOptions();
+                // connect with security, username optional
+                if(mqttSecurity)
+                {
 
-					connOpt.setCleanSession(true);
-					connOpt.setKeepAliveInterval(keepAliveInterval);
-					client.connect(connOpt);
-					infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
-		        }
+                    connectProtocol = "ssl://";
+                    connectPort = securePort;
 
-		        
+                    CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                    InputStream certFile = new FileInputStream(brokerCertificatePath);
+                    Certificate ca = cf.generateCertificate(certFile);
+                 
+                    KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                    keyStore.load(null, null);
+                    keyStore.setCertificateEntry("ca", ca);
+
+                    TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                    trustManagerFactory.init(keyStore);
+                    
+                    SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+                    sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
+
+                    // if anonymous in configuration is set to false, connect with username and pass
+                    if(!anonymous){
+
+                        connOpt.setUserName(username);
+                        connOpt.setPassword(password.toCharArray());
+
+                    }
+                    
+                    connOpt.setSocketFactory(sslContext.getSocketFactory());
+
+                    infoMessage = getWrapperName() + ": Connected to: ssl://" + brokerAddress + ":" + securePort;
+
+                }
+                
+                // connection without user authentification and no encryption
+                if(anonymous && !mqttSecurity){
+
+                    connectProtocol = "tcp://";
+                    connectPort = brokerPort;
+
+                    infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
+                }
+
+                    client = new MqttClient(connectProtocol + brokerAddress + ":" + connectPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+                    client.connect(connOpt);                   
+
 			        logger.warn(infoMessage);
 			        client.setCallback(this);
 			        client.subscribe(mqttWaspmoteGatewayTopic);
