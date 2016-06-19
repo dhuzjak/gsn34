@@ -67,8 +67,14 @@ public class GSNGSNAlarmHandler extends GSNAlarmHandler {
                 gsnDate = GSNTimeManager.dateFormat.parse(gsnTimestamp);
                 lastSentDate = GSNTimeManager.dateFormat.parse(lastSentTimestamp);
 
+
                 if (gsnDate.after(lastSentDate)) {
-                        //do nothing
+                    //do nothing
+                    
+                    /*
+                    // changed for mqtt implementation
+                    //lastSentTimestamp = null;
+                    */
 
                 } else {
                     return repeat && (GSNTimeManager.getTimeManager().compareDateTime(lastSentTimestamp, timePeriod));
@@ -92,8 +98,14 @@ public class GSNGSNAlarmHandler extends GSNAlarmHandler {
         return false;
     }
 
-    //added
-    // ako je dosano novi podatak, posalji ok
+    // added for mqtt implementation
+    /**
+     * This method checks timestamp of last data and if timestamp is after last alarm
+     * sends ok message
+     *
+     * @return - true if its ok to send "Ok" message, else false
+     */
+    @Override
     public boolean checkOkSend(){
 
 
@@ -105,7 +117,7 @@ public class GSNGSNAlarmHandler extends GSNAlarmHandler {
             gsnTimestamp = GSNTimeManager.getTimeManager().getSystemStartTimestamp();
         }
 
-        // provjeri vrijeme novog podatka, ako je novi podatak poslije posljednjeg alarma, posalji ok
+        // check timestamp of new data, if timestamp is after last alarm then it ok to send "ok" message
         if (lastSentTimestamp != null) {
             try {
 
@@ -154,6 +166,7 @@ public class GSNGSNAlarmHandler extends GSNAlarmHandler {
         return builder.toString();
     }
 
+    // added for mqtt implementation
     /**
      * This method is used for generating JSON alarm message
      * @return - JSON alarm message

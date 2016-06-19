@@ -58,6 +58,7 @@ public class GSNVSensorAlarmHandler extends GSNGSNAlarmHandler {
         return builder.toString();
     }
 
+    // added for mqtt implementation
     /**
      * This method is used for generating JSON alarm message
      * @return - JSON alarm message

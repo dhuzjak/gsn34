@@ -98,6 +98,8 @@ public class MqttLedMatrix extends AbstractVirtualSensor{
           //get message
           if(fieldNames[i].equals(dataFieldName.toUpperCase())) {
             newMessage = data.getData()[i].toString();
+
+            // parse JSON message
             try {
                   Object obj = parser.parse(newMessage);
                   
@@ -120,9 +122,10 @@ public class MqttLedMatrix extends AbstractVirtualSensor{
                     return;
                   }
 
+                  // if received message is alarmType = Ok
                   if(alarmType.equals("Ok")){
 
-
+                    // remove alarmId from list
 					if(!ledList.isEmpty()){
 						if(ledList.contains(alarmId)){
 							ledList.remove(ledList.indexOf(alarmId));
@@ -131,12 +134,15 @@ public class MqttLedMatrix extends AbstractVirtualSensor{
 					else{
 						timer.pause();					
 					}
+                    // turn On LED
 					ledMatrix.drawPixel(alarmId, true);
 					
 
                   }
+                  // if received message is alarmType = alarm
                   else if(alarmType.equals("alarm")){
 					
+                    // add alarmId to alarm list
 					if(!ledList.contains(alarmId)){
 							ledList.add(alarmId);
 							timer.start();
@@ -164,14 +170,19 @@ public class MqttLedMatrix extends AbstractVirtualSensor{
 
     public void dispose(){
 
-      try {
-        ledMatrix.clearDisplay();
-      }catch (IOException e) {
-        e.printStackTrace();
-      }
-		timer.shutdown();
+        try {
+            ledMatrix.clearDisplay();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        timer.shutdown();
 
     }
+
+    /**
+     * This class is used for LED matrix LED toggling
+     * as LED blinking represent alarm
+     */
 	public class BlinkTimer {
 
         private boolean isRunning = false;

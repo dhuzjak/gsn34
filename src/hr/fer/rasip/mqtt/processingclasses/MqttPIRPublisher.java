@@ -16,7 +16,7 @@ import hr.fer.rasip.mqtt.service.MQTTService;
 public class MqttPIRPublisher extends AbstractVirtualSensor{
 	
 	//postavi ime kolone za podatkovni dio poruke
-	//predpostavljeni naziv je "data"
+
 	private static final String DATA_FIELD_NAME = "motion";
 
     private static final String PUBLISH_TOPIC = "publish-topic";

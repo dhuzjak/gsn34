@@ -50,8 +50,9 @@ public class MqttNotificationProcessor extends AbstractVirtualSensor {
     private static final String CRITICAL_TYPE = "critical-type";
     private static final String MONITORED_FIELD = "monitored-field";
 
+    // Some info messages for notification information
     private static final String WARNING = "Warning";
-    private static final String OK = "OK";
+    private static final String OK = "Ok";
     private static final String CRITICAL = "Critical";
 
     private String gsnName;
@@ -199,6 +200,9 @@ public class MqttNotificationProcessor extends AbstractVirtualSensor {
         return true;
     }
 
+    /**
+     * This method generates JSON message based on sensorData, timestamp, and info message
+     */
     public String generateJSON(Double data, long timed, String info){
 
         JSONObject jsonOutput = new JSONObject();
@@ -233,6 +237,9 @@ public class MqttNotificationProcessor extends AbstractVirtualSensor {
                 
 
                 timed = dataItem.getTimeStamp();
+
+                // convert StreamElement to string and parse it as double
+                // should work on any Number type
                 try {
                     sensorData = Double.parseDouble(data.getData()[i].toString());
                 }
@@ -241,11 +248,15 @@ public class MqttNotificationProcessor extends AbstractVirtualSensor {
                     return;
                 }
 
+                // if sensor data is at critical value send warning message
                 if (sensorData == criticalValue){
                     
                     notificationFlag = true;
                     
+                    // outputNotification is shared resource for timer to publish data
                     outputNotification = generateJSON(sensorData, timed, WARNING);
+
+                    // start notification timer
                     if(!timer.isRunning()){
                         timer.resume();
                         
@@ -253,61 +264,81 @@ public class MqttNotificationProcessor extends AbstractVirtualSensor {
 
                 }
 
+                // if notification type is above
                 if (criticalType.equals("above")){
+
+                    // if sensor data is above critical value send critical message
                     if (sensorData > criticalValue){
                         
                         notificationFlag = true;
+
+                        // outputNotification is shared resource for timer to publish data
                         outputNotification = generateJSON(sensorData, timed, CRITICAL);
 
+                        // start notification timer
                         if(!timer.isRunning()){
                             timer.resume();                            
                         }
 
                     }
-                    // if previous condition is not satisfied, then everything is ok
+
+                    // if notification flas was set, notifications were sent before
+                    // check if sensor data is ok now and send ok message if so
                     else if(notificationFlag == true && sensorData < criticalValue){
                         
                         MQTTService.sendMqttMessage(notificationsTopic, generateJSON(sensorData, timed, OK));
                         notificationFlag = false;
+                        // pause timer
                         timer.pause();
                         
                     }
 
                 }
 
+                // if notification type is below
                 if (criticalType.equals("below")){
+
+                    // if sensor data is below critical value send cirtical message
                     if (sensorData < criticalValue){
                         
                         notificationFlag = true;
+
+                        // outputNotification is shared resource for timer to publish data
                         outputNotification = generateJSON(sensorData, timed, CRITICAL);
 
+                        // start notification timer
                         if(!timer.isRunning()){
                             timer.resume();    
                         }
 
                     }
+
+                    // if notification flas was set, notifications were sent before
+                    // check if sensor data is ok now and send ok message if so
                     else if(notificationFlag == true && (sensorData > criticalValue)){
 
                         MQTTService.sendMqttMessage(notificationsTopic, generateJSON(sensorData, timed, OK));
 
                         notificationFlag = false;
+                        // pause timer
                         timer.pause();
                        
                     }
 
                 }
-                
-                
 
             }     
         }
     } 
 
-    
     public void dispose(){
         timer.shutdown();
     }
 
+    /**
+     * This class is used for dynamic notification managment
+     * Start, Pause, Resume, and cancel notifications
+     */
     public class NotifyTimer {
 
         private boolean isRunning = false;
@@ -326,6 +357,7 @@ public class MqttNotificationProcessor extends AbstractVirtualSensor {
                 @Override
                 public void run() {   
                     try{
+                        
                         MQTTService.sendMqttMessage(notificationsTopic, outputNotification);
                         //System.out.println(outputNotification);
                     }

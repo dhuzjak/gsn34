@@ -310,7 +310,7 @@ public class GSNDataCollectorMain {
                 String onlyOnce = configurationManager.getConfigurationParameter(GSN, "alarm", alarm, "only-once");
                 String sendToList = configurationManager.getConfigurationParameter(GSN, "alarm", alarm, "send-to");
 
-                //added
+                //  added with mqtt implementatio
                 String alarmType = configurationManager.getConfigurationParameter(GSN, "alarm", alarm, "alarm-type");
                 String alarmId = configurationManager.getConfigurationParameter(GSN, "alarm", alarm, "alarm-id");
 
@@ -321,7 +321,6 @@ public class GSNDataCollectorMain {
                 }
 
                 try {
-                    //System.out.println("alarm set for: " + GSN + ", alarm: " + alarm);
                     
                     alarmManager.addAlarmHandler(GSN, alarm, alarmType);
                     alarmManager.setRepeat(GSN, alarm, repeat);
@@ -329,13 +328,10 @@ public class GSNDataCollectorMain {
                     alarmManager.setAlarmId(GSN, alarm, alarmId);
 
                     for (String sendTo : sendToList.split(";")) {
-                        //System.out.println("send to: " + sendTo);
                         alarmManager.addSendTo(GSN, alarm, sendTo);
                     }
 
                     alarmManager.initializeSender(GSN, alarm);
-                    // sends message if alarm sender type is MQTT
-                    //alarmManager.okMessage(GSN, alarm);
 
                 } catch (EndymionException e) {
                     logger.logMessage(e);

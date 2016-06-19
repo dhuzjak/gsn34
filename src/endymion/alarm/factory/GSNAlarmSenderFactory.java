@@ -15,7 +15,7 @@ public class GSNAlarmSenderFactory {
 
     /**
      * This static method returns GSNAlarmSender based on senderType
-     * @param senderType - string representing sender type (email, stdout)
+     * @param senderType - string representing sender type (email, stdout, mqtt)
      * @return - GSNSenderAlarm object
      * @throws EndymionException - wrong type given
      */

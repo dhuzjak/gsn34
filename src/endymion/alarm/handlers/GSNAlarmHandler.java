@@ -116,7 +116,10 @@ public abstract class GSNAlarmHandler {
      */
     public void raiseAlarm () throws EndymionException {
 
+        /* changed for mqtt implementation
         //initializeSender();
+        */
+        
         alarmActivated = true;
 
         if(alarmSender instanceof GSNAlarmSenderMqtt){
@@ -138,10 +141,16 @@ public abstract class GSNAlarmHandler {
 
     }
 
-    //added
+    // added for mqtt implementation
+    /**
+     * This method checks timestamp of last data and if timestamp is after last alarm
+     * sends ok message
+     *
+     * @return - true if its ok to send "Ok" message, else false
+     */
     public abstract boolean checkOkSend();
 
-    //added
+    // added for mqtt implementation
     /**
      * If sender is type GSNAlarmSenderMqtt and if alarm was set before
      * Then send Status "Ok" message that says GSN or VS recovered
@@ -160,7 +169,7 @@ public abstract class GSNAlarmHandler {
 
                 alarmSender.sendAlarm(null, generateJSON("Ok"));
                 alarmActivated = false;
-                // dont set timepstamp for OK message !!!
+                // dont set timestamp for OK message !!!
                 //setLastSentTimestamp(GSNTimeManager.dateFormat.format(new Date()));
                 
             }
@@ -174,9 +183,9 @@ public abstract class GSNAlarmHandler {
      * @throws EndymionException
      */
     public void initializeSender () throws EndymionException {
-
-        
+   
         alarmSender.setSendParameters(StringUtils.join(this.sendToList.iterator(), ";"));
+
     }
 
     /**
@@ -185,6 +194,7 @@ public abstract class GSNAlarmHandler {
      */
     protected abstract String composeMessage ();
 
+    // added for mqtt implementation
     /**
      * This method is used for generating JSON alarm message
      * @return - JSON alarm message
@@ -219,8 +229,7 @@ public abstract class GSNAlarmHandler {
         this.lastSentTimestamp = lastSentTimestamp;
     }
 
-    ///added
-    
+    // added for mqtt implementation
     /**
      * alarmId setter
      * @param alarmId

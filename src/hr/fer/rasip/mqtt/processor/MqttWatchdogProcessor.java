@@ -152,6 +152,9 @@ public class MqttWatchdogProcessor extends AbstractVirtualSensor {
             dataItem = data;
             startTime = dataItem.getTimeStamp();
 
+            // little workaround, purpose of this is that first notification must
+            // start immediately after expiration of critical period, not after
+            // some delay
             notificationTime = startTime - notificationDelay;
             
     }
@@ -161,6 +164,7 @@ public class MqttWatchdogProcessor extends AbstractVirtualSensor {
         
     }
 
+    // task for checking watchdog time
     class MyTimerTask extends TimerTask {
 
         public void run() {
@@ -174,12 +178,14 @@ public class MqttWatchdogProcessor extends AbstractVirtualSensor {
             long endPeriod = System.currentTimeMillis();
             long dataTimestamp;
 
+            // if data is not received for critical period
             if ((startTime + criticalPeriod) < endPeriod ){
 
+                // repeat notification every notificationDelay parameter
                 if(notificationTime + notificationDelay < endPeriod ){
 
-                    // ako data == null, podatak se nije pojavio od pocetka mjerenja, 
-                    // inace dohvati kad se zadnji put pojavio
+                    // if data == null, there was no data from start of watchdog
+                    // else get timestamp of last data
                     if(data == null)
                         dataTimestamp = startTime;
                     else
@@ -190,13 +196,13 @@ public class MqttWatchdogProcessor extends AbstractVirtualSensor {
 
                     notificationTime = endPeriod ;
 
-                    // postavi zastavicu kojom znamo da za sljedeci podatak mozemo poslati obavijest "Ok"
+                    // set flag to true so if new data is received watcdog will send "Ok" message
                     alarmFlag = true;
                 }    
             }
-            // ako je novi podatak stigao, posalji poruku da je sve ok
+            // if new data is received
             else{
-
+                // if alarmFlag is set, send ok
                 if(alarmFlag){
 
                     if(data == null)

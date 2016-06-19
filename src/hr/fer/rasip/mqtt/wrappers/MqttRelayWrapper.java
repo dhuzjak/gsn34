@@ -133,11 +133,14 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
         }
 
         gpio = GpioFactory.getInstance();
+
+        // claim pins for usage in this wrapper
         in_1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_06, "Input_1", PinState.HIGH);
         in_2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_10, "Input_2", PinState.HIGH);
         in_3 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_11, "Input_3", PinState.HIGH);
         in_4 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_13, "Input_4", PinState.HIGH);
         
+        // set state of relays after shutdown (HIGH = OFF)
         in_1.setShutdownOptions(Boolean.FALSE, PinState.HIGH);
         in_2.setShutdownOptions(Boolean.FALSE, PinState.HIGH);
         in_3.setShutdownOptions(Boolean.FALSE, PinState.HIGH);
@@ -262,6 +265,7 @@ public class MqttRelayWrapper extends AbstractWrapper implements MqttCallback {
     }
 
     public void connectionLost(Throwable cause) {
+        isConnected = false;
         System.out.println(getWrapperName() + " disconnected");
 
     }

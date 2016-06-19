@@ -34,11 +34,6 @@ public class MqttJsonLedTest extends AbstractVirtualSensor{
 
     private final transient Logger logger = Logger.getLogger(MqttJsonLedTest.class);
     
-
-
-    	
-
-
     public boolean initialize() {
 
         VSensorConfig vsensor = getVirtualSensorConfiguration();

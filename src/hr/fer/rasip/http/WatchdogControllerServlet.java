@@ -27,6 +27,7 @@ public class WatchdogControllerServlet extends HttpServlet {
 		handler = new WatchdogControllerHandler();
 		if (handler.isValid(request, response)) handler.handle(request, response);
 
+		// added for mqtt implementation
 		mqtthandler = new MQTTWatchdogControllerHandler();
 		if (mqtthandler.isValid(request, response)) mqtthandler.handle(request, response);
    }

@@ -16,7 +16,7 @@ import hr.fer.rasip.mqtt.service.MQTTService;
 public class MqttDs18b20Publisher extends AbstractVirtualSensor{
 	
 	//postavi ime kolone za podatkovni dio poruke
-	//predpostavljeni naziv je "data"
+	//predpostavljeni naziv je "temperature"
 	private static final String DATA_FIELD_NAME = "temperature";
 
     private static final String PUBLISH_TOPIC = "publish-topic";

@@ -26,7 +26,7 @@ public class NotificationControllerServlet extends HttpServlet {
 		handler = new NotificationControllerHandler();
 		if (handler.isValid(request, response)) handler.handle(request, response);
 
-		
+		// added for mqtt implementation
 		mqtthandler = new MQTTNotificationControllerHandler();
 		if (mqtthandler.isValid(request, response)) mqtthandler.handle(request, response);
    }

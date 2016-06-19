@@ -70,6 +70,7 @@ public class MqttAdafruitLcd extends AbstractVirtualSensor{
                 return false;
         }
 
+        // init LCD
       	lcd.setDisplay(true);
       	lcd.setBacklight(lcd.BACKLIGHT_RED);
       	lcd.write(0, "Hello");
@@ -89,14 +90,18 @@ public class MqttAdafruitLcd extends AbstractVirtualSensor{
            //get topic
           if(fieldNames[i].equals(topicFieldName.toUpperCase())) {
             topicName = data.getData()[i].toString();
-		topicName = topicName.substring(0, Math.min(topicName.length(), 15));
+
+            // output first 16 (or less) characters to LCD row 0
+            topicName = topicName.substring(0, Math.min(topicName.length(), 15));
             lcd.write(0, topicName);
 
           }
           //get message
           if(fieldNames[i].equals(dataFieldName.toUpperCase())) {
             newMessage = data.getData()[i].toString();
-		newMessage = newMessage.substring(0, Math.min(newMessage.length(), 15));
+
+            // output first 16 (or less) characters to LCD row 1
+            newMessage = newMessage.substring(0, Math.min(newMessage.length(), 15));
             lcd.write(1, newMessage);
 
           }

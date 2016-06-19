@@ -48,7 +48,6 @@ public class GSNAlarmManager {
 
         GSNAlarmHandler alarmHandler = new GSNGSNAlarmHandler(gsnId, alarmName);
         alarmHandler.setAlarmSender(GSNAlarmSenderFactory.getAlarmSender(alarmSenderType));
-        
         alarmHandlers.add(alarmHandler);
     }
 
@@ -73,7 +72,6 @@ public class GSNAlarmManager {
 
         GSNAlarmHandler alarmHandler = new GSNVSensorAlarmHandler(gsnId, vSensorName, alarmName);
         alarmHandler.setAlarmSender(GSNAlarmSenderFactory.getAlarmSender(alarmSenderType));
-        
         alarmHandlers.add(alarmHandler);
     }
 
@@ -186,9 +184,12 @@ public class GSNAlarmManager {
                 EndymionLoggerEnum.WARNING);
     }
 
+    // redesigned for mqtt implementation
     /**
-     * Method which checks checks all alarms, and raises them if
+     * Method that checks all alarms, and raises them if
      * they return true
+     * Then it checks if alarms recovered and if true sends "ok"
+     * message
      */
     public void checkAlarms () {
         for (GSNAlarmHandler alarmHandler : alarmHandlers) {
@@ -209,14 +210,27 @@ public class GSNAlarmManager {
             }
         }
     }
-    // added
+    // added for mqtt implementation
+    /**
+     * Method that checks if its ok to send "ok" message on GSN level
+     * @param gsnId - the Id of GSN
+     * @param alarmName - the name of the alarm
+     * @throws EndymionException
+     */
     public void okMessage (String gsnId,  String alarmName) throws EndymionException{
 
         okMessage(gsnId, null, alarmName);
 
     }
 
-
+    // added for mqtt implementation
+    /**
+     * Method that checks if its ok to send "ok" message on vSensor level
+     * @param gsnId - the Id of GSN
+     * @param vSensorName - the name of vSensor
+     * @param alarmName - the name of the alarm
+     * @throws EndymionException
+     */
     public void okMessage (String gsnId, String vSensor, String alarmName) throws EndymionException {
         for (GSNAlarmHandler alarmHandler : alarmHandlers) {
              if (alarmHandler.getAlarmName().equalsIgnoreCase(alarmName)
@@ -232,19 +246,51 @@ public class GSNAlarmManager {
         }
     }
 
+    // added for mqtt implementation
+    /**
+     * Method that sets alarm Id on GSN level
+     * @param gsnId - the Id of GSN
+     * @param alarmName - the name of the alarm
+     * @param alarmId - the Id of the alarm
+     * @throws EndymionException
+     */
     public void setAlarmId (String gsnId, String alarmName, String alarmId) throws EndymionException {
         setAlarmId(gsnId, null, alarmName, alarmId);
     }
 
+    // added for mqtt implementation
+    /**
+     * Method that sets alarm Id on vSensor level
+     * @param gsnId - the Id of GSN
+     * @param vSensorName - the name of vSensor
+     * @param alarmName - the name of the alarm
+     * @param alarmId - the Id of the alarm
+     * @throws EndymionException
+     */
     public void setAlarmId (String gsnId, String vSensorName, String alarmName, String alarmId) throws EndymionException {
         GSNAlarmHandler alarmHandler = getAlarmById(gsnId, vSensorName, alarmName);
         alarmHandler.setAlarmId(alarmId);
     }
 
+    // added for mqtt implementation
+    /**
+     * Initialization of the sender on GSN level
+     * @param gsnId - the Id of GSN
+     * @param alarmName - the name of the alarm
+     * @throws EndymionException
+     */
     public void initializeSender (String gsnId, String alarmName) throws EndymionException {
         initializeSender(gsnId, null, alarmName);
     }
 
+    // added for mqtt implementation
+    /**
+     * Initialization of the sender on vSensor level
+     * @param gsnId - the Id of GSN
+     * @param vSensorName - the name of vSensor
+     * @param alarmName - the name of the alarm
+     * @throws EndymionException
+     */
     public void initializeSender (String gsnId, String vSensorName, String alarmName) throws EndymionException {
         GSNAlarmHandler alarmHandler = getAlarmById(gsnId, vSensorName, alarmName);
         alarmHandler.initializeSender();
