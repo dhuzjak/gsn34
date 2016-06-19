@@ -3,18 +3,22 @@
   <connection-params>
     <gsn-name>GSN_MQTT_develop</gsn-name>
     <gsn-id>1</gsn-id>
-    <mqtt-anonymous>false</mqtt-anonymous>
-    <broker-url>192.168.5.81</broker-url>
+    <mqtt-anonymous>true</mqtt-anonymous>
+    <mqtt-security>true</mqtt-security>
+    <broker-url>test.mosquitto.org</broker-url>
     <broker-port>1883</broker-port>
-    <websockets-port>9001</websockets-port>
+    <secure-port>8883</secure-port>
+    <websockets-port>8080</websockets-port>
+    <websockets-secure-port>8081</websockets-secure-port>
     <mqtt-username>admin</mqtt-username>
     <mqtt-password>admin</mqtt-password>
-    <mqtt-gateway>RASIP1/#</mqtt-gateway>
-    <mqtt-topic-endymion-alarm>RASIP1/Endymion/alarms</mqtt-topic-endymion-alarm>
-    <mqtt-topic-notifications>RASIP1/GSN/notifications</mqtt-topic-notifications>
-    <mqtt-topic-watchdog>RASIP1/GSN/watchdog</mqtt-topic-watchdog>
-    <mqtt-topic-relay>RASIP1/GSN/relays</mqtt-topic-relay>
-    <mqtt-topic-relay-ack>RASIP1/GSN/relaysAck</mqtt-topic-relay-ack>
-    <mqtt-topic-waspmotegateway>RASIP1/GSN/GatewayOutput</mqtt-topic-waspmotegateway>
+    <broker-ca-certificate>mqtt/CaCertificates/mosquitto.org.crt</broker-ca-certificate>
+    <mqtt-gateway>RASIP2/#</mqtt-gateway>
+    <mqtt-topic-endymion-alarm>RASIP2/Endymion/alarms</mqtt-topic-endymion-alarm>
+    <mqtt-topic-notifications>RASIP2/GSN/notifications</mqtt-topic-notifications>
+    <mqtt-topic-watchdog>RASIP2/GSN/watchdog</mqtt-topic-watchdog>
+    <mqtt-topic-relay>RASIP2/GSN/relays</mqtt-topic-relay>
+    <mqtt-topic-relay-ack>RASIP2/GSN/relaysAck</mqtt-topic-relay-ack>
+    <mqtt-topic-waspmotegateway>RASIP2/GSN/GatewayOutput</mqtt-topic-waspmotegateway>
   </connection-params>
 </config>

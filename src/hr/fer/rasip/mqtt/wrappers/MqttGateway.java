@@ -24,6 +24,20 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import javax.net.ssl.SSLContext; 
+import javax.net.ssl.SSLParameters; 
+import javax.net.ssl.SSLSocketFactory; 
+import javax.net.ssl.TrustManagerFactory.*;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.GeneralSecurityException; 
+
+import java.io.FileNotFoundException; 
+import java.io.IOException; 
+import java.io.InputStreamReader; 
+import java.security.cert.*;
+import javax.net.ssl.*;
+
 
 public class MqttGateway extends AbstractWrapper implements MqttCallback{
 
@@ -41,7 +55,10 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
   private long rate = 1000;
 
   private String brokerAddress;
+  private String brokerCertificatePath;
   private int brokerPort;
+  private int securePort;
+  private int keepAliveInterval = 300;
 
   private String mqttGatewayTopic;
   private String username;
@@ -49,9 +66,12 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
 
   private boolean isConnected = false;
   private boolean anonymous = false;
+  private boolean mqttSecurity = false;
+
+  private String infoMessage = null;
   
-  MqttClient client;
-  MqttConnectOptions connOpt;
+  private MqttClient client;
+  private MqttConnectOptions connOpt;
   
   public boolean initialize() {
     setName("MqttGateway" + counter++);
@@ -73,8 +93,11 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
         mqttGatewayTopic = connectionParameters.getChild("mqtt-gateway").getValue();
 
         username = connectionParameters.getChild("mqtt-username").getValue(); 
-        password = connectionParameters.getChild("mqtt-password").getValue(); 
+        password = connectionParameters.getChild("mqtt-password").getValue();
+        brokerCertificatePath = connectionParameters.getChild("broker-ca-certificate").getValue(); 
         anonymous = Boolean.parseBoolean(connectionParameters.getChild("mqtt-anonymous").getValue()); 
+        mqttSecurity = Boolean.parseBoolean(connectionParameters.getChild("mqtt-security").getValue());
+        securePort = Integer.valueOf(connectionParameters.getChild("secure-port").getValue());
 
     }
     catch(Exception e){
@@ -82,45 +105,94 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
         return false; 
     }
 
-
         return true;
   }
 
   public void run() {
 
+  	// try to reconnect while wrapper is active
+  	while(isActive()){
 
-    if(!isConnected()){
-      try {
+	    if(!isConnected()){
+	      try {
 
-        client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
-        
-        if(!anonymous)
-        {
-          connOpt = new MqttConnectOptions();
-    
-          connOpt.setCleanSession(true);
-          connOpt.setKeepAliveInterval(300);
-          connOpt.setUserName(username);
-          connOpt.setPassword(password.toCharArray());
-          client.connect(connOpt);
+	      	// connect with username and without security
+	        if(!anonymous && !mqttSecurity)
+	        {
+				client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+				connOpt = new MqttConnectOptions();
 
-        }
-        else
-        {
-          client.connect();
-        }
+				connOpt.setCleanSession(true);
+				connOpt.setKeepAliveInterval(keepAliveInterval);
+				connOpt.setUserName(username);
+				connOpt.setPassword(password.toCharArray());
+				client.connect(connOpt);
+				infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
 
-        
-        System.out.println(getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
-        client.setCallback(this);
-        client.subscribe(mqttGatewayTopic);
-        
-      } catch (MqttException e) {
-          logger.error(e.getMessage(), e);
-          e.printStackTrace();
-      }
+	        }
+	        // connect with security, username optional
+	        if(mqttSecurity)
+	        {
 
-    }
+	        	client = new MqttClient("ssl://" + brokerAddress + ":" + securePort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+	        	CertificateFactory cf = CertificateFactory.getInstance("X.509");
+			 	InputStream certFile = new FileInputStream(brokerCertificatePath);
+			 	Certificate ca = cf.generateCertificate(certFile);
+			 
+			 	KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			 	keyStore.load(null, null);
+			 	keyStore.setCertificateEntry("ca", ca);
+
+			 	TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+			 	trustManagerFactory.init(keyStore);
+	        	
+	        	SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+				sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
+				connOpt = new MqttConnectOptions();
+
+				// if anonymous in configuration is set to false, connect with username and pass
+				if(!anonymous){
+					connOpt.setUserName(username);
+					connOpt.setPassword(password.toCharArray());
+				}
+				connOpt.setCleanSession(true);
+				connOpt.setKeepAliveInterval(keepAliveInterval);
+				connOpt.setSocketFactory(sslContext.getSocketFactory());
+				client.connect(connOpt);
+				infoMessage = getWrapperName() + ": Connected to: ssl://" + brokerAddress + ":" + securePort;
+
+	        }
+	        // connection without user authentification and no encryption
+	        if(anonymous && !mqttSecurity){
+	        	client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+	        	connOpt = new MqttConnectOptions();
+
+				connOpt.setCleanSession(true);
+				connOpt.setKeepAliveInterval(keepAliveInterval);
+				client.connect(connOpt);
+				infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
+	        }
+
+	        
+		        logger.warn(infoMessage);
+		        client.setCallback(this);
+		        client.subscribe(mqttGatewayTopic);
+	        
+	      } catch (MqttException | GeneralSecurityException | IOException e) {
+				logger.error(e.getMessage(), e);
+				//e.printStackTrace();
+				logger.warn(getWrapperName() + ": Reconnect in 10 sec");
+
+				// sleep
+	          	try{
+					Thread.sleep(10000);
+				} catch (InterruptedException ex) {
+		        	logger.error(e.getMessage(), ex);
+
+		     	}	
+			}
+	    }
+	}
 
   
   }
@@ -152,6 +224,7 @@ public class MqttGateway extends AbstractWrapper implements MqttCallback{
 
   @Override
   public void connectionLost(Throwable cause) {
+  	isConnected = false;
     System.out.println("Mqtt Gateway connection lost");
 
   }

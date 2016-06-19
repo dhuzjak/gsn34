@@ -9,7 +9,7 @@ angular.module('gsnClientApp')
                         {"name":"Relay 4", "id": 4, "status": false}];
     
     $scope.config = [];
-    $scope.isDisabled = false;
+    
     var client;
 
     // load data first
@@ -22,12 +22,25 @@ angular.module('gsnClientApp')
         $scope.RelayTopicAck = $scope.config['mqtt-topic-relay-ack'];
 
         $scope.brokerUrl = $scope.config['broker-url'];
-        $scope.brokerPort = $scope.config['websockets-port'];
 
         $scope.username = $scope.config['mqtt-username'];
         $scope.password = $scope.config['mqtt-password'];
 
         $scope.anonymous = $scope.config['mqtt-anonymous'];
+        $scope.security = $scope.config['mqtt-security'];
+
+        $scope.brokerPort = $scope.config['websockets-port'];
+        /*
+        // if security is set on
+        if (angular.equals($scope.security,"true"))
+        {
+          $scope.brokerPort = $scope.config['websockets-secure-port'];
+        }
+        else
+        {
+          $scope.brokerPort = $scope.config['websockets-port'];
+        }
+        */
 
         // Create a client instance: Broker, Port, Websocket Path, Client ID
         client = new Paho.MQTT.Client($scope.brokerUrl, Number($scope.brokerPort),  "pahoJS_" + parseInt(Math.floor((Math.random() * 100) + 1)));
@@ -39,14 +52,14 @@ angular.module('gsnClientApp')
         // set handler for recv message
         client.onMessageArrived = function (message) {
           
-          //console.log($scope.isDisabled);
+          ;
           var payload = message.payloadString;
           //console.log("recv");
           //console.log(payload);
 
-          $scope.isDisabled = false;
+          
           var relayStatus = angular.fromJson(payload);
-
+          //console.log(relayStatus);
           for(var i=0; i < relayStatus.length; i++){
 
             if(angular.equals(relayStatus[i].id,$scope.relays[i].id)){
@@ -61,28 +74,28 @@ angular.module('gsnClientApp')
           $scope.$apply();
 
         }
+
+        var connectOptions = {
+          timeout: 5,
+          onSuccess: onConnect,  
+          onFailure: onFail,
+        };
          
         // Connect the client, providing an onConnect callback
         if (angular.equals($scope.anonymous,"false"))
         {
-          client.connect({
-            timeout: 5,
-            onSuccess: onConnect,  
-            onFailure: onFail,
-            userName : $scope.username,
-            password : $scope.password
-          });
+          connectOptions.userName = $scope.username;
+          connectOptions.password = $scope.password;
         }
-        else
+        /*
+        if (angular.equals($scope.security,"true"))
         {
-          client.connect({
-            timeout: 5,
-            onSuccess: onConnect,  
-            onFailure: onFail,
-
-        });
+          connectOptions.useSSL = true;
         }
+        */
         
+        
+        client.connect(connectOptions);
 
       });
 
@@ -103,7 +116,6 @@ angular.module('gsnClientApp')
     $scope.publish = function (relay) {
         //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)
         
-        //$scope.isDisabled = true;
         console.log("Publish Relay message");
         //console.log(relay);
 
@@ -115,7 +127,6 @@ angular.module('gsnClientApp')
 
             }
         }
-        //relay.status = !relay.status;
 
         var json = angular.toJson(relaysCopy);
         
@@ -125,21 +136,8 @@ angular.module('gsnClientApp')
         message.qos = 0;
         message.retained = true;      // retain message on server
         client.send(message);
-        
-        //console.log($scope.isDisabled);
-        // reset status (to recieve actual one from Ack topic)
-        /*
-        for(var i=0; i < $scope.relays.length; i++){
-            if(angular.equals($scope.relays[i].id,relay.id)){
-                $scope.relays[i].status = false;
-            }
-        }
-        */
-        
-        
+        console.log(json);
 
-
-      
     }
     $scope.gatewayPublish = function (GatewayMessage) {
       //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)

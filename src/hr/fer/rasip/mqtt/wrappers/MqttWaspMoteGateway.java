@@ -44,6 +44,21 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.io.*;
+import javax.net.ssl.SSLContext; 
+import javax.net.ssl.SSLParameters; 
+import javax.net.ssl.SSLSocketFactory; 
+import javax.net.ssl.TrustManagerFactory.*;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.GeneralSecurityException; 
+
+import java.io.FileNotFoundException; 
+import java.io.IOException; 
+import java.io.InputStreamReader; 
+import java.security.cert.*;
+import javax.net.ssl.*;
+
 /**
  * Omotac za prikupljanje podataka s WaspMoteGatewaya. Prikuplja podatke koje gateway
  * salje na serijski port. Koristene su RXTX (http://rxtx.qbang.org/wiki/index.php/Main_Page)
@@ -107,18 +122,23 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 	private static final String MQTT_CONFIG_FILE = "mqtt/config.xml";
 
 	private String brokerAddress;
-  	private int brokerPort;
+	private String brokerCertificatePath;
+	private int brokerPort;
+	private int securePort;
+	private int keepAliveInterval = 300;
 
-  	private String mqttWaspmoteGatewayTopic;
+	private String mqttWaspmoteGatewayTopic;
+	private String username;
+	private String password;
 
-  	private String username;
-    private String password;
+	private boolean isConnected = false;
+	private boolean anonymous = false;
+	private boolean mqttSecurity = false;
 
-    private boolean isConnected = false;
-    private boolean anonymous = false;
-    
-    MqttClient client;
-    MqttConnectOptions connOpt;
+	private String infoMessage = null;
+
+	private MqttClient client;
+	private MqttConnectOptions connOpt;
 	/**
 	 * Uzima parametre iz XML datoteke. One koji nisu navedeni postavlja na 
 	 * predpostavljene vrijednosti. Inicijalizira vezu za serijskim portom.  
@@ -218,73 +238,125 @@ public class MqttWaspMoteGateway extends AbstractWrapper implements SerialPortEv
 									 new DataField("data", "varchar(" + dataStringLength+ ")", "Data part of package"),
 									 new DataField("outData", "varchar(500)", "Output data to sensor network")};	
 		
-		
-
-
-
+	
+		// get mqtt parameters
 		try {
-          SAXBuilder builder = new SAXBuilder();
-          File xmlFile = new File(MQTT_CONFIG_FILE);
-          Document doc = (Document) builder.build(xmlFile);
-          Element root = doc.getRootElement();
-          
-          //get parameters from config file
-          Element connectionParameters = root.getChild("connection-params");
-          
-          brokerAddress = connectionParameters.getChild("broker-url").getValue();  
-          brokerPort = Integer.valueOf(connectionParameters.getChild("broker-port").getValue());
-          mqttWaspmoteGatewayTopic = connectionParameters.getChild("mqtt-topic-waspmotegateway").getValue(); 
+			SAXBuilder builder = new SAXBuilder();
+			File xmlFile = new File(MQTT_CONFIG_FILE);
+			Document doc = (Document) builder.build(xmlFile);
+			Element root = doc.getRootElement();
 
-          username = connectionParameters.getChild("mqtt-username").getValue(); 
-          password = connectionParameters.getChild("mqtt-password").getValue(); 
+			//get parameters from config file
+			Element connectionParameters = root.getChild("connection-params");
 
-          anonymous = Boolean.parseBoolean(connectionParameters.getChild("mqtt-anonymous").getValue()); 
+			brokerAddress = connectionParameters.getChild("broker-url").getValue();  
+			brokerPort = Integer.valueOf(connectionParameters.getChild("broker-port").getValue());
+			mqttWaspmoteGatewayTopic = connectionParameters.getChild("mqtt-topic-waspmotegateway").getValue(); 
 
-         }
+			username = connectionParameters.getChild("mqtt-username").getValue(); 
+			password = connectionParameters.getChild("mqtt-password").getValue(); 
+
+			brokerCertificatePath = connectionParameters.getChild("broker-ca-certificate").getValue(); 
+			anonymous = Boolean.parseBoolean(connectionParameters.getChild("mqtt-anonymous").getValue()); 
+			mqttSecurity = Boolean.parseBoolean(connectionParameters.getChild("mqtt-security").getValue());
+			securePort = Integer.valueOf(connectionParameters.getChild("secure-port").getValue()); 
+
+        }
 		catch(Exception e){
-          logger.error(e.getMessage(), e);
-          return false; 
-       }
+			logger.error(e.getMessage(), e);
+			return false; 
+       	}
 
-       return true;
+		return true;
 	}
 	
 	public void run (){
 
+		// try to reconnect while wrapper is active
+		while(isActive()){
 
-		if(!isConnected()){
-			try {
+		    if(!isConnected()){
+		      try {
 
-				client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, client.generateClientId(), new MemoryPersistence());
-				connOpt = new MqttConnectOptions();
-    
-		        if(!anonymous)
+		      	// connect with username and without security
+		        if(!anonymous && !mqttSecurity)
 		        {
-		          connOpt = new MqttConnectOptions();
-		    
-		          connOpt.setCleanSession(true);
-		          connOpt.setKeepAliveInterval(300);
-		          connOpt.setUserName(username);
-		          connOpt.setPassword(password.toCharArray());
-		          client.connect(connOpt);
+					client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+					connOpt = new MqttConnectOptions();
+
+					connOpt.setCleanSession(true);
+					connOpt.setKeepAliveInterval(keepAliveInterval);
+					connOpt.setUserName(username);
+					connOpt.setPassword(password.toCharArray());
+					client.connect(connOpt);
+					infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
 
 		        }
-		        else
+		        // connect with security, username optional
+		        if(mqttSecurity)
 		        {
-		          client.connect();
+
+		        	client = new MqttClient("ssl://" + brokerAddress + ":" + securePort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+		        	CertificateFactory cf = CertificateFactory.getInstance("X.509");
+				 	InputStream certFile = new FileInputStream(brokerCertificatePath);
+				 	Certificate ca = cf.generateCertificate(certFile);
+				 
+				 	KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+				 	keyStore.load(null, null);
+				 	keyStore.setCertificateEntry("ca", ca);
+
+				 	TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+				 	trustManagerFactory.init(keyStore);
+		        	
+		        	SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+					sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
+					connOpt = new MqttConnectOptions();
+
+					// if anonymous in configuration is set to false, connect with username and pass
+					if(!anonymous){
+						connOpt.setUserName(username);
+						connOpt.setPassword(password.toCharArray());
+					}
+					connOpt.setCleanSession(true);
+					connOpt.setKeepAliveInterval(keepAliveInterval);
+					connOpt.setSocketFactory(sslContext.getSocketFactory());
+					client.connect(connOpt);
+					infoMessage = getWrapperName() + ": Connected to: ssl://" + brokerAddress + ":" + securePort;
+
 		        }
-				System.out.println(getWrapperName() + ": Connected to: " + brokerAddress + ":" + brokerPort);
-				client.setCallback(this);
-				client.subscribe(mqttWaspmoteGatewayTopic);
+		        // connection without user authentification and no encryption
+		        if(anonymous && !mqttSecurity){
+		        	client = new MqttClient("tcp://" + brokerAddress + ":" + brokerPort, getWrapperName() + client.generateClientId(), new MemoryPersistence());
+		        	connOpt = new MqttConnectOptions();
 
-			}catch (MqttException e) {
-				logger.error(e.getMessage(), e);
-				e.printStackTrace();
-			}
+					connOpt.setCleanSession(true);
+					connOpt.setKeepAliveInterval(keepAliveInterval);
+					client.connect(connOpt);
+					infoMessage = getWrapperName() + ": Connected to: tcp://" + brokerAddress + ":" + brokerPort;
+		        }
 
-    	}
+		        
+			        logger.warn(infoMessage);
+			        client.setCallback(this);
+			        client.subscribe(mqttWaspmoteGatewayTopic);
+		        
+		      } catch (MqttException | GeneralSecurityException | IOException e) {
+					logger.error(e.getMessage(), e);
+					//e.printStackTrace();
+					logger.warn(getWrapperName() + ": Reconnect in 10 sec");
+
+					// sleep
+		          	try{
+						Thread.sleep(10000);
+					} catch (InterruptedException ex) {
+			        	logger.error(e.getMessage(), ex);
+
+			     	}	
+				}
+		    }
+		}
 		
-		// send test string to putput
+		// send test string to output
 		/*
 		while(isActive()){
 			
