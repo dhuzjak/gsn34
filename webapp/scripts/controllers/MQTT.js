@@ -3,10 +3,13 @@
 angular.module('gsnClientApp')
   .controller('MQTTController', function ($http, $scope, mqttConfigService ) {
 
-    $scope.relays=[{"name":"Relay 1", "id": 1, "status": false},
-                        {"name":"Relay 2","id": 2, "status": false},
-                        {"name":"Relay 3", "id": 3, "status": false},
-                        {"name":"Relay 4", "id": 4, "status": false}];
+    $scope.relays={ "relays": [ {"name":"Relay 1", "id": 1, "status": false},
+                                {"name":"Relay 2","id": 2, "status": false},
+                                {"name":"Relay 3", "id": 3, "status": false},
+                                {"name":"Relay 4", "id": 4, "status": false}
+                              ],
+                    "relayControllerState": true
+                  };
     
     $scope.config = [];
     
@@ -29,9 +32,9 @@ angular.module('gsnClientApp')
         $scope.anonymous = $scope.config['mqtt-anonymous'];
         $scope.security = $scope.config['mqtt-security'];
 
-        $scope.brokerPort = $scope.config['websockets-port'];
-        /*
-        // if security is set on
+        //$scope.brokerPort = $scope.config['websockets-port'];
+        
+        // if security is set on use secure WebSockets
         if (angular.equals($scope.security,"true"))
         {
           $scope.brokerPort = $scope.config['websockets-secure-port'];
@@ -40,7 +43,7 @@ angular.module('gsnClientApp')
         {
           $scope.brokerPort = $scope.config['websockets-port'];
         }
-        */
+        
 
         // Create a client instance: Broker, Port, Websocket Path, Client ID
         client = new Paho.MQTT.Client($scope.brokerUrl, Number($scope.brokerPort),  "pahoJS_" + parseInt(Math.floor((Math.random() * 100) + 1)));
@@ -52,23 +55,37 @@ angular.module('gsnClientApp')
         // set handler for recv message
         client.onMessageArrived = function (message) {
           
-          ;
+          
           var payload = message.payloadString;
           //console.log("recv");
           //console.log(payload);
 
-          
-          var relayStatus = angular.fromJson(payload);
-          //console.log(relayStatus);
-          for(var i=0; i < relayStatus.length; i++){
+          try{
 
-            if(angular.equals(relayStatus[i].id,$scope.relays[i].id)){
-                //if($scope.relays[i].status != relayStatus[i].status){
-                    $scope.relays[i].status = relayStatus[i].status
-                  //  console.log($scope.relays[i].status);
-                //}
-                
+            var relays = angular.fromJson(payload);
+
+            var relayStatus = relays.relays;
+
+            //console.log(relayStatus);
+            for(var i=0; i < relayStatus.length; i++){
+              //console.log($scope.relays.relays[i].id);
+
+              if(angular.equals(relayStatus[i].id,$scope.relays.relays[i].id)){
+                  //if($scope.relays[i].status != relayStatus[i].status){
+                      $scope.relays.relays[i].status = relayStatus[i].status
+                    //  console.log($scope.relays[i].status);
+                  //}
+                  
+              }
             }
+
+            // if message is from last will testament, relayState will be false
+            // therefore no further publishing is allowed
+            $scope.relays.relayControllerState = relays.relayControllerState;
+          }
+          catch(error)
+          {
+            console.log("Invalid JSON format or no JSON recieved");
           }
         
           $scope.$apply();
@@ -87,12 +104,12 @@ angular.module('gsnClientApp')
           connectOptions.userName = $scope.username;
           connectOptions.password = $scope.password;
         }
-        /*
+        
         if (angular.equals($scope.security,"true"))
         {
           connectOptions.useSSL = true;
         }
-        */
+        
         
         
         client.connect(connectOptions);
@@ -116,27 +133,32 @@ angular.module('gsnClientApp')
     $scope.publish = function (relay) {
         //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)
         
-        console.log("Publish Relay message");
-        //console.log(relay);
 
+        if($scope.relays.relayControllerState)
+        {
+          console.log("Publish Relay message");
+          //console.log(relay);$scope.relays.relays[i]
 
-        var relaysCopy = angular.copy($scope.relays);
-        for(var i=0; i < relaysCopy.length; i++){
-            if(angular.equals(relaysCopy[i].id,relay.id)){
-                relaysCopy[i].status = !relay.status;
+          var relaysCopy = angular.copy($scope.relays);
+          for(var i=0; i < relaysCopy.relays.length; i++){
+              if(angular.equals(relaysCopy.relays[i].id,relay.id)){
+                  relaysCopy.relays[i].status = !relay.status;
 
-            }
+              }
+          }
+
+          var json = angular.toJson(relaysCopy);
+          
+          //console.log(json);
+          var message = new Paho.MQTT.Message(json);
+          message.destinationName = $scope.RelayTopic;
+          message.qos = 0;
+          message.retained = true;      // retain message on server
+          client.send(message);
+          //console.log(json);
+
         }
-
-        var json = angular.toJson(relaysCopy);
         
-        //console.log(json);
-        var message = new Paho.MQTT.Message(json);
-        message.destinationName = $scope.RelayTopic;
-        message.qos = 0;
-        message.retained = true;      // retain message on server
-        client.send(message);
-        console.log(json);
 
     }
     $scope.gatewayPublish = function (GatewayMessage) {

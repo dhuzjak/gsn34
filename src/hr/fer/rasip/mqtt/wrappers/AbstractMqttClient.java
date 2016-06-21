@@ -124,6 +124,8 @@ public abstract class AbstractMqttClient extends AbstractWrapper{
     }
     /**
      * Connection to broker implementation.
+     *
+     * @throws MqttException, GeneralSecurityException, IOException
      */
     protected void connectToBroker() throws MqttException, GeneralSecurityException, IOException{
 

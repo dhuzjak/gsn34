@@ -57,10 +57,11 @@ public class MqttRelayWrapper extends AbstractMqttClient {
     protected String mqttRelayTopicAck;
 
 
-    private final String lastWillPayload = "[{\"name\":\"Relay 1\",\"id\":1,\"status\":false}," + 
-                                            "{\"name\":\"Relay 2\",\"id\":2,\"status\":false}," +
-                                            "{\"name\":\"Relay 3\",\"id\":3,\"status\":false}," +
-                                            "{\"name\":\"Relay 4\",\"id\":4,\"status\":false}]";
+    private final String lastWillPayload = "{\"relays\":" + "[{\"name\":\"Relay 1\",\"id\":1,\"status\":false}," + 
+                                                            "{\"name\":\"Relay 2\",\"id\":2,\"status\":false}," +
+                                                            "{\"name\":\"Relay 3\",\"id\":3,\"status\":false}," +
+                                                            "{\"name\":\"Relay 4\",\"id\":4,\"status\":false}]," +
+                                            "\"relayControllerState\": false}";
 
     private GpioController gpio;
     private GpioPinDigitalOutput in_1;
@@ -126,7 +127,7 @@ public class MqttRelayWrapper extends AbstractMqttClient {
 
         // set last will (qos = 1, retain = true)
         connOpt.setWill(mqttRelayTopicAck, lastWillPayload.getBytes(), 1, true);
-	
+    
         return true;
     }
 
@@ -177,22 +178,29 @@ public class MqttRelayWrapper extends AbstractMqttClient {
                 JSONParser parser = new JSONParser();
                 
                 try {
-                    Object obj = parser.parse(newMessage);
-                    JSONArray array = (JSONArray)obj;
+                    
+                    JSONObject jsonObject = (JSONObject) parser.parse(newMessage);
+
+                    JSONArray array = (JSONArray) jsonObject.get("relays");
                     for (int i = 0; i < array.size(); ++i) {
                         JSONObject relayState = (JSONObject)array.get(i);
 
                         if (relays.get(i).getState() != relayState.get((Object)"status")){
-                        	relays.get(i).setState((Boolean)relayState.get((Object)"status") == false);
+                            relays.get(i).setState((Boolean)relayState.get((Object)"status") == false);
                         }
                     }
+                    // 
+                    jsonObject.put("relayControllerState", true);
+                    newMessage = jsonObject.toJSONString();
+
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                     return;
                 }
 
-                // send same message as acknowledgement that this message was received by relay wrapper
+                // send message as acknowledgement that this message was received by relay wrapper
+                // relayControllerState set to true
                 MqttMessage status = new MqttMessage();
                 status.setPayload(newMessage.getBytes());
                 status.setRetained(true);
