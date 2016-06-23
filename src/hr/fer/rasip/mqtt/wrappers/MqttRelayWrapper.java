@@ -30,6 +30,7 @@ import org.jdom.output.Format;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
@@ -40,6 +41,9 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import java.security.GeneralSecurityException; 
+import java.io.IOException; 
 
 public class MqttRelayWrapper extends AbstractMqttClient {
 
@@ -131,6 +135,24 @@ public class MqttRelayWrapper extends AbstractMqttClient {
         return true;
     }
 
+    /**
+     * Try to connect to broker.
+     */
+    public void run() {
+
+        if(!isConnected()){
+          try {
+
+            connectToBroker();
+            
+          } catch (MqttException | GeneralSecurityException | IOException e) {
+                logger.error(e.getMessage(), e);
+                //e.printStackTrace();
+                
+            }
+        }
+        
+    }
 
     public DataField[] getOutputFormat() {
         return collection;
@@ -163,16 +185,19 @@ public class MqttRelayWrapper extends AbstractMqttClient {
     }
 
     @Override
-    protected MqttCallback setCallback() {
+    protected MqttCallbackExtended setCallback() {
 
-        return new MqttCallback(){ 
+        return new MqttCallbackExtended(){ 
 
+            @Override
             public void connectionLost(Throwable cause) {
                 isConnected = false;
-                System.out.println("connection lost");
+                System.out.println(getWrapperName() + ": connection to " + brokerAddress + " lost. Reconnecting...");
 
             }
-            // parse relay statis
+
+            // parse relay status
+            @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 String newMessage = message.toString();
                 JSONParser parser = new JSONParser();
@@ -189,7 +214,8 @@ public class MqttRelayWrapper extends AbstractMqttClient {
                             relays.get(i).setState((Boolean)relayState.get((Object)"status") == false);
                         }
                     }
-                    // 
+
+                    // Set relayControllerState to true
                     jsonObject.put("relayControllerState", true);
                     newMessage = jsonObject.toJSONString();
 
@@ -214,7 +240,16 @@ public class MqttRelayWrapper extends AbstractMqttClient {
                                                             });
             }
 
+            @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+
+                System.out.println(getWrapperName() + ": reconnected to " + serverURI);
+
             }
         };
     }

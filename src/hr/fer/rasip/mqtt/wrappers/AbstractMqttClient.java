@@ -18,6 +18,7 @@ import org.jdom.output.Format;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -105,24 +106,6 @@ public abstract class AbstractMqttClient extends AbstractWrapper{
     }
 
     /**
-     * Try to connect to broker.
-     */
-    public void run() {
-
-	    if(!isConnected()){
-          try {
-
-            connectToBroker();
-	        
-	      } catch (MqttException | GeneralSecurityException | IOException e) {
-				logger.error(e.getMessage(), e);
-				//e.printStackTrace();
-				
-			}
-	    }
-        
-    }
-    /**
      * Connection to broker implementation.
      *
      * @throws MqttException, GeneralSecurityException, IOException
@@ -133,8 +116,12 @@ public abstract class AbstractMqttClient extends AbstractWrapper{
         String connectProtocol = "tcp://";
         int connectPort = brokerPort;
 
+        // Set clean session
         connOpt.setCleanSession(true);
         connOpt.setKeepAliveInterval(keepAliveInterval);
+
+        // Enable Automatic Reconnect
+        connOpt.setAutomaticReconnect(true);  
 
         // connect with username and without security
         if(!anonymous && !mqttSecurity)

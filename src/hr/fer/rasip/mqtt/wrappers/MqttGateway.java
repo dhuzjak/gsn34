@@ -18,11 +18,15 @@ import org.jdom.output.Format;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
+import java.security.GeneralSecurityException; 
+import java.io.IOException; 
 
 public class MqttGateway extends AbstractMqttClient{
 
@@ -76,6 +80,24 @@ public class MqttGateway extends AbstractMqttClient{
         return true;
     }
 
+    /**
+     * Try to connect to broker.
+     */
+    public void run() {
+
+        if(!isConnected()){
+          try {
+
+            connectToBroker();
+            
+          } catch (MqttException | GeneralSecurityException | IOException e) {
+                logger.error(e.getMessage(), e);
+                //e.printStackTrace();
+                
+            }
+        }
+        
+    }
 
     public DataField[] getOutputFormat() {
         return collection;
@@ -109,14 +131,14 @@ public class MqttGateway extends AbstractMqttClient{
     }
 
     @Override
-    protected MqttCallback setCallback() {
+    protected MqttCallbackExtended setCallback() {
 
-        return new MqttCallback(){  
+        return new MqttCallbackExtended(){  
 
             @Override
             public void connectionLost(Throwable cause) {
                 isConnected = false;
-                System.out.println("connection lost");
+                System.out.println(getWrapperName() + ": connection to " + brokerAddress + " lost. Reconnecting...");
 
             }
 
@@ -131,6 +153,13 @@ public class MqttGateway extends AbstractMqttClient{
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
                 // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+
+                System.out.println(getWrapperName() + ": reconnected to " + serverURI);
 
             }
         };
