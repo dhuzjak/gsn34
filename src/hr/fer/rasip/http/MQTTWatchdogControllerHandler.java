@@ -102,7 +102,7 @@ public class MQTTWatchdogControllerHandler  implements RequestHandler  {
 			content.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 	        content.append("<virtual-sensor name=\""+generatedSensorName+"\" priority=\"10\">\n");
 	        content.append("<processing-class>\n");
-	        content.append("<class-name>gsn.processor.MqttWatchdogProcessor</class-name>\n");
+	        content.append("<class-name>hr.fer.rasip.mqtt.processor.MqttWatchdogProcessor</class-name>\n");
 	        content.append("    <init-params>\n");
 	       	content.append("      <param name=\"delay\">" + delay + "</param>\n");
 	       	content.append("      <param name=\"critical-period\">" + criticalPeriod + "</param>\n");

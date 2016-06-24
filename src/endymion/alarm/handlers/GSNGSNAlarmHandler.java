@@ -131,6 +131,10 @@ public class GSNGSNAlarmHandler extends GSNAlarmHandler {
                 return false;
             }
         }
+        // else alarm was never sent so sent initial "Ok" message
+        else {
+            return true;
+        }
 
         return false;
 

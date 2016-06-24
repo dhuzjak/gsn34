@@ -125,7 +125,7 @@ public class MQTTNotificationControllerHandler  implements RequestHandler  {
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         sb.append("<virtual-sensor name=\""+generatedSensorName+"\" priority=\"10\">\n");
         sb.append("<processing-class>\n");
-        sb.append("<class-name>gsn.processor.MqttNotificationProcessor</class-name>\n");
+        sb.append("<class-name>hr.fer.rasip.mqtt.processor.MqttNotificationProcessor</class-name>\n");
         sb.append("    <init-params>\n");
        	sb.append("      <param name=\"period\">" + delay + "</param>\n");
        	sb.append("      <param name=\"delay\">" + delay + "</param>\n");
