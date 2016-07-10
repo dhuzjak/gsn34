@@ -77,6 +77,11 @@ public class MqttLedMatrix extends AbstractVirtualSensor{
         }
 
         ledMatrix = new LedMatrix();
+        try {
+            ledMatrix.setBrightness("half");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
 
 		timer = new BlinkTimer();
 

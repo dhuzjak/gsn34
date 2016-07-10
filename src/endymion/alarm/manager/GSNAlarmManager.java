@@ -210,13 +210,16 @@ public class GSNAlarmManager {
             }
         }
     }
+
+    /*
+        Used for development, not used in final stage
     // added for mqtt implementation
     /**
-     * Method that checks if its ok to send "ok" message on GSN level
+     * Method that sends "Ok" message on GSN level
      * @param gsnId - the Id of GSN
      * @param alarmName - the name of the alarm
      * @throws EndymionException
-     */
+     *//*
     public void okMessage (String gsnId,  String alarmName) throws EndymionException{
 
         okMessage(gsnId, null, alarmName);
@@ -225,12 +228,12 @@ public class GSNAlarmManager {
 
     // added for mqtt implementation
     /**
-     * Method that checks if its ok to send "ok" message on vSensor level
+     * Method that sends "Ok" message on vSensor level
      * @param gsnId - the Id of GSN
      * @param vSensorName - the name of vSensor
      * @param alarmName - the name of the alarm
      * @throws EndymionException
-     */
+     *//*
     public void okMessage (String gsnId, String vSensor, String alarmName) throws EndymionException {
         for (GSNAlarmHandler alarmHandler : alarmHandlers) {
              if (alarmHandler.getAlarmName().equalsIgnoreCase(alarmName)
@@ -241,10 +244,11 @@ public class GSNAlarmManager {
                     alarmHandler.okMessage();
                 }
             }
-            
-            
+ 
         }
     }
+
+    */
 
     // added for mqtt implementation
     /**

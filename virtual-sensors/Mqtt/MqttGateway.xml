@@ -1,0 +1,29 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <virtual-sensor name="MqttGateway" priority="11">
+    <processing-class>
+        <class-name>gsn.vsensor.BridgeVirtualSensor</class-name>
+        <output-structure>
+            <field name="topic" type="varchar(120)" />
+            <field name="message" type="varchar(1000)" />
+
+        </output-structure>
+    </processing-class>
+    <description>
+        Mqtt Gateway Vs
+    </description>
+    <life-cycle pool-size="10" />
+    <addressing>
+        <predicate key="geographical">ZARI</predicate>
+    </addressing>
+    <storage history-size="24h" />
+    <streams>
+        <stream name="input1">
+            <source alias="source1" sampling-rate="1" storage-size="1">
+                <address wrapper="MqttGateway">
+                </address>
+                <query>select * from wrapper</query>
+            </source>
+            <query>select * from source1</query>
+        </stream>   
+    </streams>
+</virtual-sensor>
